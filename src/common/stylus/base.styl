@@ -7,6 +7,10 @@ body, html
   -webkit-tap-highlight-color: transparent
   background: $color-background
   color: $color-text
+  -webkit-text-size-adjust: 100%!important
+
+input:focus, textarea:focus
+  font-size: $font-size-14 !important
 
 .border-top-1px, .border-right-1px, .border-bottom-1px, .border-left-1px
   position: relative
@@ -89,3 +93,5 @@ body, html
     &:before
       height: 300%
       transform: scale(.333) translateZ(0)
+
+
