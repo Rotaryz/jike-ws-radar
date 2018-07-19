@@ -1,6 +1,6 @@
-# jike-ws-radar
+# vue-template
 
-> 赞播微商AI雷达
+> A Vue.js template
 
 ## Build Setup
 

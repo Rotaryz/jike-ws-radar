@@ -117,6 +117,10 @@ const webpackConfig = merge(baseWebpackConfig, {
         from: path.resolve(__dirname, '../static'),
         to: config.build.assetsSubDirectory,
         ignore: ['.*']
+      },
+      {
+        from: path.resolve(__dirname, '../static/WW_verify_cOtsA4ytEOrOYroq.txt'),
+        to: path.resolve(__dirname, '../dist')
       }
     ])
   ]
