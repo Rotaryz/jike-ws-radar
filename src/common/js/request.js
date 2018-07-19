@@ -3,7 +3,7 @@
 import axios from 'axios'
 import { BASE_URL } from './config'
 import storage from 'storage-controller'
-// import utils from './utils'
+import utils from './utils'
 
 const TIME_OUT = 10000
 const ERR_OK = 0
@@ -49,8 +49,8 @@ function checkCode (res) {
   }
   // 如果网络请求成功，而提交的数据，或者是后端的一些未知错误所导致的，可以根据实际情况进行捕获异常
   if (res.data && (res.data.code !== ERR_OK)) {
-    // const code = res.data.code
-    // utils._handleErrorType(code)
+    const code = res.data.code
+    utils._handleErrorType(code)
     throw requestException(res.data)
   }
   return res.data

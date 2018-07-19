@@ -5,7 +5,7 @@
 </template>
 
 <script>
-  // import Oauth from 'common/js/oauth'
+  import Oauth from 'common/js/oauth'
   import { Jwt } from 'api'
   import storage from 'storage-controller'
   import { ERR_OK } from 'common/js/config'
@@ -13,7 +13,7 @@
 
   const NORMAL_ROUTE = '/radar'
   const COMPONENT_NAME = 'Oauth'
-  // const oauth = new Oauth()
+  const oauth = new Oauth()
 
   export default {
     name: COMPONENT_NAME,
@@ -33,7 +33,7 @@
     },
     methods: {
       _checkAuthorize () {
-        // this.$router.replace(NORMAL_ROUTE)
+        this.$router.replace(NORMAL_ROUTE)
         if (this.code && !this.hasToken) {
           // 有code没有token -> 申请拿token
           this._applyOauth()
@@ -44,7 +44,7 @@
         }
       },
       _getCode () {
-        // window.location.replace(oauth.oauthUri)
+        window.location.replace(oauth.oauthUri)
       },
       _applyOauth () {
         Jwt.employeeLogin(this.code).then((res) => {
