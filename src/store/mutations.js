@@ -85,8 +85,9 @@ const mutations = {
     state.nowChat = arr
   },
   [TYPES.ADD_NOW_CHAT](state, msg) {
-    if (msg.fromAccount === state.currentMsg.account) {
-      let newMsg = {
+    let newMsg
+    if (msg.type === 'chat') {
+      newMsg = {
         from_account_id: msg.fromAccount,
         avatar: state.currentMsg.avatar,
         content: msg.text,
@@ -97,8 +98,22 @@ const mutations = {
         unreadMsgCount: 0,
         type: 1
       }
-      state.nowChat = [...state.nowChat, newMsg]
+    } else {
+      let data = JSON.parse(msg.data)
+      newMsg = {
+        from_account_id: msg.fromAccount,
+        avatar: state.currentMsg.avatar,
+        time: msg.time,
+        url: data.url,
+        title: data.title,
+        msgTimeStamp: msg.time,
+        nickName: state.currentMsg.nickName,
+        sessionId: msg.fromAccount,
+        unreadMsgCount: 0,
+        type: 2
+      }
     }
+    state.nowChat = [...state.nowChat, newMsg]
   },
   [TYPES.SET_IM_ING](state, boolean) {
     state.imIng = boolean

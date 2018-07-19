@@ -89,12 +89,13 @@
             let res = await webimHandler.onMsgNotify(msg)
             if (res.type === 'custom') {
               this.setCustomCount('add')
-              if (res.ext * 1 === 20005 && res.fromAccount === this.currentMsg.account) {
+              if (Number(res.ext) === 20005 && res.fromAccount === this.currentMsg.account) {
                 let goods = JSON.parse(res.data)
                 let url = goods.url ? goods.url : ''
                 let title = goods.title ? goods.title : ''
                 let goodsId = goods.goods_id
                 let goodsRes = Object.assign({}, res, {url, title, goods_id: goodsId})
+                console.log(goodsRes, 'aaaaaa')
                 this.addNowChat(goodsRes)
               }
             } else {
