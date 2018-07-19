@@ -22,7 +22,7 @@
     },
     methods: {
       login() {
-        this.$refs.celing.login()
+        this.$refs.ceiling.login()
       }
     },
     components: {

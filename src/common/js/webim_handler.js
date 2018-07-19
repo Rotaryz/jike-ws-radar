@@ -388,19 +388,19 @@ export default class webimHandler {
       let nickName = msg.fromAccountNick
       switch (code) {
         case 10000:
-          resTxt = nickName + '正在查看你的名片'
+          resTxt = nickName + '通过扫描他人分享的名片海报查看了你的名片'
           break
         case 10001:
-          resTxt = nickName + '给你点了赞, 看来认可你'
+          resTxt = nickName + '通过点击他人分享的名片链接查看了你的名片'
           break
         case 10002:
-          resTxt = nickName + '取消了给你点的赞'
+          resTxt = nickName + '查看了你的名片'
           break
         case 10003:
-          resTxt = nickName + '复制了你的邮箱, 请留意邮件'
+          resTxt = nickName + '给你点了赞'
           break
         case 10004:
-          resTxt = nickName + '浏览了你的地址'
+          resTxt = nickName + '取消了给你点的赞'
           break
         case 10005:
           resTxt = nickName + '转发了你的名片, 你的人脉圈正在裂变'
@@ -415,12 +415,21 @@ export default class webimHandler {
           resTxt = nickName + '保存了你的电话, 可以考虑主动沟通'
           break
         case 10009:
-          resTxt = nickName + '保存了你的名片海报'
+          resTxt = nickName + '复制了你的邮箱, 请留意邮件'
           break
-        case 20001:
-          resTxt = nickName + '正在查看你的产品, 请把握商机'
+        case 10010:
+          resTxt = nickName + '浏览了你的地址'
           break
         case 20002:
+          data = JSON.parse(msg.data)
+          if (data.title.length > 8) {
+            productName = data.title.slice(0, 8) + '···'
+          } else {
+            productName = data.title
+          }
+          resTxt = `${nickName}正在对砍价活动${productName}向你咨询, 请做好准备应答`
+          break
+        case 20003:
         case 20005:
           data = JSON.parse(msg.data)
           if (data.title.length > 8) {
@@ -428,16 +437,7 @@ export default class webimHandler {
           } else {
             productName = data.title
           }
-          resTxt = `${nickName}正在查看${productName}, 可能对该产品感兴趣`
-          break
-        case 20003:
-          data = JSON.parse(msg.data)
-          if (data.title.length > 8) {
-            productName = data.title.slice(0, 8) + '···'
-          } else {
-            productName = data.title
-          }
-          resTxt = `${nickName}正在对${productName}向你咨询, 请做好准备应答`
+          resTxt = `${nickName}正在对商品${productName}向你咨询, 请做好准备应答`
           break
         case 20004:
           data = JSON.parse(msg.data)
@@ -446,7 +446,124 @@ export default class webimHandler {
           } else {
             productName = data.title
           }
-          resTxt = `${nickName}转发了${productName}可能在咨询他人建议`
+          resTxt = `${nickName}正在对拼团活动${productName}向你咨询, 请做好准备应答`
+          break
+        case 20006:
+          resTxt = `${nickName}通过扫描他人分享的商品海报查看了你的商品`
+          break
+        case 20007:
+          resTxt = `${nickName}通过点击他人分享的商品链接查看了你的商品`
+          break
+        case 20008:
+          resTxt = `${nickName}查看了你的商品`
+          break
+        case 20009:
+          data = JSON.parse(msg.data)
+          if (data.title.length > 8) {
+            productName = data.title.slice(0, 8) + '···'
+          } else {
+            productName = data.title
+          }
+          resTxt = `${nickName}正在购买拼团活动${productName}`
+          break
+        case 20010:
+          data = JSON.parse(msg.data)
+          if (data.title.length > 8) {
+            productName = data.title.slice(0, 8) + '···'
+          } else {
+            productName = data.title
+          }
+          resTxt = `${nickName}提交了拼团活动${productName}的订单,金额为${data.total}元`
+          break
+        case 20011:
+          data = JSON.parse(msg.data)
+          if (data.title.length > 8) {
+            productName = data.title.slice(0, 8) + '···'
+          } else {
+            productName = data.title
+          }
+          resTxt = `${nickName}提交了拼团活动${productName}的订单,金额为${data.total}元,并完成支付`
+          break
+        case 20012:
+          data = JSON.parse(msg.data)
+          if (data.title.length > 8) {
+            productName = data.title.slice(0, 8) + '···'
+          } else {
+            productName = data.title
+          }
+          resTxt = `${nickName}正在参加砍价活动${productName},成功砍掉${data.total}元`
+          break
+        case 20013:
+          data = JSON.parse(msg.data)
+          if (data.title.length > 8) {
+            productName = data.title.slice(0, 8) + '···'
+          } else {
+            productName = data.title
+          }
+          resTxt = `${nickName}转发了砍价活动${productName}, 你的活动正在裂变`
+          break
+        case 20014:
+          data = JSON.parse(msg.data)
+          if (data.title.length > 8) {
+            productName = data.title.slice(0, 8) + '···'
+          } else {
+            productName = data.title
+          }
+          resTxt = `${nickName}通过点击他人分享的砍价活动链接查看了砍价活动${productName}`
+          break
+        case 20015:
+          data = JSON.parse(msg.data)
+          if (data.title.length > 8) {
+            productName = data.title.slice(0, 8) + '···'
+          } else {
+            productName = data.title
+          }
+          resTxt = `${nickName}正在购买砍价活动${productName}`
+          break
+        case 20016:
+          data = JSON.parse(msg.data)
+          if (data.title.length > 8) {
+            productName = data.title.slice(0, 8) + '···'
+          } else {
+            productName = data.title
+          }
+          resTxt = `${nickName}提交了砍价活动${productName}的订单,金额为${data.total}元`
+          break
+        case 20017:
+          data = JSON.parse(msg.data)
+          if (data.title.length > 8) {
+            productName = data.title.slice(0, 8) + '···'
+          } else {
+            productName = data.title
+          }
+          resTxt = `${nickName}提交了砍价活动${productName}的订单,金额为${data.total}元，并支付成功`
+          break
+        case 20018:
+          data = JSON.parse(msg.data)
+          if (data.title.length > 8) {
+            productName = data.title.slice(0, 8) + '···'
+          } else {
+            productName = data.title
+          }
+          resTxt = `${nickName}转发了你的商品${productName}`
+          break
+        case 20019:
+          data = JSON.parse(msg.data)
+          if (data.title.length > 8) {
+            productName = data.title.slice(0, 8) + '···'
+          } else {
+            productName = data.title
+          }
+          resTxt = `${nickName}保存了你的商品${productName}的海报`
+          break
+        case 20020:
+          data = JSON.parse(msg.data)
+          if (data.title.length > 8) {
+            productName = data.title.slice(0, 8) + '···'
+          } else {
+            productName = data.title
+          }
+          resTxt = `${nickName}提交了商品${productName}的订单,金额为${data.total}元，并支付成功`
           break
         case 30001:
           resTxt = nickName + '正在查看你发布的动态'
@@ -454,11 +571,89 @@ export default class webimHandler {
         case 30002:
           resTxt = nickName + '给你发布的动态点了赞'
           break
+        case 30003:
+          resTxt = nickName + '评论了你的动态'
+          break
         case 40001:
-          resTxt = nickName + '正在查看你公司的官网'
+          resTxt = nickName + '主动添加了收货地址,该客户有望成交'
           break
         case 50001:
           resTxt = nickName + '正在向你咨询, 请做好准备应答'
+          break
+        case 60001:
+          resTxt = nickName + '通过扫描他人分享的小店海报访问了你的小店'
+          break
+        case 60002:
+          resTxt = nickName + '通过点击他人分享的小店链接访问了你的小店'
+          break
+        case 60003:
+          resTxt = nickName + '查看了你的海报'
+          break
+        case 60004:
+          resTxt = nickName + '转发了你的小店, 你的人脉圈正在裂变'
+          break
+        case 60005:
+          resTxt = nickName + '保存了你的小店海报'
+          break
+        case 60006:
+          resTxt = nickName + '正在查看你的名片, 可能对你感兴趣'
+          break
+        case 60007:
+          resTxt = nickName + '给你的名片点了赞'
+          break
+        case 60008:
+          data = JSON.parse(msg.data)
+          if (data.title.length > 8) {
+            productName = data.title.slice(0, 8) + '···'
+          } else {
+            productName = data.title
+          }
+          resTxt = `${nickName}正在查看拼团活动${productName},可能对该活动感兴趣`
+          break
+        case 60009:
+          data = JSON.parse(msg.data)
+          if (data.title.length > 8) {
+            productName = data.title.slice(0, 8) + '···'
+          } else {
+            productName = data.title
+          }
+          resTxt = `${nickName}给拼团活动${productName}点了赞`
+          break
+        case 60010:
+          data = JSON.parse(msg.data)
+          if (data.title.length > 8) {
+            productName = data.title.slice(0, 8) + '···'
+          } else {
+            productName = data.title
+          }
+          resTxt = `${nickName}正在查看砍价活动${productName},可能对该活动感兴趣`
+          break
+        case 60011:
+          data = JSON.parse(msg.data)
+          if (data.title.length > 8) {
+            productName = data.title.slice(0, 8) + '···'
+          } else {
+            productName = data.title
+          }
+          resTxt = `${nickName}给砍价活动${productName}点了赞`
+          break
+        case 60012:
+          data = JSON.parse(msg.data)
+          if (data.title.length > 8) {
+            productName = data.title.slice(0, 8) + '···'
+          } else {
+            productName = data.title
+          }
+          resTxt = `${nickName}正在查看商品${productName},可能对该商品感兴趣`
+          break
+        case 60013:
+          data = JSON.parse(msg.data)
+          if (data.title.length > 8) {
+            productName = data.title.slice(0, 8) + '···'
+          } else {
+            productName = data.title
+          }
+          resTxt = `${nickName}给商品${productName}点了赞`
           break
       }
     }

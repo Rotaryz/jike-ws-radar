@@ -17,7 +17,9 @@
                       <div class="white-arrow"></div>
                     </div>
                   </div>
-                  <div class="chat-msg-content other">{{item.content}}</div>
+                  <div class="chat-msg-content-max-box">
+                    <div class="chat-msg-content other">{{item.content}}</div>
+                  </div>
                 </div>
                 <div class="chat-msg-goods" v-if="item.type == 2">
                   <img :src="item.url" class="goods-img">
@@ -26,7 +28,9 @@
               </div>
               <div class="chat-content mine" v-if="item.from_account_id === imInfo.im_account">
                 <div class="chat-msg-box mine">
-                  <div class="chat-msg-content mine">{{item.content}}</div>
+                  <div class="chat-msg-content-max-box">
+                    <div class="chat-msg-content mine">{{item.content}}</div>
+                  </div>
                   <div class="arrow-box">
                     <div class="green-arrow"></div>
                   </div>
@@ -288,6 +292,10 @@
             flex: 1
             overflow: hidden
             display: flex
+            .chat-msg-content-max-box
+              flex: 1
+              overflow: hidden
+              display: flex
             .chat-msg-content
               padding: 13px 15px
               border-radius: 8px
@@ -327,7 +335,8 @@
                   top: -5px
           .mine.chat-msg-box
             margin-left: 50px
-            justify-content: flex-end
+            .chat-msg-content-max-box
+              justify-content: flex-end
             .arrow-box
               width: 10px
               height: 45px

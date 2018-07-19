@@ -12,7 +12,7 @@ export default {
 
   // 雷达消息（所有人）
   getRadarList(page = 1, limit = 30, id, loading = true) {
-    const url = `/api/employee/action-logs`
+    const url = `/api/employee/ws-action-logs`
     const data = {
       page,
       limit,
@@ -24,13 +24,13 @@ export default {
 
   // 聊天记录
   getMsgList(data, loading = true) {
-    const url = `/api/employee/message-logs`
+    const url = `/api/employee/ws-message-logs`
     return request.post(url, data, loading)
   },
 
   // 最近联系人最后一条聊天记录
   getLastMsgObj(data, loading = true) {
-    const url = `/api/employee/customers-newest-message`
+    const url = `/api/employee/ws-customers-newest-message`
     return request.post(url, data, loading)
   }
 }

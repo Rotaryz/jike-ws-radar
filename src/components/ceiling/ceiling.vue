@@ -34,7 +34,6 @@
     },
     created() {
       this.touch = {}
-      this.login()
     },
     methods: {
       ...mapActions([
