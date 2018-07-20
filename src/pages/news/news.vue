@@ -24,6 +24,7 @@
 
 <script>
   import {mapActions, mapGetters} from 'vuex'
+  import Scroll from 'components/scroll/scroll'
   export default {
     name: 'News',
     created() {
@@ -51,6 +52,9 @@
       ...mapGetters([
         'latelyList'
       ])
+    },
+    components: {
+      Scroll
     }
   }
 </script>
