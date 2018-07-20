@@ -1,17 +1,21 @@
 <template>
   <transition :name="slide">
     <article class="client-add-user">
-      <ul class="user-list">
-        <li class="user-box" v-if="dataArray.length" v-for="(item,index) in dataArray" :key="index" @click="check(item)">
-          <div :class="['check-box',item.is_member?'un-check':'' ,item.isCheck?'active':'']"></div>
-          <img class="user-icon" :src="item.image_url" alt="">
-          <section class="base-info">
-            <div class="name">{{item.name}}</div>
-            <div class="status">{{item.last_follow_day}}</div>
-          </section>
-          <div class="ai">AI预计成交率{{item.conversion_rate}}%</div>
-        </li>
-      </ul>
+      <div class="user-list-wrapper">
+        <scroll :data="dataArray">
+          <ul class="user-list">
+            <li class="user-box" v-if="dataArray.length" v-for="(item,index) in dataArray" :key="index" @click="check(item)">
+              <div :class="['check-box',item.is_member?'un-check':'' ,item.isCheck?'active':'']"></div>
+              <img class="user-icon" :src="item.image_url" alt="">
+              <section class="base-info">
+                <div class="name">{{item.name}}</div>
+                <div class="status">{{item.last_follow_day}}</div>
+              </section>
+              <div class="ai">AI预计成交率{{item.conversion_rate}}%</div>
+            </li>
+          </ul>
+        </scroll>
+      </div>
       <footer class="btn" @click="submit">确定</footer>
       <toast ref="toast"></toast>
     </article>
@@ -23,6 +27,7 @@
   import Toast from 'components/toast/toast'
   import {ERR_OK} from '../../common/js/config'
   import {mapGetters} from 'vuex'
+  import Scroll from 'components/scroll/scroll'
 
   export default {
     name: 'ClientAddUser',
@@ -83,7 +88,8 @@
     },
     watch: {},
     components: {
-      Toast
+      Toast,
+      Scroll
     }
   }
 </script>
@@ -96,56 +102,62 @@
     fill-box()
     background-color: $color-white-fff
     z-index: 10
-    .user-list
-      position: relative
-      padding-left: 15px
-      .user-box
-        layout(row, block, no-warp)
-        align-items: center
-        padding: 15px 0
-        border-bottom: 0.5px solid $color-col-line
-        height: 45px
-        .check-box
-          width: 21px
-          height: 21px
-          border-radius: 50%
-          border: 1px solid $color-col-line
-          box-sizing: border-box
-          background :url("")
-          transition :all 0.1s
-          &.active
-            background: url("./icon-selected@3x.png") no-repeat center / 100%
-            border: none
-          &.un-check
-            background: url("./icon-nocheck@3x.png") no-repeat center / 100%
-            border: none
-        .user-icon
-          width: 45px
+    .user-list-wrapper
+      position: absolute
+      top: 0
+      left: 0
+      right: 0
+      bottom: 45px
+      overflow: hidden
+      .user-list
+        padding-left: 15px
+        .user-box
+          layout(row, block, no-warp)
+          align-items: center
+          padding: 15px 0
+          border-bottom: 0.5px solid $color-col-line
           height: 45px
-          opacity: 0.8
-          margin: 0 10px
-        .base-info
-          flex: 1
-          height: 100%
-          layout()
-          justify-content: space-around
-          .name
-            font-family: $font-family-regular
-            font-size: $font-size-16
-            color: $color-20202E
-            letter-spacing: 0.6px
-          .status
+          .check-box
+            width: 21px
+            height: 21px
+            border-radius: 50%
+            border: 1px solid $color-col-line
+            box-sizing: border-box
+            background :url("")
+            transition :all 0.1s
+            &.active
+              background: url("./icon-selected@3x.png") no-repeat center / 100%
+              border: none
+            &.un-check
+              background: url("./icon-nocheck@3x.png") no-repeat center / 100%
+              border: none
+          .user-icon
+            width: 45px
+            height: 45px
+            opacity: 0.8
+            margin: 0 10px
+          .base-info
+            flex: 1
+            height: 100%
+            layout()
+            justify-content: space-around
+            .name
+              font-family: $font-family-regular
+              font-size: $font-size-16
+              color: $color-20202E
+              letter-spacing: 0.6px
+            .status
+              font-family: $font-family-regular
+              font-size: $font-size-12
+              color: $color-56BA15
+          .ai
+            width: 105px
+            height: 100%
+            padding-right: 15px
+            padding-top: 5px
             font-family: $font-family-regular
             font-size: $font-size-12
-            color: $color-56BA15
-        .ai
-          width: 105px
-          height: 100%
-          padding-right: 15px
-          padding-top: 5px
-          font-family: $font-family-regular
-          font-size: $font-size-12
-          color: $color-888888
+            color: $color-888888
 
     .btn
       height: 45px
