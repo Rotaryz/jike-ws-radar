@@ -76,7 +76,12 @@
           let list = res.data.reverse()
           this.setNowChat(list)
           let timer = setTimeout(() => {
-            let startY = this.chatDom.clientHeight - this.listDom.clientHeight - 20
+            let startY
+            if (this.listDom.clientHeight < this.chatDom.clientHeight) {
+              startY = 20
+            } else {
+              startY = this.chatDom.clientHeight - this.listDom.clientHeight - 20
+            }
             this.$refs.scroll.scrollTo(0, startY, 10, ease[this.scrollToEasing])
             clearTimeout(timer)
           }, 20)
@@ -112,7 +117,6 @@
         }, 20)
       },
       onPullingDown() {
-        if (this.noMore) return
         let heightBegin = this.listDom.clientHeight
         let data = {
           'end_date': this.endDate,
@@ -136,6 +140,7 @@
               this.noMore = true
               this.page--
             }
+            this.$refs.scroll.forceUpdate()
           }
         })
       },
@@ -146,42 +151,44 @@
         })
       },
       sendMsg() {
-        console.log(this.inputMsg)
         let value = this.inputMsg.trim()
         if (!value) {
           this.$refs.toast.show('发送消息不能为空')
           return
         }
-        webimHandler.onSendMsg(value, this.id).then(res => {
-          let msg = {
-            from_account_id: this.imInfo.im_account,
-            avatar: this.userInfo.avatar,
-            content: value,
-            time: res.MsgTime,
-            msgTimeStamp: res.MsgTime,
-            nickName: this.userInfo.nickName,
-            sessionId: this.userInfo.account,
-            unreadMsgCount: 0,
-            type: 1
-          }
-          let list = [...this.nowChat, msg]
-          this.setNowChat(list)
-          let addMsg = {
-            text: value,
-            time: res.MsgTime,
-            msgTimeStamp: res.MsgTime,
-            fromAccount: this.id,
-            unreadMsgCount: 0,
-            avatar: msg.avatar
-          }
-          this.addListMsg(addMsg)
-          this.inputMsg = ''
-          this.$refs.scroll.forceUpdate()
+        let timeStamp = parseInt(Date.parse(new Date()) / 1000)
+        let msg = {
+          from_account_id: this.imInfo.im_account,
+          avatar: this.userInfo.avatar,
+          content: value,
+          time: timeStamp,
+          msgTimeStamp: timeStamp,
+          nickName: this.userInfo.nickName,
+          sessionId: this.userInfo.account,
+          unreadMsgCount: 0,
+          type: 1
+        }
+        let list = [...this.nowChat, msg]
+        this.setNowChat(list)
+        let addMsg = {
+          text: value,
+          time: timeStamp,
+          msgTimeStamp: timeStamp,
+          fromAccount: this.id,
+          unreadMsgCount: 0,
+          avatar: msg.avatar
+        }
+        this.addListMsg(addMsg)
+        this.inputMsg = ''
+        this.$refs.scroll.forceUpdate()
+        if (this.listDom.clientHeight > this.chatDom.clientHeight) {
           let timer = setTimeout(() => {
             let startY = this.chatDom.clientHeight - this.listDom.clientHeight - 20
             this.$refs.scroll.scrollTo(0, startY, 300, ease[this.scrollToEasing])
             clearTimeout(timer)
           }, 20)
+        }
+        webimHandler.onSendMsg(value, this.id).then(res => {
         }, err => {
           this.$refs.toast.show(err)
         })

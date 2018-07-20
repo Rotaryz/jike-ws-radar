@@ -65,6 +65,8 @@
     top: 0
     bottom: 45px
     background: $color-white
+    overflow-x: hidden
+    overflow-y: auto
     .news-list
       background: $color-white
       padding: 0 15px
