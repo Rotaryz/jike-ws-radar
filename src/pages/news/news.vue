@@ -1,22 +1,24 @@
 <template>
   <div class="news">
-    <div class="news-list">
-      <div class="news-item border-bottom-1px" v-for="(item, index) in latelyList" :key="index" @click="chatMsg(item)">
-        <div class="news-left">
-          <img :src="item.avatar" class="left-img">
-          <span class="news-count" v-show="item.unreadMsgCount">{{item.unreadMsgCount > 99 ? '···' : item.unreadMsgCount}}</span>
-        </div>
-        <div class="news-right">
-          <div class="right-top">
-            <span class="top-name">{{item.nickName}}</span>
-            <span class="top-time">{{item.time}}</span>
+    <scroll :data="latelyList" :bcColor="'#ffffff'">
+      <div class="news-list">
+        <div class="news-item border-bottom-1px" v-for="(item, index) in latelyList" :key="index" @click="chatMsg(item)">
+          <div class="news-left">
+            <img :src="item.avatar" class="left-img">
+            <span class="news-count" v-show="item.unreadMsgCount">{{item.unreadMsgCount > 99 ? '···' : item.unreadMsgCount}}</span>
           </div>
-          <div class="right-down">
-            {{item.lastMsg}}
+          <div class="news-right">
+            <div class="right-top">
+              <span class="top-name">{{item.nickName}}</span>
+              <span class="top-time">{{item.time}}</span>
+            </div>
+            <div class="right-down">
+              {{item.lastMsg}}
+            </div>
           </div>
         </div>
       </div>
-    </div>
+    </scroll>
   </div>
 </template>
 
@@ -65,8 +67,6 @@
     top: 0
     bottom: 45px
     background: $color-white
-    overflow-x: hidden
-    overflow-y: auto
     .news-list
       background: $color-white
       padding: 0 15px
