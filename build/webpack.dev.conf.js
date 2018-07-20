@@ -13,7 +13,6 @@ const portfinder = require('portfinder')
 const HOST = process.env.HOST
 const PORT = process.env.PORT && Number(process.env.PORT)
 
-console.log(process.env)
 const env = process.env.BUILD_ENV === 'production' ? require('../config/prod.env') :
   process.env.BUILD_ENV === 'test' ? require('../config/test.env') : require('../config/dev.env')
 
