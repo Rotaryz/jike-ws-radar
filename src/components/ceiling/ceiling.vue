@@ -95,7 +95,6 @@
                 let title = goods.title ? goods.title : ''
                 let goodsId = goods.goods_id
                 let goodsRes = Object.assign({}, res, {url, title, goods_id: goodsId})
-                console.log(goodsRes, 'aaaaaa')
                 this.addNowChat(goodsRes)
               }
             } else {
