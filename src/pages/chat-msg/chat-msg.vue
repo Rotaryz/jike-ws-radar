@@ -189,8 +189,8 @@
           }, 20)
         }
         webimHandler.onSendMsg(value, this.id).then(res => {
-        }, err => {
-          this.$refs.toast.show(err)
+        }, () => {
+          this.$refs.toast.show('网络异常, 请稍后重试')
         })
       }
     },
