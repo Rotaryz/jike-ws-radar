@@ -1,6 +1,6 @@
 <template>
   <div class="news">
-    <scroll :data="latelyList" :bcColor="'#ffffff'">
+    <scroll :data="latelyList" :bcColor="'#ffffff'" ref="scroll">
       <div class="news-list">
         <div class="news-item border-bottom-1px" v-for="(item, index) in latelyList" :key="index" @click="chatMsg(item)">
           <div class="news-left">
@@ -52,6 +52,15 @@
       ...mapGetters([
         'latelyList'
       ])
+    },
+    watch: {
+      latelyList: function(newVal, oldVal) {
+        if (newVal && oldVal && newVal.length !== oldVal.length) {
+          setTimeout(() => {
+            this.$refs.scroll.refresh()
+          }, 20)
+        }
+      }
     },
     components: {
       Scroll
