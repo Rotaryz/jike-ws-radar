@@ -126,26 +126,28 @@
         let requireArr = noMsgList.map((item) => {
           return item.sessionId
         })
-        Im.getLastMsgObj(requireArr).then((res) => {
-          if (res.error === ERR_OK) {
-            let resObj = res.data
-            msgList = msgList.map((item) => {
-              let account = item.sessionId
-              if (resObj[account]) {
-                item.lastMsg = resObj[account].content
-                item.time = resObj[account]['created_at']
-              }
-              return item
-            })
-            msgList = msgList.map((item) => {
-              item.time = Utils.formatDate(item.msgTimeStamp).date
-              return item
-            })
-            this.saveList(msgList)
-          }
-        }, (err) => {
-          console.log(err)
-        })
+        if (requireArr.length) {
+          Im.getLastMsgObj(requireArr).then((res) => {
+            if (res.error === ERR_OK) {
+              let resObj = res.data
+              msgList = msgList.map((item) => {
+                let account = item.sessionId
+                if (resObj[account]) {
+                  item.lastMsg = resObj[account].content
+                  item.time = resObj[account]['created_at']
+                }
+                return item
+              })
+              msgList = msgList.map((item) => {
+                item.time = Utils.formatDate(item.msgTimeStamp).date
+                return item
+              })
+              this.saveList(msgList)
+            }
+          }, (err) => {
+            console.log(err)
+          })
+        }
       },
       touchStart(e) {
         this.touch.initiated = true
