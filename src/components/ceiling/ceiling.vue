@@ -34,6 +34,7 @@
     },
     created() {
       this.touch = {}
+      this.login()
     },
     methods: {
       ...mapActions([
@@ -127,7 +128,11 @@
           return item.sessionId
         })
         if (requireArr.length) {
-          Im.getLastMsgObj(requireArr).then((res) => {
+          let reqdata = {
+            customer_ims: requireArr,
+            employee_id: this.userInfo.id
+          }
+          Im.getLastMsgObj(reqdata).then((res) => {
             if (res.error === ERR_OK) {
               let resObj = res.data
               msgList = msgList.map((item) => {
@@ -139,6 +144,9 @@
                 return item
               })
               msgList = msgList.map((item) => {
+                if (item.lastMsg === '[其他]') {
+                  item.lastMsg = ''
+                }
                 item.time = Utils.formatDate(item.msgTimeStamp).date
                 return item
               })
@@ -147,6 +155,12 @@
           }, (err) => {
             console.log(err)
           })
+        } else {
+          msgList = msgList.map((item) => {
+            item.time = Utils.formatDate(item.msgTimeStamp).date
+            return item
+          })
+          this.saveList(msgList)
         }
       },
       touchStart(e) {

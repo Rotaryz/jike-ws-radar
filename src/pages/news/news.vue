@@ -2,7 +2,7 @@
   <div class="news">
     <scroll :data="latelyList" :bcColor="'#ffffff'" ref="scroll">
       <div class="news-list">
-        <div class="news-item border-bottom-1px" v-for="(item, index) in latelyList" :key="index" @click="chatMsg(item)">
+        <div class="news-item border-bottom-1px" v-for="(item, index) in latelyList" :key="index" @click="chatMsg(item)" v-if="item.lastMsg">
           <div class="news-left">
             <img :src="item.avatar" class="left-img">
             <span class="news-count" v-show="item.unreadMsgCount">{{item.unreadMsgCount > 99 ? '···' : item.unreadMsgCount}}</span>
@@ -54,12 +54,10 @@
       ])
     },
     watch: {
-      latelyList: function(newVal, oldVal) {
-        if (newVal && oldVal && newVal.length !== oldVal.length) {
-          setTimeout(() => {
-            this.$refs.scroll.refresh()
-          }, 20)
-        }
+      latelyList: function() {
+        setTimeout(() => {
+          this.$refs.scroll.refresh()
+        }, 20)
       }
     },
     components: {
@@ -74,10 +72,10 @@
   @import '~common/stylus/mixin'
 
   .news
-    width: 100vw
     position: fixed
     left: 0
     top: 0
+    right: 0
     bottom: 45px
     background: $color-white
     .news-list

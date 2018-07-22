@@ -426,7 +426,7 @@
           },
           tooltip: {
             trigger: 'axis',
-            formatter: '新用户数：{c}',
+            formatter: '活跃度：{c}',
             axisPointer: {
               type: 'none'
             }
@@ -824,6 +824,8 @@
                 height: 60px
                 display: block
             .label-right
+              flex: 1
+              overflow: hidden
               margin-left: 10px
               .label-name
                 font-size: $font-size-medium-x
@@ -832,13 +834,15 @@
                 padding-top: 5px
                 margin-bottom: 15px
               .label-box
-                layout(row)
+                width: 100%
+                overflow-x: auto
                 .label
                   width: 65px
                   height: 20px
                   line-height: 20px
                   text-align: center
-                  font-size: $font-size-medium
+                  display: inline-block
+                  font-size: $font-size-12
                   color: $color-text-88
                   font-family: $font-family-regular
                   background: #F0F2F5
