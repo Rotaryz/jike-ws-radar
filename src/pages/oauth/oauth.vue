@@ -6,9 +6,9 @@
 
 <script>
   import Oauth from 'common/js/oauth'
-  import { Jwt } from 'api'
+  import {Jwt} from 'api'
   import storage from 'storage-controller'
-  import { ERR_OK } from 'common/js/config'
+  import {ERR_OK} from 'common/js/config'
   import utils from 'common/js/utils'
 
   const NORMAL_ROUTE = '/radar'
@@ -17,22 +17,22 @@
 
   export default {
     name: COMPONENT_NAME,
-    created () {
+    created() {
       this._checkAuthorize()
     },
     computed: {
-      code () {
+      code() {
         return this.$route.query.code || ''
       },
-      hasToken () {
+      hasToken() {
         return storage.has('token')
       },
-      beforeLoginRoute () {
+      beforeLoginRoute() {
         return storage.get('beforeLoginRoute')
       }
     },
     methods: {
-      _checkAuthorize () {
+      _checkAuthorize() {
         this.$router.replace(NORMAL_ROUTE)
         if (this.code && !this.hasToken) {
           // 有code没有token -> 申请拿token
@@ -43,10 +43,10 @@
           this.$router.replace(NORMAL_ROUTE)
         }
       },
-      _getCode () {
+      _getCode() {
         window.location.replace(oauth.oauthUri)
       },
-      _applyOauth () {
+      _applyOauth() {
         Jwt.employeeLogin(this.code).then((res) => {
           if (res.error !== ERR_OK) {
             // todo '跳去系统异常页面'

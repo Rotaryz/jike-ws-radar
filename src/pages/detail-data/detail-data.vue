@@ -187,10 +187,15 @@
         } else if (this.sexSelected === '女') {
           this.flow.sex = 1
         }
+        if (this.flow.mobile.length !== 11) {
+          this.$refs.toast.show('请输入手机号码为11位数')
+          return
+        }
         ClientDetail.saveClientDetail(this.id, this.flow).then((res) => {
           if (res.error === ERR_OK) {
             this.$refs.toast.show(res.message)
             setTimeout(() => {
+              this.$emit('refresh')
               this.$router.back()
             }, 500)
           } else {

@@ -337,12 +337,12 @@
       ]),
       refresh() {
         setTimeout(() => {
+          this.getClientId(this.id)
           this.getCusomerTagList()
         }, 300)
       },
       getCusomerTagList() {
         Client.getCusomerTagList({customer_id: this.id}).then(res => {
-          // console.log(res)
           if (res.error === ERR_OK) {
             let arr = res.data.slice(0, 3)
             this.labelList = arr
@@ -354,7 +354,6 @@
         this.$router.push(path)
       },
       chatMsg(item) {
-        console.log(item)
         let currentMsg = {
           nickName: item.nickName,
           avatar: item.avatar,
@@ -575,6 +574,15 @@
             this.clientData = res.data
             this.id = res.data.id
             this.flowId = res.data.flow_id
+            ClientDetail.getClientDetail(id).then(res => {
+              if (res.error === ERR_OK) {
+                if (res.data.flow.real_name.length !== 0) {
+                  this.clientData.name = res.data.flow.real_name
+                } else {
+                  this.clientData.name = res.data.flow.nickname
+                }
+              }
+            })
             this.mobile = res.data.mobile
             this.getNewFlowList(this.id, this.flowId)
             this.getNewActionList(this.id)
@@ -582,6 +590,7 @@
         })
       },
       getNewFlowList(id, flowId) {
+        this.flowPage = 1
         ClientDetail.getFlowList(id, flowId, this.flowPage).then((res) => {
           if (res.error === ERR_OK) {
             this.flowList = res.data
@@ -608,6 +617,7 @@
         }
       },
       getNewActionList(id) {
+        this.actionPage = 1
         ClientDetail.getActionList(id, this.actionPage).then((res) => {
           if (res.error === ERR_OK) {
             this.actionList = res.data
@@ -650,7 +660,6 @@
           avatar: this.clientData.image_url,
           account: this.clientData.im_account
         }
-        console.log(currentMsg)
         this.setCurrent(currentMsg)
         let url = '/chat?id=' + this.clientData.im_account
         this.$router.push(url)
