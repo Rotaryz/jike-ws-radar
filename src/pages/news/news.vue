@@ -29,6 +29,11 @@
     name: 'News',
     created() {
     },
+    mounted() {
+      setTimeout(() => {
+        this.$refs.scroll.refresh()
+      }, 20)
+    },
     data() {
       return {
       }
