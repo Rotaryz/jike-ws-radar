@@ -621,15 +621,23 @@
         ClientDetail.getActionList(id, this.actionPage).then((res) => {
           if (res.error === ERR_OK) {
             this.actionList = res.data
+          } else {
+            this.noActionMore = true
+            this.$refs.toast.show(res.message)
           }
         })
       },
       getMoreActionList(id) {
+        if (this.noActionMore) {
+          this.$refs.scroll.forceUpdate()
+          return
+        }
         this.actionPage++
         ClientDetail.getActionList(id, this.actionPage).then((res) => {
           if (res.error === ERR_OK) {
             if (res.data.length * 1 === 0) {
               this.actionPage--
+              this.noActionMore = true
             } else {
               this.actionList.push(...res.data)
             }

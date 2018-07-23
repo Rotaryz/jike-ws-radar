@@ -32,7 +32,8 @@
       return {
         note: '',
         id: '',
-        flowId: ''
+        flowId: '',
+        subimt: false
       }
     },
     created () {
@@ -43,6 +44,8 @@
     },
     methods: {
       addFlow() {
+        if (this.subimt) return
+        this.subimt = true
         if (this.note.length === 0) {
           this.$refs.toast.show('跟进内容不能为空')
           return
@@ -51,9 +54,11 @@
           if (res.error === ERR_OK) {
             this.$refs.toast.show(res.message)
             setTimeout(() => {
+              this.$emit('refresh')
               this.$router.back()
             }, 500)
           } else {
+            this.subimt = false
             this.$refs.toast.show(res.message)
           }
         })
