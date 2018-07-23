@@ -2,7 +2,7 @@
   <div class="news">
     <scroll :data="latelyList" :bcColor="'#ffffff'" ref="scroll">
       <div class="news-list">
-        <div class="news-item border-bottom-1px" v-for="(item, index) in latelyList" :key="index" @click="chatMsg(item)" v-if="item.lastMsg">
+        <div class="news-item border-bottom-1px" v-for="(item, index) in latelyList" :key="index" @click="chatMsg(item)">
           <div class="news-left">
             <img :src="item.avatar" class="left-img">
             <span class="news-count" v-show="item.unreadMsgCount">{{item.unreadMsgCount > 99 ? '···' : item.unreadMsgCount}}</span>
@@ -13,7 +13,7 @@
               <span class="top-time">{{item.time}}</span>
             </div>
             <div class="right-down">
-              {{item.lastMsg}}
+              {{item.lastMsg ? item.lastMsg : ' '}}
             </div>
           </div>
         </div>
