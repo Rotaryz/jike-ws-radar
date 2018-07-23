@@ -14,7 +14,7 @@
               </div>
               <div class="chat-content" v-if="item.from_account_id !== imInfo.im_account">
                 <img :src="currentMsg.avatar" class="avatar">
-                <div class="chat-msg-box other" v-if="item.type == 1">
+                <div class="chat-msg-box other" v-if="item.type * 1 == 1">
                   <div class="arrow-box">
                     <div class="gray-arrow">
                       <div class="white-arrow"></div>
@@ -24,7 +24,7 @@
                     <div class="chat-msg-content other">{{item.content}}</div>
                   </div>
                 </div>
-                <div class="chat-msg-goods" v-if="item.type == 2">
+                <div class="chat-msg-goods" v-if="item.type * 1 == 2">
                   <img :src="item.url" class="goods-img">
                   <p class="goods-title">{{item.title}}</p>
                 </div>

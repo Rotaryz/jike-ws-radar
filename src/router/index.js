@@ -360,9 +360,9 @@ route.beforeEach((to, from, next) => {
   if (to.path === '/') {
     const token = storage.get('token', '')
     if (token) {
-      next(DEFAULT_ROUTE)
+      next({path: DEFAULT_ROUTE, replace: true})
     } else {
-      next(OAUTH_ROUTE)
+      next({path: OAUTH_ROUTE, replace: true})
     }
   }
   next()
