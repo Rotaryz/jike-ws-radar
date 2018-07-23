@@ -16,20 +16,20 @@
                   <div class="text">客户总数</div>
                 </div>
                 <div class="list-box">
-                  <div class="number">{{allDatas.follow_up_sum}}</div>
-                  <div class="text">跟进总数</div>
+                  <div class="number">{{allDatas.order_sum}}</div>
+                  <div class="text">订单总数</div>
                 </div>
                 <div class="list-box">
-                  <div class="number">{{allDatas.card_visits_sum}}</div>
-                  <div class="text">名片访问数</div>
-                </div>
-                <div class="list-box">
-                  <div class="number">{{allDatas.website_visits_sum}}</div>
-                  <div class="text">官网访问数</div>
+                  <div class="number">{{allDatas.order_finish_sum}}</div>
+                  <div class="text">成交总数</div>
                 </div>
                 <div class="list-box">
                   <div class="number">{{allDatas.goods_visits_sum}}</div>
                   <div class="text">产品访问数</div>
+                </div>
+                <div class="list-box">
+                  <div class="number">{{allDatas.activity_visits_sum}}</div>
+                  <div class="text">活动访问数</div>
                 </div>
                 <div class="list-box">
                   <div class="number">{{allDatas.live_logs_sum}}</div>
@@ -185,11 +185,6 @@
         let myChart = this.$echarts.init(document.getElementById('myPie'))
         // 绘制图表
         myChart.setOption({
-          // title: {
-          //   text: '客户兴趣占比',
-          //   subtext: '(每小时更新)',
-          //   x: 'center'
-          // },
           tooltip: {
             trigger: 'item',
             formatter: '{d}%'
@@ -235,7 +230,7 @@
           },
           tooltip: {
             trigger: 'axis',
-            formatter: '新用户数：{c}',
+            formatter: '活跃度：{c}',
             axisPointer: {
               type: 'none'
             }
@@ -271,11 +266,6 @@
         let myChart = this.$echarts.init(document.getElementById('myAddLine'))
         // 绘制图表
         myChart.setOption({
-          // title: {
-          //   text: '近30日客户活跃度',
-          //   subtext: '(每小时更新)',
-          //   x: 'center'
-          // },
           xAxis: {
             type: 'category',
             boundaryGap: false,
@@ -325,11 +315,6 @@
         let myChart = this.$echarts.init(document.getElementById('myBar'))
         // 绘制图表
         myChart.setOption({
-          // title: {
-          //   text: '客户与我的互动',
-          //   subtext: '(每小时更新)',
-          //   x: 'center'
-          // },
           tooltip: {
             trigger: 'axis',
             formatter: '{b}数：{c}',
@@ -387,11 +372,6 @@
         let myChart = this.$echarts.init(document.getElementById('myChartfour'))
         // 绘制图表
         myChart.setOption({
-          // title: {
-          //   text: '成交漏斗图',
-          //   subtext: '(每小时更新)',
-          //   x: 'center'
-          // },
           tooltip: {
             trigger: 'item',
             formatter: '{b}'
@@ -434,12 +414,7 @@
                 borderWidth: 1
               }
             },
-            data: [
-              {value: 80, name: '322'},
-              {value: 60, name: '155'},
-              {value: 40, name: '21'},
-              {value: 20, name: '0'}
-            ]
+            data: this.successData
           }]
         })
         // myChart.on('click', this.eConsole)
