@@ -48,9 +48,11 @@
         'setImIng'
       ]),
       async login() {
-        if (!this.hasToken) {
+        let token = storage.get('token')
+        if (!token) {
           return
         }
+        this.userInfo = storage.get('info')
         Im.getImInfo(this.userInfo.im_account).then((res) => {
           if (res.error === ERR_OK) {
             let imInfo = res.data
@@ -196,12 +198,6 @@
       }
     },
     computed: {
-      hasToken() {
-        return storage.has('token')
-      },
-      userInfo() {
-        return storage.get('info')
-      },
       ...mapGetters([
         'newMsg',
         'currentMsg'
