@@ -351,7 +351,7 @@ const route = new Router({
   ]
 })
 
-const DEFAULT_TITLE = 'AI雷达'
+const DEFAULT_TITLE = '雷达'
 const DEFAULT_ROUTE = '/radar'
 const OAUTH_ROUTE = '/oauth'
 
