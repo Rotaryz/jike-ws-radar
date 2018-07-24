@@ -421,6 +421,10 @@
       padding: 6px 15px
       display: flex
       align-items: flex-end
+      position: absolute
+      left: 0
+      right: 0
+      bottom: 0
       .submit-btn
         width: 50px
         height: 36px
