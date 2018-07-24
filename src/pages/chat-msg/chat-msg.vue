@@ -13,7 +13,7 @@
                 <span class="time-box">{{item.created_at | timeFormat}}</span>
               </div>
               <div class="chat-content" v-if="item.from_account_id !== imInfo.im_account">
-                <img :src="currentMsg.avatar" class="avatar">
+                <div :style="{backgroundImage: 'url(' + currentMsg.avatar + ')',backgroundPosition: 'center',backgroundRepeat: 'no-repeat',backgroundSize: 'cover'}" class="avatar"></div>
                 <div class="chat-msg-box other" v-if="item.type * 1 == 1">
                   <div class="arrow-box">
                     <div class="gray-arrow">
@@ -38,7 +38,7 @@
                     <div class="green-arrow"></div>
                   </div>
                 </div>
-                <img :src="userInfo.avatar" class="avatar">
+                <div class="avatar" :style="{backgroundImage: 'url(' + userInfo.avatar + ')',backgroundPosition: 'center',backgroundRepeat: 'no-repeat',backgroundSize: 'cover'}"></div>
               </div>
             </div>
           </div>
