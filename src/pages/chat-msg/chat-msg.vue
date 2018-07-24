@@ -121,8 +121,16 @@
         }, 20)
       },
       refushBox() {
-        setTimeout(() => {
+        let timer = setTimeout(() => {
+          let startY
+          if (this.listDom.clientHeight < this.chatDom.clientHeight) {
+            startY = 20
+          } else {
+            startY = this.chatDom.clientHeight - this.listDom.clientHeight - 20
+          }
           this.$refs.scroll.refresh()
+          this.$refs.scroll.scrollTo(0, startY, 10, ease[this.scrollToEasing])
+          clearTimeout(timer)
         }, 20)
       },
       onPullingDown() {
