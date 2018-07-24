@@ -9,9 +9,12 @@
           <div class="chat-list" ref="list">
             <div class="list-line"></div>
             <div class="chat-item" v-for="(item, index) in nowChat" :key="index">
+              <div class="item-time" v-if="item.is_showtime">
+                <span class="time-box">{{item.created_at | timeFormat}}</span>
+              </div>
               <div class="chat-content" v-if="item.from_account_id !== imInfo.im_account">
                 <img :src="currentMsg.avatar" class="avatar">
-                <div class="chat-msg-box other" v-if="item.type == 1">
+                <div class="chat-msg-box other" v-if="item.type * 1 == 1">
                   <div class="arrow-box">
                     <div class="gray-arrow">
                       <div class="white-arrow"></div>
@@ -21,8 +24,8 @@
                     <div class="chat-msg-content other">{{item.content}}</div>
                   </div>
                 </div>
-                <div class="chat-msg-goods" v-if="item.type == 2">
-                  <img :src="item.url" class="goods-img">
+                <div class="chat-msg-goods" v-if="item.type * 1 == 2">
+                  <img :src="item.url" class="goods-img" onload="refushBox">
                   <p class="goods-title">{{item.title}}</p>
                 </div>
               </div>
@@ -61,13 +64,14 @@
   import storage from 'storage-controller'
   import {Im} from 'api'
   import {ERR_OK} from 'common/js/config'
+  import utils from 'common/js/utils'
   export default {
     name: 'Chat',
     created() {
       this.id = this.$route.query.id
       let data = {
         'end_date': this.endDate,
-        limit: 30,
+        limit: 40,
         customer_im_account: this.id,
         employee_im_account: this.imInfo.im_account
       }
@@ -116,11 +120,16 @@
           clearTimeout(timer)
         }, 20)
       },
+      refushBox() {
+        setTimeout(() => {
+          this.$refs.scroll.refresh()
+        }, 20)
+      },
       onPullingDown() {
         let heightBegin = this.listDom.clientHeight
         let data = {
           'end_date': this.endDate,
-          limit: 30,
+          limit: 40,
           customer_im_account: this.id,
           employee_im_account: this.imInfo.im_account
         }
@@ -175,8 +184,10 @@
           time: timeStamp,
           msgTimeStamp: timeStamp,
           fromAccount: this.id,
+          sessionId: this.id,
           unreadMsgCount: 0,
-          avatar: msg.avatar
+          avatar: this.currentMsg.avatar,
+          nickName: this.currentMsg.nickName
         }
         this.addListMsg(addMsg)
         this.inputMsg = ''
@@ -208,12 +219,22 @@
         scrollToEasing: 'bounce',
         scrollToEasingOptions: ['bounce', 'swipe', 'swipeBounce'],
         id: '',
-        page: 1
+        page: 1,
+        noMore: false
       }
     },
     components: {
       Scroll,
       Toast
+    },
+    filters: {
+      timeFormat(val) {
+        if (val) {
+          let res = utils.radarTimeFormat(val)
+          return res.time
+        }
+        return ''
+      }
     },
     watch: {
       inputMsg() {
@@ -234,7 +255,7 @@
         'ios'
       ]),
       pullDownRefreshObj: function () {
-        return this.pullDownRefresh ? {
+        return this.pullDownRefresh && !this.noMore ? {
           threshold: parseInt(this.pullDownRefreshThreshold),
           stop: parseInt(this.pullDownRefreshStop),
           txt: ' '
@@ -274,11 +295,13 @@
     justify-content: space-between
     z-index: 200
     .chat-container
-      flex: 1
-      overflow-y: auto
-      position: relative
+      position: absolute
+      top: 0
+      bottom: 50px
+      left: 0
+      right: 0
       width: 100%
-      overflow-x: hidden
+      overflow: hidden
       .chat-list
         width: 100%
         padding-bottom: 40px
@@ -289,6 +312,18 @@
         box-sizing: border-box
         padding: 0 15px
         margin-top: 15px
+        .item-time
+          padding-bottom: 15px
+          text-align: center
+          .time-box
+            display: inline-block
+            padding: 4px 8px
+            background: #D6D6D9
+            border-radius: 2px
+            font-family: $font-family-regular
+            font-size: $font-size-12
+            color: $color-white
+            line-height: 14px
         .chat-content
           display: flex
           width: 100%
@@ -359,7 +394,6 @@
                 top: 17.5px
           .chat-msg-goods
             width: 200px
-            height: 150px
             border: 0.5px solid rgba(0,0,0,0.10)
             border-radius: 8px
             background: $color-white
@@ -368,7 +402,6 @@
             font-size: 0
             .goods-img
               width: 100%
-              height: 120px
             .goods-title
               line-height: 30px
               font-size: $font-size-small
@@ -388,6 +421,10 @@
       padding: 6px 15px
       display: flex
       align-items: flex-end
+      position: absolute
+      left: 0
+      right: 0
+      bottom: 0
       .submit-btn
         width: 50px
         height: 36px

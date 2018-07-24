@@ -9,21 +9,48 @@ const NET_404 = 404
 export default class utils {
   static formatDate (time) {
     let resTime = new Date(time * 1000)
-    let nowDate = resTime.toLocaleDateString()
+    let nowDate = this.formatDateTime(resTime)
     let nowTime = this.formatTime(resTime)
     let todayTime = new Date()
-    let todayDate = todayTime.toLocaleDateString()
+    let todayDate = this.formatDateTime(todayTime)
     let yesToday = todayTime.setDate(todayTime.getDate() - 1)
     let yesTodayDateTime = new Date(yesToday)
-    let yesTodayDate = yesTodayDateTime.toLocaleDateString()
+    let yesTodayDate = this.formatDateTime(yesTodayDateTime)
     nowDate = nowDate.replace(todayDate, '今天')
     nowDate = nowDate.replace(yesTodayDate, '昨天')
-    nowTime = nowDate.replace(todayDate, '今天')
-    nowTime = nowDate.replace(yesTodayDate, '昨天')
+    nowTime = nowTime.replace(todayDate, '今天')
+    nowTime = nowTime.replace(yesTodayDate, '昨天')
     return {
       date: nowDate,
       time: nowTime
     }
+  }
+  static radarTimeFormat(time) {
+    let resTime = new Date(time * 1000)
+    let nowDate = resTime.toLocaleDateString()
+    let nowTime = this.formatTime(resTime)
+    let todayTime = new Date()
+    let todayDate = this.formatDateTime(todayTime)
+    let yesToday = todayTime.setDate(todayTime.getDate() - 1)
+    let yesTodayDateTime = new Date(yesToday)
+    let yesTodayDate = this.formatDateTime(yesTodayDateTime)
+    nowDate = nowDate.replace(todayDate, '')
+    nowDate = nowDate.replace(yesTodayDate, '昨天').trim()
+    nowTime = nowTime.replace(todayDate, '')
+    nowTime = nowTime.replace(yesTodayDate, '昨天').trim()
+    return {
+      date: nowDate,
+      time: nowTime
+    }
+  }
+
+  static formatDateTime(time) {
+    let date = new Date(time)
+    const year = date.getFullYear()
+    const month = date.getMonth() + 1
+    const day = date.getDate()
+
+    return [year, month, day].join('/')
   }
 
   static formatTime (time) {
@@ -35,7 +62,7 @@ export default class utils {
     const hour = date.getHours()
     const minute = date.getMinutes()
 
-    const t1 = [year, month, day].map(this.formatNumber).join('/')
+    const t1 = [year, month, day].join('/')
     const t2 = [hour, minute].map(this.formatNumber).join(':')
     return `${t1} ${t2}`
   }

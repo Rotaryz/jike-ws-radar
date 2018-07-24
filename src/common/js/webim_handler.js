@@ -545,7 +545,7 @@ export default class webimHandler {
           } else {
             productName = data.title
           }
-          resTxt = `${nickName}转发了你的商品${productName}`
+          resTxt = `${nickName}转发了你的商品${productName}, 你的商品正在裂变`
           break
         case 20019:
           data = JSON.parse(msg.data)

@@ -15,7 +15,8 @@
                     <div class="label-right">
                       <div class="label-name">{{flow.nickname}}</div>
                       <div class="add-text">
-                        {{flow.sources}}
+                        <div class="text">{{flow.created_at}}</div>
+                        <div class="text">{{flow.sources}}</div>
                       </div>
                     </div>
                   </div>
@@ -187,10 +188,15 @@
         } else if (this.sexSelected === '女') {
           this.flow.sex = 1
         }
+        if (this.flow.mobile.length !== 11) {
+          this.$refs.toast.show('请输入手机号码为11位数')
+          return
+        }
         ClientDetail.saveClientDetail(this.id, this.flow).then((res) => {
           if (res.error === ERR_OK) {
             this.$refs.toast.show(res.message)
             setTimeout(() => {
+              this.$emit('refresh')
               this.$router.back()
             }, 500)
           } else {
@@ -271,16 +277,23 @@
                 display: block
             .label-right
               margin-left: 10px
+              overflow: hidden
+              flex: 1
               .label-name
                 font-size: $font-size-medium-x
                 color: $color-text
                 font-family: $font-family-regular
                 padding-top: 5px
                 margin-bottom: 15px
+                overflow: hidden
               .add-text
-                font-size: $font-size-small
-                color: $color-text-88
-                font-family: $font-family-regular
+                layout(row)
+                no-wrap()
+                .text
+                  font-size: $font-size-small
+                  color: $color-text-88
+                  font-family: $font-family-regular
+                  margin-right: 5px
   .data-con
     padding: 15px
     .data-top

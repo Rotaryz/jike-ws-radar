@@ -1,30 +1,38 @@
 <template>
   <div class="news">
-    <div class="news-list">
-      <div class="news-item border-bottom-1px" v-for="(item, index) in latelyList" :key="index" @click="chatMsg(item)">
-        <div class="news-left">
-          <img :src="item.avatar" class="left-img">
-          <span class="news-count" v-show="item.unreadMsgCount">{{item.unreadMsgCount > 99 ? '···' : item.unreadMsgCount}}</span>
-        </div>
-        <div class="news-right">
-          <div class="right-top">
-            <span class="top-name">{{item.nickName}}</span>
-            <span class="top-time">{{item.time}}</span>
+    <scroll :data="latelyList" :bcColor="'#ffffff'" ref="scroll">
+      <div class="news-list">
+        <div class="news-item border-bottom-1px" v-for="(item, index) in latelyList" :key="index" @click="chatMsg(item)">
+          <div class="news-left">
+            <img :src="item.avatar" class="left-img">
+            <span class="news-count" v-show="item.unreadMsgCount">{{item.unreadMsgCount > 99 ? '···' : item.unreadMsgCount}}</span>
           </div>
-          <div class="right-down">
-            {{item.lastMsg}}
+          <div class="news-right">
+            <div class="right-top">
+              <span class="top-name">{{item.nickName}}</span>
+              <span class="top-time">{{item.time}}</span>
+            </div>
+            <div class="right-down">
+              {{item.lastMsg ? item.lastMsg : ' '}}
+            </div>
           </div>
         </div>
       </div>
-    </div>
+    </scroll>
   </div>
 </template>
 
 <script>
   import {mapActions, mapGetters} from 'vuex'
+  import Scroll from 'components/scroll/scroll'
   export default {
     name: 'News',
     created() {
+    },
+    mounted() {
+      setTimeout(() => {
+        this.$refs.scroll.refresh()
+      }, 20)
     },
     data() {
       return {
@@ -49,6 +57,16 @@
       ...mapGetters([
         'latelyList'
       ])
+    },
+    watch: {
+      latelyList: function() {
+        setTimeout(() => {
+          this.$refs.scroll.refresh()
+        }, 20)
+      }
+    },
+    components: {
+      Scroll
     }
   }
 </script>
@@ -59,14 +77,12 @@
   @import '~common/stylus/mixin'
 
   .news
-    width: 100vw
     position: fixed
     left: 0
     top: 0
+    right: 0
     bottom: 45px
     background: $color-white
-    overflow-x: hidden
-    overflow-y: auto
     .news-list
       background: $color-white
       padding: 0 15px

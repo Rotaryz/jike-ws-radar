@@ -34,6 +34,7 @@
     },
     created() {
       this.touch = {}
+      this.login()
     },
     methods: {
       ...mapActions([
@@ -47,9 +48,11 @@
         'setImIng'
       ]),
       async login() {
-        if (!this.hasToken) {
+        let token = storage.get('token')
+        if (!token) {
           return
         }
+        this.userInfo = storage.get('info')
         Im.getImInfo(this.userInfo.im_account).then((res) => {
           if (res.error === ERR_OK) {
             let imInfo = res.data
@@ -126,26 +129,41 @@
         let requireArr = noMsgList.map((item) => {
           return item.sessionId
         })
-        Im.getLastMsgObj(requireArr).then((res) => {
-          if (res.error === ERR_OK) {
-            let resObj = res.data
-            msgList = msgList.map((item) => {
-              let account = item.sessionId
-              if (resObj[account]) {
-                item.lastMsg = resObj[account].content
-                item.time = resObj[account]['created_at']
-              }
-              return item
-            })
-            msgList = msgList.map((item) => {
-              item.time = Utils.formatDate(item.msgTimeStamp).date
-              return item
-            })
-            this.saveList(msgList)
+        if (requireArr.length) {
+          let reqdata = {
+            customer_ims: requireArr,
+            employee_id: this.userInfo.id
           }
-        }, (err) => {
-          console.log(err)
-        })
+          Im.getLastMsgObj(reqdata).then((res) => {
+            if (res.error === ERR_OK) {
+              let resObj = res.data
+              msgList = msgList.map((item) => {
+                let account = item.sessionId
+                if (resObj[account]) {
+                  item.lastMsg = resObj[account].content
+                  item.time = resObj[account]['created_at']
+                }
+                return item
+              })
+              msgList = msgList.map((item) => {
+                if (item.lastMsg === '[其他]') {
+                  item.lastMsg = ''
+                }
+                item.time = Utils.formatDate(item.msgTimeStamp).date
+                return item
+              })
+              this.saveList(msgList)
+            }
+          }, (err) => {
+            console.log(err)
+          })
+        } else {
+          msgList = msgList.map((item) => {
+            item.time = Utils.formatDate(item.msgTimeStamp).date
+            return item
+          })
+          this.saveList(msgList)
+        }
       },
       touchStart(e) {
         this.touch.initiated = true
@@ -180,12 +198,6 @@
       }
     },
     computed: {
-      hasToken() {
-        return storage.has('token')
-      },
-      userInfo() {
-        return storage.get('info')
-      },
       ...mapGetters([
         'newMsg',
         'currentMsg'
