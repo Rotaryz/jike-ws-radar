@@ -12,7 +12,7 @@
           <div class="last-time">最后跟进</div>
         </section>
         <div class="tags">
-          <div>{{userInfo.last_follow_day}}</div>
+          <div class="left">{{userInfo.last_follow_day}}</div>
           <div class="tags-right">{{userInfo.last_follow_at}}</div>
         </div>
       </article>
@@ -29,7 +29,7 @@
           <div class="last-time">最后活跃</div>
         </section>
         <div class="tags">
-          <div>{{userInfo.last_follow_day}}</div>
+          <div class="left">{{userInfo.last_follow_day}}</div>
           <div class="tags-right">{{userInfo.last_active_at}}</div>
         </div>
       </article>
@@ -43,11 +43,11 @@
             <div class="txt">{{userInfo.name}}</div>
             <img v-if="userInfo.is_new" class="is-new" src="./icon-new@3x.png" alt="">
           </div>
-          <div class="last-time">{{userInfo.flow_join_at}}</div>
+          <div class="last-time">{{userInfo.sources}}</div>
         </section>
         <div class="tags">
-          <div>{{userInfo.last_follow_day}}</div>
-          <div class="tags-right">{{userInfo.last_follow_day}}</div>
+          <div class="left">{{userInfo.last_follow_day}}</div>
+          <div class="tags-right">{{userInfo.flow_join_at}}</div>
         </div>
       </article>
     </section>
@@ -62,7 +62,10 @@
           </div>
           <div class="last-time">AI预计成交率{{userInfo.conversion_rate}}%</div>
         </section>
-        <div class="tags">{{userInfo.last_follow_day}}</div>
+        <div class="tags">
+          <div class="left">{{userInfo.last_follow_day}}</div>
+          <div class="tags-right"></div>
+        </div>
       </article>
     </section>
   </div>
@@ -98,9 +101,11 @@
         margin-right: 10px
       .user-info
         flex: 1
-        layout()
-        justify-content: space-around
+        layout(column,block,nowrap)
+        padding :3px 0
+        justify-content: space-between
         height: 100%
+        box-sizing :border-box
         .base-info
           box-sizing: border-box
           layout(row, block, nowrap)
@@ -111,8 +116,8 @@
             font-size: $font-size-16
             color: $color-20202E
             letter-spacing: 0.6px
-            layout(row)
-            align-items: center
+            layout(row, block, nowrap)
+            align-items: flex-start
             .is-new
               width: 19px
               height: 13.5px
@@ -127,7 +132,7 @@
           font-family: $font-family-regular
           font-size: $font-size-12
           color: $color-56BA15
-          layout(row)
+          layout(row, block, nowrap)
           justify-content: space-between
           align-items: flex-start
           .tags-right
@@ -135,5 +140,6 @@
             font-size: $font-size-12
             color: $color-888888
             padding-right: 15px
+            no-wrap()
 
 </style>
