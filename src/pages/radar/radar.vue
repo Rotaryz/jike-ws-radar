@@ -92,7 +92,9 @@
   export default {
     name: 'Radar',
     created() {
-      this.$emit('login')
+      if (!this.imIng) {
+        this.$emit('login')
+      }
       Im.getRadarList(this.page, 30, this.userInfo.id).then((res) => {
         if (res.error === ERR_OK) {
           this.list = res.data
@@ -250,10 +252,9 @@
     right: 0
     bottom: 45px
     background: $color-background
-    display: flex
-    flex-direction: column
     .container
-      flex: 1
+      width: 100%
+      height: 100%
       overflow: hidden
       position: relative
     .msg-box
