@@ -25,7 +25,7 @@
                   </div>
                 </div>
                 <div class="chat-msg-goods" v-if="item.type * 1 == 2">
-                  <img :src="item.url" class="goods-img" onload="refushBox">
+                  <img :src="item.url" class="goods-img" @load="refushBox">
                   <p class="goods-title">{{item.title}}</p>
                 </div>
               </div>
