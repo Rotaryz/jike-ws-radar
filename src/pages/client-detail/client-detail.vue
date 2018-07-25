@@ -831,10 +831,11 @@
           position: relative
           z-index: 1
           .detail-img-box
+            flex: 1
+            overflow: hidden
             layout(row)
             .img
               position: relative
-              height: 0
               width: 60px
               height: 60px
               background: #333
