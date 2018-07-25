@@ -30,7 +30,7 @@ export default {
    * @returns {*}
    */
   Myqrcode (data) {
-    let url = 'api/employee/shop-qrcode'
+    let url = 'api/employee/my-new-qrcode'
     return request.get(url, data)
   }
 }
