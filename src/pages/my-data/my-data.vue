@@ -342,7 +342,16 @@
             axisLabel: {
               interval: 0,
               color: '#20202E',
-              fontSize: 14
+              fontSize: 14,
+              formatter: function (value) {
+                return value
+              },
+              align: 'right'
+            },
+            axisLine: {
+              lineStyle: {
+                color: '#888'
+              }
             }
           },
           yAxis: {
@@ -352,6 +361,11 @@
               interval: 0,
               color: '#20202E',
               fontSize: 14
+            },
+            axisLine: {
+              lineStyle: {
+                color: '#888'
+              }
             }
           },
           series: [{
