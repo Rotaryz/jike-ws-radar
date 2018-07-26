@@ -338,7 +338,7 @@ const route = new Router({
       path: '/detail-data',
       component: Cdata,
       meta: {
-        title: '客户資料'
+        title: '客户资料'
       }
     },
     {
