@@ -40,7 +40,7 @@
           <p>{{checkedGroup.name}}</p>
           <img class="icon" src="./icon-down@3x.png" alt=""/>
         </div>
-        <div class="right">全部 {{dataArray.length}} 位</div>
+        <div class="right">全部 {{total}} 位</div>
       </section>
       <div class="scroll-list-wrap" v-if="dataArray.length">
         <ul class="user-list">
@@ -108,7 +108,8 @@
         pullUpLoadNoMoreTxt: '没有更多了',
         page: 1,
         limit: LIMIT,
-        isAll: false
+        isAll: false,
+        total: 0
       }
     },
     created() {
@@ -146,6 +147,7 @@
         Client.getCustomerList(data).then(res => {
           if (res.error === ERR_OK) {
             this.dataArray = res.data
+            this.total = res.meta.total // 共多少人
             this.isEmpty = !this.dataArray.length
             this.pullUpLoad = !!this.dataArray.length // 防止下拉报错
           } else {
@@ -177,6 +179,7 @@
         Client.getCustomerList(data).then(res => {
           if (res.data) {
             this.dataArray = res.data
+            this.total = res.meta.total // 共多少人
           }
         })
       },
@@ -215,6 +218,7 @@
             if (res.data && res.data.length) {
               let newArr = this.dataArray.concat(res.data)
               this.dataArray = newArr
+              this.total = res.meta.total // 共多少人
             } else {
               this.$refs.scroll.forceUpdate()
               this.isAll = true

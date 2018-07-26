@@ -127,6 +127,7 @@
       return {
         sexSelected: '未完善',
         options: [
+          {text: '未完善', value: '未完善'},
           {text: '男', value: '男'},
           {text: '女', value: '女'}
         ],
@@ -175,8 +176,10 @@
             this.imgUrl = res.data.image_url
             this.flow = res.data.flow
             if (res.data.flow.sex * 1 === 0) {
-              this.sexSelected = '男'
+              this.sexSelected = '未完善'
             } else if (res.data.flow.sex * 1 === 1) {
+              this.sexSelected = '男'
+            } else if (res.data.flow.sex * 1 === 2) {
               this.sexSelected = '女'
             }
           }
@@ -184,9 +187,9 @@
       },
       saveClientData(id) {
         if (this.sexSelected === '男') {
-          this.flow.sex = 0
-        } else if (this.sexSelected === '女') {
           this.flow.sex = 1
+        } else if (this.sexSelected === '女') {
+          this.flow.sex = 2
         }
         if (this.flow.mobile.length !== 11) {
           this.$refs.toast.show('请输入手机号码为11位数')
@@ -194,7 +197,7 @@
         }
         ClientDetail.saveClientDetail(this.id, this.flow).then((res) => {
           if (res.error === ERR_OK) {
-            this.$refs.toast.show(res.message)
+            this.$refs.toast.show('保存成功')
             setTimeout(() => {
               this.$emit('refresh')
               this.$router.back()
@@ -223,6 +226,16 @@
     components: {
       Toast,
       Scroll
+    },
+    watch: {
+      sexSelected(val) {
+        if (this.sexSelected !== '未完善') {
+          this.options = [
+            {text: '男', value: '男'},
+            {text: '女', value: '女'}
+          ]
+        }
+      }
     }
   }
 </script>

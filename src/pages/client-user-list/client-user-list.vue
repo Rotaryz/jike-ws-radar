@@ -6,7 +6,7 @@
         <img class="icon" src="./icon-add@3x.png" alt="">
         <div class="txt">添加成员</div>
       </section>
-      <section class="total">共 {{dataArray.length}} 位</section>
+      <section class="total">共 {{total}} 位</section>
       <div class="simple-scroll-demo">
         <div class="scroll-list-wrap">
           <scroll ref="scroll"
@@ -71,7 +71,8 @@
         itemIndex: 0,
         page: 1,
         limit: LIMIT,
-        isAll: false
+        isAll: false,
+        total: 0
       }
     },
     created() {
@@ -111,6 +112,7 @@
         Client.getCustomerList(data).then(res => {
           if (res.error === ERR_OK) {
             this.dataArray = res.data
+            this.total = res.meta.total // 共多少人
           } else {
             this.$refs.toast.show(res.message)
           }
@@ -166,6 +168,7 @@
           if (res.error === ERR_OK) {
             if (res.data && res.data.length) {
               this.dataArray.concat(res.data)
+              this.total = res.meta.total // 共多少人
             } else {
               this.$refs.scroll.forceUpdate()
               this.isAll = true
