@@ -281,7 +281,7 @@ const route = new Router({
         path: 'shareCard',
         component: ShareCard,
         meta: {
-          title: '分享名片'
+          title: '店铺二维码'
         }
       },
       {
