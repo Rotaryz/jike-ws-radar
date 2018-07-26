@@ -1,16 +1,13 @@
 <template>
   <transition :name="slide">
-
     <div class="share-card">
-      <scroll :bcColor="'#20202E'">
-        <div class="share-box">
-          <p class="peo-name">{{card.name}}</p>
-          <p class="peo-position">{{card.position}}</p>
-          <p class="buss-name">{{card.department}}</p>
-          <img class="qr-code" :src="card.qrcode">
-          <p class="tip">长按识别图中小程序码</p>
-        </div>
-      </scroll>
+      <div class="share-box">
+        <p class="peo-name">{{card.name}}</p>
+        <p class="peo-position">{{card.position}}</p>
+        <p class="buss-name">{{card.department}}</p>
+        <img class="qr-code" :src="card.qrcode">
+        <p class="tip">长按识别图中小程序码</p>
+      </div>
     </div>
   </transition>
 </template>

@@ -28,6 +28,7 @@ const EditDynamic = () => import('pages/edit-dynamic/edit-dynamic')
 const AddFlow = () => import('pages/add-flow/add-flow')
 const MyData = () => import('pages/my-data/my-data')
 const PageError = () => import('pages/page-error/page-error')
+const Home = () => import('pages/home/home')
 
 Vue.use(Router)
 
@@ -36,99 +37,223 @@ const route = new Router({
   routes: [
     // {
     //   path: '/',
-    //   redirect: '/oauth'
+    //   redirect: '/shareCard'
     // },
     {
       path: '/oauth',
       component: Oauth
     },
     {
-      path: '/page-error',
-      component: PageError,
-      meta: {
-        title: '异常'
-      }
-    },
-    {
-      path: '/radar',
-      component: Radar,
-      meta: {
-        title: '雷达'
-      },
-      children: [
-        {
-          path: 'client-detail',
-          component: Cdetail,
+      path: '/',
+      component: Home,
+      children: [{
+        path: 'mine',
+        component: Mine,
+        meta: {
+          title: '我的'
+        },
+        children: [{
+          path: 'editCard',
+          component: EditCard,
           meta: {
-            title: '客户详情'
+            title: '编辑名片'
+          },
+          children: [{
+            path: 'changeAutograph',
+            component: ChangeAutograph,
+            meta: {
+              title: '修改签名'
+            }
+          }]
+        },
+          {
+            path: 'my-data',
+            component: MyData,
+            meta: {
+              title: '我的图表'
+            }
+          },
+          {
+            path: 'shareCard',
+            component: ShareCard,
+            meta: {
+              title: '分享名片'
+            }
+          },
+          {
+            path: 'goodList',
+            component: GoodsList,
+            meta: {
+              title: '我的产品'
+            },
+            children: [{
+              path: 'goodsDetail',
+              component: GoodsDetail,
+              meta: {
+                title: '产品详情'
+              }
+            }]
+          },
+          {
+            path: 'dynamicList',
+            component: DynamicList,
+            meta: {
+              title: '动态'
+            },
+            children: [{
+              path: 'editDynamic',
+              component: EditDynamic,
+              meta: {
+                title: '发布动态'
+              }
+            }]
+          }]
+      }, {
+        path: '/chat',
+        component: Chat,
+        meta: {
+          title: ''
+        }
+      },
+        {
+          path: '/scroll-demo',
+          component: ScrollDemo,
+          meta: {
+            title: '测试滚动'
+          }
+        },
+        {
+          path: '/echarts',
+          component: Echarts,
+          meta: {
+            title: ''
+          }
+        },
+        {
+          path: '/detail-data',
+          component: Cdata,
+          meta: {
+            title: '客户资料'
+          }
+        },
+        {
+          path: '/addflow',
+          component: AddFlow,
+          meta: {
+            title: '添加跟进内容'
+          }
+        }, {
+          path: '/radar',
+          component: Radar,
+          meta: {
+            title: '雷达'
           },
           children: [
             {
-              path: 'client-tag',
-              component: ClientTag,
+              path: 'client-detail',
+              component: Cdetail,
               meta: {
-                title: '标签'
-              }
-            },
-            {
-              path: 'detail-data',
-              component: Cdata,
-              meta: {
-                title: '客户資料'
-              }
-            },
-            {
-              path: 'addflow',
-              component: AddFlow,
-              meta: {
-                title: '添加跟进内容'
-              }
+                title: '客户详情'
+              },
+              children: [
+                {
+                  path: 'client-tag',
+                  component: ClientTag,
+                  meta: {
+                    title: '标签'
+                  }
+                },
+                {
+                  path: 'detail-data',
+                  component: Cdata,
+                  meta: {
+                    title: '客户资料'
+                  }
+                },
+                {
+                  path: 'addflow',
+                  component: AddFlow,
+                  meta: {
+                    title: '添加跟进内容'
+                  }
+                }
+              ]
             }
           ]
-        }
-      ]
-    },
-    {
-      path: '/news',
-      component: News,
-      meta: {
-        title: '消息'
-      }
-    },
-    {
-      path: '/client',
-      component: Client,
-      meta: {
-        title: '客户'
-      },
-      children: [
+        },
         {
-          path: 'client-user-list',
-          component: ClientUserList,
+          path: '/news',
+          component: News,
           meta: {
-            title: '客户列表'
+            title: '消息'
+          }
+        },
+        {
+          path: '/client',
+          component: Client,
+          meta: {
+            title: '客户'
           },
           children: [
             {
-              path: 'client-add-user',
-              component: ClientAddUser,
+              path: 'client-user-list',
+              component: ClientUserList,
               meta: {
-                title: '添加成员'
-              }
-            },
-            {
-              path: 'client-set-group',
-              component: ClientSetGroup,
-              meta: {
-                title: '设置分组'
-              }
-            },
-            {
-              path: 'client-search',
-              component: ClientSearch,
-              meta: {
-                title: '搜索'
-              }
+                title: '客户列表'
+              },
+              children: [
+                {
+                  path: 'client-add-user',
+                  component: ClientAddUser,
+                  meta: {
+                    title: '添加成员'
+                  }
+                },
+                {
+                  path: 'client-set-group',
+                  component: ClientSetGroup,
+                  meta: {
+                    title: '设置分组'
+                  }
+                },
+                {
+                  path: 'client-search',
+                  component: ClientSearch,
+                  meta: {
+                    title: '搜索'
+                  }
+                },
+                {
+                  path: 'client-detail',
+                  component: Cdetail,
+                  meta: {
+                    title: '客户详情'
+                  },
+                  children: [
+                    {
+                      path: 'client-tag',
+                      component: ClientTag,
+                      meta: {
+                        title: '标签'
+                      }
+                    },
+                    {
+                      path: 'detail-data',
+                      component: Cdata,
+                      meta: {
+                        title: '客户资料'
+                      }
+                    },
+                    {
+                      path: 'addflow',
+                      component: AddFlow,
+                      meta: {
+                        title: '添加跟进内容'
+                      }
+                    }
+                  ]
+                }
+              ]
             },
             {
               path: 'client-detail',
@@ -148,7 +273,7 @@ const route = new Router({
                   path: 'detail-data',
                   component: Cdata,
                   meta: {
-                    title: '客户資料'
+                    title: '客户资料'
                   }
                 },
                 {
@@ -159,199 +284,85 @@ const route = new Router({
                   }
                 }
               ]
+            },
+            {
+              path: 'client-set-group',
+              component: ClientSetGroup,
+              meta: {
+                title: '设置分组'
+              }
+            },
+            {
+              path: 'client-create-group',
+              component: ClientCreateGroup,
+              meta: {
+                title: '添加分组'
+              }
+            },
+            {
+              path: 'client-search',
+              component: ClientSearch,
+              meta: {
+                title: '搜索'
+              }
             }
           ]
         },
         {
-          path: 'client-detail',
+          path: '/client-tag',
+          component: ClientTag,
+          meta: {
+            title: '标签'
+          }
+        },
+        {
+          path: '/client-search',
+          component: ClientSearch,
+          meta: {
+            title: '搜索'
+          }
+        },
+        {
+          path: '/client-detail',
           component: Cdetail,
           meta: {
             title: '客户详情'
-          },
-          children: [
-            {
-              path: 'client-tag',
-              component: ClientTag,
-              meta: {
-                title: '标签'
-              }
-            },
-            {
-              path: 'detail-data',
-              component: Cdata,
-              meta: {
-                title: '客户資料'
-              }
-            },
-            {
-              path: 'addflow',
-              component: AddFlow,
-              meta: {
-                title: '添加跟进内容'
-              }
-            }
-          ]
+          }
         },
         {
-          path: 'client-set-group',
+          path: '/client-set-group',
           component: ClientSetGroup,
           meta: {
             title: '设置分组'
           }
         },
         {
-          path: 'client-create-group',
+          path: '/client-create-group',
           component: ClientCreateGroup,
           meta: {
             title: '添加分组'
           }
-        },
-        {
-          path: 'client-search',
-          component: ClientSearch,
-          meta: {
-            title: '搜索'
-          }
-        }
-      ]
-    },
-    {
-      path: '/client-tag',
-      component: ClientTag,
-      meta: {
-        title: '标签'
-      }
-    },
-    {
-      path: '/client-search',
-      component: ClientSearch,
-      meta: {
-        title: '搜索'
-      }
-    },
-    {
-      path: '/client-detail',
-      component: Cdetail,
-      meta: {
-        title: '客户详情'
-      }
-    },
-    {
-      path: '/client-set-group',
-      component: ClientSetGroup,
-      meta: {
-        title: '设置分组'
-      }
-    },
-    {
-      path: '/client-create-group',
-      component: ClientCreateGroup,
-      meta: {
-        title: '添加分组'
-      }
-    },
-    {
-      path: '/mine',
-      component: Mine,
-      meta: {
-        title: '我的'
-      },
-      children: [{
-        path: 'editCard',
-        component: EditCard,
-        meta: {
-          title: '编辑名片'
-        },
-        children: [{
-          path: 'changeAutograph',
-          component: ChangeAutograph,
-          meta: {
-            title: '修改签名'
-          }
         }]
-      },
-      {
-        path: 'my-data',
-        component: MyData,
-        meta: {
-          title: '我的图表'
-        }
-      },
-      {
-        path: 'shareCard',
-        component: ShareCard,
-        meta: {
-          title: '分享名片'
-        }
-      },
-      {
-        path: 'goodList',
-        component: GoodsList,
-        meta: {
-          title: '我的产品'
-        },
-        children: [{
-          path: 'goodsDetail',
-          component: GoodsDetail,
-          meta: {
-            title: '产品详情'
-          }
-        }]
-      },
-      {
-        path: 'dynamicList',
-        component: DynamicList,
-        meta: {
-          title: '动态'
-        },
-        children: [ {
-          path: 'editDynamic',
-          component: EditDynamic,
-          meta: {
-            title: '发布动态'
-          }
-        }]
-      }]
     },
     {
-      path: '/chat',
-      component: Chat,
+      path: '/page-error',
+      component: PageError,
       meta: {
-        title: ''
+        title: '异常'
       }
     },
+    // 测试
     {
-      path: '/scroll-demo',
-      component: ScrollDemo,
+      path: '/shareCard',
+      component: ShareCard,
       meta: {
-        title: '测试滚动'
-      }
-    },
-    {
-      path: '/echarts',
-      component: Echarts,
-      meta: {
-        title: ''
-      }
-    },
-    {
-      path: '/detail-data',
-      component: Cdata,
-      meta: {
-        title: '客户資料'
-      }
-    },
-    {
-      path: '/addflow',
-      component: AddFlow,
-      meta: {
-        title: '添加跟进内容'
+        title: '分享名片'
       }
     }
   ]
 })
 
-const DEFAULT_TITLE = 'AI雷达'
+const DEFAULT_TITLE = '雷达'
 const DEFAULT_ROUTE = '/radar'
 const OAUTH_ROUTE = '/oauth'
 
