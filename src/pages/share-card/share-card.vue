@@ -1,19 +1,17 @@
 <template>
   <transition :name="slide">
     <div class="share-card">
-      <scroll>
-        <div class="card-con"></div>
-        <div class="card-main">
-          <img src="./bg-shopcode@2x.png" alt="" class="card-bg">
-          <div class="main-con">
-            <div class="title">{{card.name}}</div>
-            <img src="./pic-myshop@2x.png" alt="" class="title-img">
-            <img :src="card.avatar" alt="" class="avatar-img">
-            <img :src="card.qrcode" alt="" class="avatar-card">
-            <div class="qrcode-text">长按识别二维码</div>
-          </div>
+      <div class="card-con"></div>
+      <div class="card-main">
+        <img src="./bg-shopcode@2x.png" alt="" class="card-bg">
+        <div class="main-con">
+          <div class="title">{{card.name}}</div>
+          <img src="./pic-myshop@2x.png" alt="" class="title-img">
+          <img :src="card.avatar" alt="" class="avatar-img">
+          <img :src="card.qrcode" alt="" class="avatar-card">
+          <div class="qrcode-text">长按识别二维码</div>
         </div>
-      </scroll>
+      </div>
     </div>
   </transition>
 </template>
@@ -21,7 +19,7 @@
 <script>
   import Scroll from 'components/scroll/scroll'
   import { Business } from 'api'
-  import {mapGetters} from 'vuex'
+  import { mapGetters } from 'vuex'
 
   export default {
     name: 'share-card',
@@ -45,7 +43,7 @@
     },
     computed: {
       ...mapGetters(['ios']),
-      slide() {
+      slide () {
         return this.ios ? '' : 'slide'
       }
     },
@@ -60,8 +58,10 @@
   *
     -webkit-box-sizing: border-box
     box-sizing: border-box
+
   .card-con
     padding-top: 31px
+
   .card-main
     width: 317px
     position: relative
@@ -110,6 +110,7 @@
         font-size: $font-size-12
         color: #7C7C8F
         margin-top: -10px
+
   .share-card
     background: $color-text
     position: fixed
@@ -150,8 +151,7 @@
             height: 16px
             width: 1px
             margin: 0 10px
-            background: rgba(0,0,0, .1)
-
+            background: rgba(0, 0, 0, .1)
 
         .buss-name
           font-family: $font-family-regular
