@@ -13,7 +13,7 @@
                 <span class="time-box">{{item.created_at | timeFormat}}</span>
               </div>
               <div class="chat-content" v-if="item.from_account_id !== imInfo.im_account">
-                <img :src="currentMsg.avatar" class="avatar">
+                <div :style="{backgroundImage: 'url(' + currentMsg.avatar + ')',backgroundPosition: 'center',backgroundRepeat: 'no-repeat',backgroundSize: 'cover'}" class="avatar"></div>
                 <div class="chat-msg-box other" v-if="item.type * 1 == 1">
                   <div class="arrow-box">
                     <div class="gray-arrow">
@@ -25,7 +25,7 @@
                   </div>
                 </div>
                 <div class="chat-msg-goods" v-if="item.type * 1 == 2">
-                  <img :src="item.url" class="goods-img" onload="refushBox">
+                  <img :src="item.url" class="goods-img" @load="refushBox">
                   <p class="goods-title">{{item.title}}</p>
                 </div>
               </div>
@@ -38,7 +38,7 @@
                     <div class="green-arrow"></div>
                   </div>
                 </div>
-                <img :src="userInfo.avatar" class="avatar">
+                <div class="avatar" :style="{backgroundImage: 'url(' + userInfo.avatar + ')',backgroundPosition: 'center',backgroundRepeat: 'no-repeat',backgroundSize: 'cover'}"></div>
               </div>
             </div>
           </div>
@@ -121,8 +121,16 @@
         }, 20)
       },
       refushBox() {
-        setTimeout(() => {
+        let timer = setTimeout(() => {
+          let startY
+          if (this.listDom.clientHeight < this.chatDom.clientHeight) {
+            startY = 20
+          } else {
+            startY = this.chatDom.clientHeight - this.listDom.clientHeight - 20
+          }
           this.$refs.scroll.refresh()
+          this.$refs.scroll.scrollTo(0, startY, 10, ease[this.scrollToEasing])
+          clearTimeout(timer)
         }, 20)
       },
       onPullingDown() {

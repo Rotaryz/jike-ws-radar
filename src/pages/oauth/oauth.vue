@@ -33,7 +33,6 @@
     },
     methods: {
       _checkAuthorize() {
-        this.$router.replace(NORMAL_ROUTE)
         if (this.code && !this.hasToken) {
           // 有code没有token -> 申请拿token
           this._applyOauth()

@@ -12,7 +12,8 @@
                 :pullUpLoad="pullUpLoadObj"
                 @pullingUp="onPullingUp"
                 :showNoMore="showNoMore"
-        >
+                :pullDownRefresh="pullDownRefreshObj"
+                @pullingDown="onPullingDown">
           <div class="msgs-list">
             <div class="msgs-item" v-for="(item, index) in list" :key="index" @click="toDetail(item)">
               <div class="item-time" v-if="item.is_showtime">{{item.created_at | timeFormat}}</div>
@@ -91,7 +92,9 @@
   export default {
     name: 'Radar',
     created() {
-      this.$emit('login')
+      if (!this.imIng) {
+        this.$emit('login')
+      }
       Im.getRadarList(this.page, 30, this.userInfo.id).then((res) => {
         if (res.error === ERR_OK) {
           this.list = res.data
@@ -108,8 +111,12 @@
         pullUpLoadThreshold: 0,
         pullUpLoadMoreTxt: '加载更多',
         pullUpLoadNoMoreTxt: '没有更多了',
+        pullDownRefresh: true,
+        pullDownRefreshThreshold: 90,
+        pullDownRefreshStop: 40,
         page: 1,
         scrollToEasing: 'bounce',
+        scrollToEasingOptions: ['bounce', 'swipe', 'swipeBounce'],
         showNoMore: false
       }
     },
@@ -155,6 +162,19 @@
           }
         })
       },
+      onPullingDown() {
+        this.page = 1
+        Im.getRadarList(this.page, 30, this.userInfo.id).then((res) => {
+          if (res.error === ERR_OK) {
+            this.list = res.data
+            this.setCustomCount('clear')
+            setTimeout(() => {
+              this.$refs.scroll.forceUpdate()
+              this.$refs.scroll.scrollTo(0, 0, 300, ease[this.scrollToEasing])
+            }, 20)
+          }
+        })
+      },
       rebuildScroll() {
         this.nextTick(() => {
           this.$refs.scroll.destroy()
@@ -189,12 +209,25 @@
           txt: {more: this.pullUpLoadMoreTxt, noMore: this.pullUpLoadNoMoreTxt}
         } : false
       },
+      pullDownRefreshObj: function () {
+        return this.pullDownRefresh && !this.noMore ? {
+          threshold: parseInt(this.pullDownRefreshThreshold),
+          stop: parseInt(this.pullDownRefreshStop),
+          txt: '没有更多了'
+        } : false
+      },
       userInfo() {
         return storage.get('info')
       }
     },
     watch: {
       pullUpLoadObj: {
+        handler() {
+          this.rebuildScroll()
+        },
+        deep: true
+      },
+      pullDownRefreshObj: {
         handler() {
           this.rebuildScroll()
         },
@@ -219,10 +252,9 @@
     right: 0
     bottom: 45px
     background: $color-background
-    display: flex
-    flex-direction: column
     .container
-      flex: 1
+      width: 100%
+      height: 100%
       overflow: hidden
       position: relative
     .msg-box

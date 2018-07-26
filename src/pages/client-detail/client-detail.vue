@@ -24,10 +24,12 @@
                     <div class="label-right">
                       <div class="label-name">{{clientData.name}}</div>
                       <div class="label-box">
-                        <div class="label active" v-for="(item, index) in labelList" v-bind:key="index"
-                             @click="toClientTag">{{item.label_name}}
+                        <div class="label-content">
+                          <div class="label active" v-for="(item, index) in labelList" v-bind:key="index"
+                               @click="toClientTag">{{item.label_name}}
+                          </div>
+                          <div class="label" v-if="labelList.length<3" @click="toClientTag">添加标签</div>
                         </div>
-                        <div class="label" v-if="labelList.length<3" @click="toClientTag">添加标签</div>
                       </div>
                     </div>
                   </div>
@@ -161,15 +163,19 @@
               <div class="pie-list">
                 <div class="list">
                   <div class="icon one"></div>
-                  <div class="text">对我感兴趣</div>
+                  <div class="text">个人</div>
                 </div>
                 <div class="list">
                   <div class="icon two"></div>
-                  <div class="text">对产品感兴趣</div>
+                  <div class="text">商品</div>
                 </div>
                 <div class="list">
                   <div class="icon thr"></div>
-                  <div class="text">对公司感兴趣</div>
+                  <div class="text">拼团</div>
+                </div>
+                <div class="list">
+                  <div class="icon four"></div>
+                  <div class="text">砍价</div>
                 </div>
               </div>
             </div>
@@ -384,7 +390,7 @@
             trigger: 'item',
             formatter: '{d}%'
           },
-          color: ['#F9543C', '#23799D', '#8E3C68'],
+          color: ['#F9543C', '#23799D', '#8E3C68', '#F9B43C'],
           series: [
             {
               name: '访问222来源',
@@ -489,7 +495,16 @@
             axisLabel: {
               interval: 0,
               color: '#20202E',
-              fontSize: 14
+              fontSize: 14,
+              formatter: function (value) {
+                return value
+              },
+              align: 'right'
+            },
+            axisLine: {
+              lineStyle: {
+                color: '#888'
+              }
             }
           },
           yAxis: {
@@ -499,6 +514,11 @@
               interval: 0,
               color: '#20202E',
               fontSize: 14
+            },
+            axisLine: {
+              lineStyle: {
+                color: '#888'
+              }
             }
           },
           series: [{
@@ -829,10 +849,11 @@
           position: relative
           z-index: 1
           .detail-img-box
+            flex: 1
+            overflow: hidden
             layout(row)
             .img
               position: relative
-              height: 0
               width: 60px
               height: 60px
               background: #333
@@ -851,10 +872,12 @@
                 padding-top: 5px
                 margin-bottom: 15px
               .label-box
-                width: 100%
                 overflow-x: auto
+                .label-content
+                  display: inline-block
+                  white-space: nowrap
                 .label
-                  width: 65px
+                  padding: 0 10px
                   height: 20px
                   line-height: 20px
                   text-align: center
@@ -1019,7 +1042,6 @@
   .visitor-box
     padding: 0 15px
     .box-list
-      padding-top: 25px
       .time
         font-size: $font-size-medium
         color: $color-text
@@ -1165,6 +1187,8 @@
             background: #23799D
           .thr
             background: #8E3C68
+          .four
+            background: #F9B43C
           .text
             line-height: 1
             font-size: $font-size-small

@@ -81,15 +81,19 @@
             <div class="pie-list">
               <div class="list">
                 <div class="icon one"></div>
-                <div class="text">对我感兴趣</div>
+                <div class="text">个人</div>
               </div>
               <div class="list">
                 <div class="icon two"></div>
-                <div class="text">对产品感兴趣</div>
+                <div class="text">商品</div>
               </div>
               <div class="list">
                 <div class="icon thr"></div>
-                <div class="text">对公司感兴趣</div>
+                <div class="text">拼团</div>
+              </div>
+              <div class="list">
+                <div class="icon four"></div>
+                <div class="text">砍价</div>
               </div>
             </div>
           </div>
@@ -189,7 +193,7 @@
             trigger: 'item',
             formatter: '{d}%'
           },
-          color: ['#F9543C', '#23799D', '#8E3C68'],
+          color: ['#F9543C', '#23799D', '#8E3C68', '#F9B43C'],
           series: [
             {
               name: '访问222来源',
@@ -338,7 +342,16 @@
             axisLabel: {
               interval: 0,
               color: '#20202E',
-              fontSize: 14
+              fontSize: 14,
+              formatter: function (value) {
+                return value
+              },
+              align: 'right'
+            },
+            axisLine: {
+              lineStyle: {
+                color: '#888'
+              }
             }
           },
           yAxis: {
@@ -348,6 +361,11 @@
               interval: 0,
               color: '#20202E',
               fontSize: 14
+            },
+            axisLine: {
+              lineStyle: {
+                color: '#888'
+              }
             }
           },
           series: [{
@@ -679,6 +697,8 @@
             background: #23799D
           .thr
             background: #8E3C68
+          .four
+            background: #F9B43C
           .text
             line-height: 1
             font-size: $font-size-small
