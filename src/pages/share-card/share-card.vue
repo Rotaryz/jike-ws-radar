@@ -2,23 +2,15 @@
   <transition :name="slide">
     <div class="share-card">
       <scroll>
-        <div class="share-box">
-          <div class="share-con">
-            <img class="share-top" :src="card.avatar" alt="">
-            <div class="share-bottom">
-              <img :src="card.qrcode" alt="" class="share-code">
-              <div class="name-profession">
-                <div class="name">{{card.name}}</div>
-                <div class="line" v-if="showPosition"></div>
-                <div class="name-profession">{{card.position}}</div>
-              </div>
-              <div class="buss-name">{{card.department}}</div>
-              <div class="code-padding"></div>
-              <div class="code-phone" v-if="showMobile">
-                <img src="./icon-telephone_ash@2x.png" alt="" class="img-phone">
-                <div class="text">{{card.business_card_mobile}}</div>
-              </div>
-            </div>
+        <div class="card-con"></div>
+        <div class="card-main">
+          <img src="./bg-shopcode@2x.png" alt="" class="card-bg">
+          <div class="main-con">
+            <div class="title">{{card.name}}</div>
+            <img src="./pic-myshop@2x.png" alt="" class="title-img">
+            <img :src="card.avatar" alt="" class="avatar-img">
+            <img :src="card.qrcode" alt="" class="avatar-card">
+            <div class="qrcode-text">长按识别二维码</div>
           </div>
         </div>
       </scroll>
@@ -41,7 +33,7 @@
       }
     },
     created () {
-      Business.Myqrcode().then((res) => {
+      Business.Myshop().then((res) => {
         this.card = res.data || {}
         if (this.card.position.length === 0) {
           this.showPosition = false
@@ -65,6 +57,59 @@
 <style scoped lang="stylus" rel="stylesheet/stylus">
   @import "~common/stylus/variable"
   @import '~common/stylus/mixin'
+  *
+    -webkit-box-sizing: border-box
+    box-sizing: border-box
+  .card-con
+    padding-top: 31px
+  .card-main
+    width: 317px
+    position: relative
+    padding: 20px 20px 25px
+    margin: auto
+    .card-bg
+      position: absolute
+      width: 100%
+      height: 100%
+      left: 0
+      top: 0
+      display: block
+    .main-con
+      background: $color-white
+      padding-top: 29px
+      padding-bottom: 15px
+      width: 275px
+      margin: 0 auto
+      layout()
+      align-items: center
+      position: relative
+      z-index: 1
+      .title
+        font-family: $font-family-medium
+        font-size: $font-size-18
+        color: $color-20202E
+      .title-img
+        display: block
+        width: 175px
+        height: 16px
+        margin-top: 13.5px
+      .avatar-img
+        display: block
+        width: 235px
+        height: 235px
+        margin-top: 21px
+      .avatar-card
+        display: block
+        width: 120px
+        height: 120px
+        padding: 20px
+        -webkit-box-sizing: border-box
+        box-sizing: border-box
+      .qrcode-text
+        font-family: $font-family-regular
+        font-size: $font-size-12
+        color: #7C7C8F
+        margin-top: -10px
   .share-card
     background: $color-text
     position: fixed
@@ -81,9 +126,7 @@
       margin: 0 auto
       padding-top: 20px
     .share-con
-      background: $color-white-fff
       border-radius: 2px
-      box-shadow: 0 2px 6px 0 rgba(43,43,145,0.04)
       .share-top
         display: block
         width: 305px

@@ -197,7 +197,7 @@
         }
         ClientDetail.saveClientDetail(this.id, this.flow).then((res) => {
           if (res.error === ERR_OK) {
-            this.$refs.toast.show(res.message)
+            this.$refs.toast.show('保存成功')
             setTimeout(() => {
               this.$emit('refresh')
               this.$router.back()
