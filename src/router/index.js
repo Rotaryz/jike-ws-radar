@@ -148,7 +148,7 @@ const route = new Router({
                   path: 'detail-data',
                   component: Cdata,
                   meta: {
-                    title: '客户資料'
+                    title: '客户资料'
                   }
                 },
                 {
@@ -180,7 +180,7 @@ const route = new Router({
               path: 'detail-data',
               component: Cdata,
               meta: {
-                title: '客户資料'
+                title: '客户资料'
               }
             },
             {
@@ -281,7 +281,7 @@ const route = new Router({
         path: 'shareCard',
         component: ShareCard,
         meta: {
-          title: '分享名片'
+          title: '店铺二维码'
         }
       },
       {
@@ -338,7 +338,7 @@ const route = new Router({
       path: '/detail-data',
       component: Cdata,
       meta: {
-        title: '客户資料'
+        title: '客户资料'
       }
     },
     {
