@@ -143,7 +143,8 @@
       },
       onPullingUp() {
         if (this.showNoMore) return
-        Im.getRadarList(this.list.length, 30, this.userInfo.id).then((res) => {
+        const num = this.list.length * 1 + this.customCount * 1
+        Im.getRadarList(num, 30, this.userInfo.id).then((res) => {
           if (res.error === ERR_OK) {
             let list = res.data
             if (!list.length) {
