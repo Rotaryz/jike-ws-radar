@@ -57,7 +57,7 @@ export default {
    * 行为记录列表
    * @returns {*}
    */
-  getActionList(customer_id = 0, from = 0, limit = 30, page) {
+  getActionList(customer_id = 0, from = 0, limit = 30, page = 0) {
     const info = storage.get('info', {})
     const employeeId = info.id
     let url = `api/employee/ws-action-logs`
