@@ -638,7 +638,7 @@
       },
       getNewActionList(id) {
         this.actionPage = 1
-        ClientDetail.getActionList(id, this.actionPage).then((res) => {
+        ClientDetail.getActionList(id).then((res) => {
           if (res.error === ERR_OK) {
             this.actionList = res.data
           } else {
@@ -653,7 +653,8 @@
           return
         }
         this.actionPage++
-        ClientDetail.getActionList(id, this.actionPage).then((res) => {
+        const number = this.actionList.length
+        ClientDetail.getActionList(id, number).then((res) => {
           if (res.error === ERR_OK) {
             if (res.data.length * 1 === 0) {
               this.actionPage--

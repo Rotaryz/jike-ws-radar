@@ -57,7 +57,7 @@ export default {
    * 行为记录列表
    * @returns {*}
    */
-  getActionList(customer_id = 0, page = 1, limit = 10) {
+  getActionList(customer_id = 0, from = 0, limit = 30, page) {
     const info = storage.get('info', {})
     const employeeId = info.id
     let url = `api/employee/ws-action-logs`
@@ -65,6 +65,7 @@ export default {
       employee_id: employeeId,
       customer_id,
       page,
+      from,
       limit
     }
     return request.post(url, data)
