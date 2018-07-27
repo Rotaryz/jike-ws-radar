@@ -11,11 +11,12 @@ export default {
   },
 
   // 雷达消息（所有人）
-  getRadarList(page = 1, limit = 30, id, loading = true) {
+  getRadarList(from = 0, limit = 30, id, loading = true) {
     const url = `/api/employee/ws-action-logs`
     const data = {
-      page,
+      page: 0,
       limit,
+      from,
       customer_id: 0,
       employee_id: id
     }
