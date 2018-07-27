@@ -3,7 +3,6 @@
     <div class="share-card">
       <div class="card-con"></div>
       <div class="card-main">
-        <img src="./bg-shopcode@2x.png" alt="" class="card-bg">
         <div class="main-con">
           <div class="title">{{card.name}}</div>
           <img src="./pic-myshop@2x.png" alt="" class="title-img">
@@ -67,13 +66,7 @@
     position: relative
     padding: 20px 20px 25px
     margin: auto
-    .card-bg
-      position: absolute
-      width: 100%
-      height: 100%
-      left: 0
-      top: 0
-      display: block
+    background: url("./bg-shopcode@2x.png") no-repeat center center
     .main-con
       background: $color-white
       padding-top: 29px
@@ -120,65 +113,4 @@
     right: 0
     bottom: 0
     top: 0
-    .share-box
-      display: flex
-      flex-direction: column
-      width: 305px
-      margin: 0 auto
-      padding-top: 20px
-    .share-con
-      border-radius: 2px
-      .share-top
-        display: block
-        width: 305px
-        height: 305px
-        border: 0px solid #fff
-      .share-bottom
-        padding: 20px
-        position: relative
-        .name-profession
-          layout(row)
-          align-items: flex-end
-          .name
-            font-family: 'PingFangSC-Semibold'
-            font-size: $font-size-18
-            color: $color-20202E
-          .name-profession
-            font-family: $font-family-regular
-            font-size: $font-size-medium
-            color: $color-text-88
-          .line
-            height: 16px
-            width: 1px
-            margin: 0 10px
-            background: rgba(0, 0, 0, .1)
-
-        .buss-name
-          font-family: $font-family-regular
-          font-size: $font-size-medium
-          color: $color-20202E
-          margin-top: 15px
-        .code-padding
-          padding-bottom: 147px
-          width: 100%
-        .code-phone
-          layout(row)
-          .img-phone
-            display: block
-            width: 14px
-            height: 14px
-            margin-right: 5px
-          .text
-            font-family: $font-family-regular
-            font-size: $font-size-medium
-            color: $color-text-88
-
-        .share-code
-          position: absolute
-          z-index: 11
-          width: 74px
-          height: 74px
-          display: block
-          right: 20px
-          bottom: 20px
 </style>

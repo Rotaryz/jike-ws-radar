@@ -372,7 +372,7 @@
             data: this.barData.x,
             type: 'bar',
             showSymbol: false,
-            barWidth: 25,
+            barWidth: 15,
             itemStyle: {
               normal: {
                 color: '#F9543C',
