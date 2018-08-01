@@ -121,7 +121,26 @@
 
         let avatar = this.userInfo.avatar
         await webimHandler.sdkLogin(loginInfo, listeners, options, avatar)
-        let res = await webimHandler.getRecentContact(50)
+        let userInfo = storage.get('info')
+        let reqData = {
+          merchant_id: userInfo.merchant_id,
+          employee_id: userInfo.id,
+          page: 1,
+          limit: 50
+        }
+        Im.getContactList(reqData).then((res) => {
+          if (res.error === ERR_OK) {
+            let data = res.data
+            webimHandler.initUnread(data).then((resp) => {
+              let msgList = resp.map((item) => {
+                item.time = Utils.formatDate(item.msgTimeStamp).date
+                return item
+              })
+              this.saveList(msgList)
+            })
+          }
+        })
+        /** let res = await webimHandler.getRecentContact(50)
         let msgList = await webimHandler.initUnread(res)
         let noMsgList = msgList.filter((item) => {
           return item.lastMsg === '[其他]'
@@ -163,7 +182,7 @@
             return item
           })
           this.saveList(msgList)
-        }
+        } **/
       },
       touchStart(e) {
         this.touch.initiated = true

@@ -33,5 +33,11 @@ export default {
   getLastMsgObj(data, loading = true) {
     const url = `/api/employee/ws-customers-newest-message`
     return request.post(url, data, loading)
+  },
+
+  // 最近联系人最后一条聊天记录
+  getContactList(data, loading = true) {
+    const url = `/api/employee/ws-customers-recent-contacts`
+    return request.post(url, data, loading)
   }
 }
