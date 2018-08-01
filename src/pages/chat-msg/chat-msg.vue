@@ -10,7 +10,7 @@
             <div class="list-line"></div>
             <div class="chat-item" v-for="(item, index) in nowChat" :key="index">
               <div class="item-time" v-if="item.is_showtime">
-                <span class="time-box">{{item.created_at | timeFormat}}</span>
+                <span class="time-box">{{item.created_at ? item.created_at : item.msgTimeStamp | timeFormat}}</span>
               </div>
               <div class="chat-content" v-if="item.from_account_id !== imInfo.im_account">
                 <div :style="{backgroundImage: 'url(' + currentMsg.avatar + ')',backgroundPosition: 'center',backgroundRepeat: 'no-repeat',backgroundSize: 'cover'}" class="avatar"></div>
@@ -63,7 +63,7 @@
   import webimHandler from 'common/js/webim_handler'
   import storage from 'storage-controller'
   import {Im} from 'api'
-  import {ERR_OK} from 'common/js/config'
+  import {ERR_OK, TIMELAG} from 'common/js/config'
   import utils from 'common/js/utils'
   export default {
     name: 'Chat',
@@ -184,6 +184,13 @@
           sessionId: this.userInfo.account,
           unreadMsgCount: 0,
           type: 1
+        }
+        if (this.nowChat.length) {
+          let lastItem = this.nowChat[this.nowChat.length - 1]
+          let lastTime = lastItem.created_at ? lastItem.created_at : lastItem.msgTimeStamp
+          msg.is_showtime = timeStamp - lastTime > TIMELAG
+        } else {
+          msg.is_showtime = true
         }
         let list = [...this.nowChat, msg]
         this.setNowChat(list)

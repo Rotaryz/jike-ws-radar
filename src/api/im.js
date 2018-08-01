@@ -35,7 +35,7 @@ export default {
     return request.post(url, data, loading)
   },
 
-  // 最近联系人最后一条聊天记录
+  // 最近联系人列表
   getContactList(data, loading = true) {
     const url = `/api/employee/ws-customers-recent-contacts`
     return request.post(url, data, loading)
