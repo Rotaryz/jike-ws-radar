@@ -291,19 +291,24 @@ export default class webimHandler {
       // 解析文本和表情
       let expr = /\[[^[\]]{1,3}\]/mg
       let emotions = msgtosend.match(expr)
+      console.log(emotions)
       let textObj, faceObj, tmsg, emotionIndex, emotion, restMsgIndex
       if (!emotions || emotions.length < 1) {
         textObj = new webim.Msg.Elem.Text(msgtosend)
         msg.addText(textObj)
       } else { // 有表情
         for (let i = 0; i < emotions.length; i++) {
+          console.log(msgtosend)
           tmsg = msgtosend.substring(0, msgtosend.indexOf(emotions[i]))
+          console.log(tmsg)
           if (tmsg) {
             textObj = new webim.Msg.Elem.Text(tmsg)
             msg.addText(textObj)
           }
           emotionIndex = webim.EmotionDataIndexs[emotions[i]]
+          console.log(webim.EmotionDataIndexs, emotionIndex)
           emotion = webim.Emotions[emotionIndex]
+          console.log(webim.Emotions, emotion)
           if (emotion) {
             faceObj = new webim.Msg.Elem.Face(emotionIndex, emotions[i])
             msg.addFace(faceObj)
@@ -319,6 +324,7 @@ export default class webimHandler {
           msg.addText(textObj)
         }
       }
+      console.log(msg)
       this.sendMsg(msg).then(res => {
         resolve(res)
       }, err => {
