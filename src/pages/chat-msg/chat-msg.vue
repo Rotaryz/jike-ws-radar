@@ -435,7 +435,7 @@
       background: $color-background-f9
       padding: 6px 15px
       display: flex
-      align-items: flex-end
+      align-items: center
       position: absolute
       left: 0
       right: 0

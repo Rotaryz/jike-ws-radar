@@ -1,5 +1,6 @@
 import _this from '@/main'
 import storage from 'storage-controller'
+import {emotionsFace} from 'common/js/constants'
 
 const LOSE_EFFICACY = 10000
 const DISABLE = 110002
@@ -126,6 +127,25 @@ export default class utils {
       timer = setTimeout(() => {
         func.apply(this, args)
       }, delay)
+    }
+  }
+
+  // 讲文本中的表情转为img
+  static msgFaceToHtml(msg) {
+    let expr = /\[[^[\]]{1,3}\]/mg
+    let emotions = msg.match(expr)
+    if (!emotions || emotions.length < 1) {
+      return msg
+    } else { // 有表情
+      for (let i = 0; i < emotions.length; i++) {
+        let html = `<img class="face-img" src="${emotionsFace[emotions[i]]}"/>`
+        let str = emotions[i].replace(/(\[|])/g, '\\' + '$1')
+        console.log(str)
+        let reg = new RegExp(str, 'g')
+        console.log(reg, html)
+        msg = msg.replace(reg, html)
+      }
+      return msg
     }
   }
 }
