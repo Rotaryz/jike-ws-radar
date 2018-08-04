@@ -62,12 +62,14 @@ const mutations = {
     let notIn = state.latelyList.filter((item) => {
       return item.sessionId !== msg.fromAccount
     })
+    console.log(hasIn)
     let inItem
     if (hasIn.length) {
-      inItem = Object.assign({}, hasIn[0], {lastMsg: msg.text, msgTimeStamp: msg.msgTimeStamp, time: Utils.formatDate(msg.time).date})
+      inItem = Object.assign({}, hasIn[0], {html: Utils.msgFaceToHtml(msg.text), lastMsg: msg.text, msgTimeStamp: msg.msgTimeStamp, time: Utils.formatDate(msg.time).date})
     } else {
       let addMsg = {
         lastMsg: msg.text,
+        html: Utils.msgFaceToHtml(msg.text),
         msgTimeStamp: msg.msgTimeStamp ? msg.msgTimeStamp : msg.time,
         time: Utils.formatDate(msg.time).date,
         sessionId: msg.fromAccount,
@@ -77,13 +79,17 @@ const mutations = {
       }
       inItem = Object.assign({}, addMsg)
     }
+    console.log(inItem)
     state.latelyList = [inItem, ...notIn]
   },
   [TYPES.SET_IM_INFO](state, imInfo) {
     state.imInfo = imInfo
   },
   [TYPES.SET_NOW_CHAT](state, arr) {
-    state.nowChat = arr
+    state.nowChat = arr.map((item) => {
+      item.html = Utils.msgFaceToHtml(item.content)
+      return item
+    })
   },
   [TYPES.ADD_NOW_CHAT](state, msg) {
     let newMsg
@@ -97,7 +103,8 @@ const mutations = {
         nickName: state.currentMsg.nickName,
         sessionId: msg.fromAccount,
         unreadMsgCount: 0,
-        type: 1
+        type: 1,
+        html: Utils.msgFaceToHtml(msg.text)
       }
     } else {
       let data = JSON.parse(msg.data)

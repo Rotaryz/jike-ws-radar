@@ -12,9 +12,7 @@
               <span class="top-name">{{item.nickName}}</span>
               <span class="top-time">{{item.time}}</span>
             </div>
-            <div class="right-down">
-              {{item.lastMsg ? item.lastMsg : ' '}}
-            </div>
+            <div class="right-down" v-html="item.html"></div>
           </div>
         </div>
       </div>
@@ -141,5 +139,7 @@
             font-family: $font-family-regular
             font-size: $font-size-small
             color: $color-text-88
+            line-height: 14px
+            vertical-align: middle
 
 </style>

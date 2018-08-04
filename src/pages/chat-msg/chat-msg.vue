@@ -21,7 +21,7 @@
                     </div>
                   </div>
                   <div class="chat-msg-content-max-box">
-                    <div class="chat-msg-content other">{{item.content}}</div>
+                    <div class="chat-msg-content other" v-html="item.html"></div>
                   </div>
                 </div>
                 <div class="chat-msg-goods" v-if="item.type * 1 == 2">
@@ -32,7 +32,7 @@
               <div class="chat-content mine" v-if="item.from_account_id === imInfo.im_account">
                 <div class="chat-msg-box mine">
                   <div class="chat-msg-content-max-box">
-                    <div class="chat-msg-content mine">{{item.content}}</div>
+                    <div class="chat-msg-content mine" v-html="item.html"></div>
                   </div>
                   <div class="arrow-box">
                     <div class="green-arrow"></div>
@@ -249,6 +249,9 @@
           return res.time
         }
         return ''
+      },
+      test(val) {
+        return '<div>123</div>'
       }
     },
     watch: {
@@ -361,6 +364,7 @@
               font-family: $font-family-regular
               word-wrap: break-word
               word-break: break-all
+              vertical-align: middle
             .chat-msg-content.other
               background: $color-white
               border: 0.5px solid #D6DCE0

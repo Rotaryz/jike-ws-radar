@@ -134,6 +134,7 @@
             webimHandler.initUnread(data).then((resp) => {
               let msgList = resp.map((item) => {
                 item.time = Utils.formatDate(item.msgTimeStamp).date
+                item.html = Utils.msgFaceToHtml(item.lastMsg)
                 return item
               })
               this.saveList(msgList)
