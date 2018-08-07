@@ -132,6 +132,7 @@ export default class utils {
 
   // 讲文本中的表情转为img
   static msgFaceToHtml(msg) {
+    if (!msg) return msg
     msg = this.labelEscape(msg)
     let expr = /\[[^[\]]{1,3}\]/mg
     let emotions = msg.match(expr)
@@ -152,6 +153,7 @@ export default class utils {
 
   // 标签转义
   static labelEscape(msg) {
+    if (!msg) return msg
     let res = msg.replace(/</g, '&lt;')
     res = res.replace(/>/g, '&gt;')
     return res

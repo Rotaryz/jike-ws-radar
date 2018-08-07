@@ -690,7 +690,7 @@
           account: this.clientData.im_account
         }
         this.setCurrent(currentMsg)
-        let url = '/chat?id=' + this.clientData.im_account
+        let url = '/chat/' + this.clientData.im_account
         this.$router.push(url)
       },
       onPullingUp() {

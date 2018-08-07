@@ -94,11 +94,13 @@
               this.setCustomCount('add')
               if (Number(res.ext) === 20005 && res.fromAccount === this.currentMsg.account) {
                 let goods = JSON.parse(res.data)
-                let url = goods.url ? goods.url : ''
-                let title = goods.title ? goods.title : ''
-                let goodsId = goods.goods_id
-                let goodsRes = Object.assign({}, res, {url, title, goods_id: goodsId})
+                let goodsRes = Object.assign({}, res, goods)
+                console.log(goodsRes)
                 this.addNowChat(goodsRes)
+              }
+              if (Number(res.ext) === 20005) {
+                this.addListCount(res)
+                this.addListMsg(res)
               }
             } else {
               this.addListCount(res)

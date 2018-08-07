@@ -14,7 +14,7 @@
               </div>
               <div class="chat-content" v-if="item.from_account_id !== imInfo.im_account">
                 <div :style="{backgroundImage: 'url(' + currentMsg.avatar + ')',backgroundPosition: 'center',backgroundRepeat: 'no-repeat',backgroundSize: 'cover'}" class="avatar"></div>
-                <div class="chat-msg-box other" v-if="item.type * 1 == 1">
+                <div class="chat-msg-box other" v-if="item.type * 1 === 1">
                   <div class="arrow-box">
                     <div class="gray-arrow">
                       <div class="white-arrow"></div>
@@ -28,15 +28,57 @@
                   <img :src="item.url" class="goods-img" @load="refushBox">
                   <p class="goods-title">{{item.title}}</p>
                 </div>
+                <div class="chat-msg-new-goods other" v-if="item.type * 1 == 3 || item.type * 1 == 4 || item.type * 1 == 5">
+                  <div class="new-goods-top">
+                    <div class="shop-title">
+                      <div :style="{backgroundImage: 'url(' + item.avatar + ')',backgroundPosition: 'center',backgroundRepeat: 'no-repeat',backgroundSize: 'cover'}" class="shop-icon"></div>
+                      <div class="shop-name">{{item.shop_name}}的小店</div>
+                    </div>
+                    <div class="goods-title">
+                      <img src="../../../static/img/pic-spell@2x.png" class="title-icon" v-if="item.type * 1 == 4">
+                      <img src="../../../static/img/icon-bargain@2x.png" class="title-icon" v-if="item.type * 1 == 5">
+                      <span>原价{{item.original_price}}元的{{item.title}}，{{item.type * 1 == 4 ? '团购价' : '底价'}}只要{{item.goods_price}}元！</span>
+                    </div>
+                    <div :style="{backgroundImage: 'url(' + item.url + ')',backgroundPosition: 'center',backgroundRepeat: 'no-repeat',backgroundSize: 'cover'}" class="goods-img"></div>
+                  </div>
+                  <div class="new-goods-down border-top-1px">
+                    <img src="../../../static/img/pic-logo_zb@2x.png" class="down-icon" @load="refushBox">
+                    <span>赞播微店</span>
+                  </div>
+                </div>
+                <div>
+                  <img class="chat-msg-img other" :src="item.url" v-if="item.type * 1 == 20" @load="refushBox" @click.stop="showPic(item)">
+                </div>
               </div>
               <div class="chat-content mine" v-if="item.from_account_id === imInfo.im_account">
-                <div class="chat-msg-box mine">
+                <div class="chat-msg-box mine" v-if="item.type * 1 === 1">
                   <div class="chat-msg-content-max-box">
                     <div class="chat-msg-content mine" v-html="item.html"></div>
                   </div>
                   <div class="arrow-box">
                     <div class="green-arrow"></div>
                   </div>
+                </div>
+                <div class="chat-msg-new-goods mine" v-if="item.type * 1 == 3 || item.type * 1 == 4 || item.type * 1 == 5">
+                  <div class="new-goods-top">
+                    <div class="shop-title">
+                      <div :style="{backgroundImage: 'url(' + item.avatar + ')',backgroundPosition: 'center',backgroundRepeat: 'no-repeat',backgroundSize: 'cover'}" class="shop-icon"></div>
+                      <div class="shop-name">{{item.shop_name}}的小店</div>
+                    </div>
+                    <div class="goods-title">
+                      <img src="../../../static/img/pic-spell@2x.png" class="title-icon" v-if="item.type * 1 == 4">
+                      <img src="../../../static/img/icon-bargain@2x.png" class="title-icon" v-if="item.type * 1 == 5">
+                      <span>原价{{item.original_price}}元的{{item.title}}，{{item.type * 1 == 4 ? '团购价' : '底价'}}只要{{item.goods_price}}元！</span>
+                    </div>
+                    <div :style="{backgroundImage: 'url(' + item.url + ')',backgroundPosition: 'center',backgroundRepeat: 'no-repeat',backgroundSize: 'cover'}" class="goods-img"></div>
+                  </div>
+                  <div class="new-goods-down border-top-1px">
+                    <img src="../../../static/img/pic-logo_zb@2x.png" class="down-icon" @load="refushBox">
+                    <span>赞播微店</span>
+                  </div>
+                </div>
+                <div>
+                  <img class="chat-msg-img mine" :src="item.url" v-if="item.type * 1 == 20" @load="refushBox" @click.stop="showPic(item)">
                 </div>
                 <div class="avatar" :style="{backgroundImage: 'url(' + userInfo.avatar + ')',backgroundPosition: 'center',backgroundRepeat: 'no-repeat',backgroundSize: 'cover'}"></div>
               </div>
@@ -45,12 +87,35 @@
         </scroll>
       </div>
       <div class="chat-input border-top-1px">
-        <div class="input-container" ref="textBox">
-          <textarea class="textarea" type="text" ref="inputTxt" v-model="inputMsg" rows="1"></textarea>
+        <div class="chat-input-box">
+          <div class="face-box" @click.stop="showEmoji">
+            <img src="../../../static/img/icon-emoji@2x.png" class="face-icon">
+          </div>
+          <div class="input-container" ref="textBox">
+            <textarea class="textarea" type="text" ref="inputTxt" v-model="inputMsg" rows="1"></textarea>
+          </div>
+          <div class="addimg-box" v-if="!inputMsg" @click.stop="showMoreList">
+            <img src="../../../static/img/icon-add_im@2x.png" class="addimg-icon">
+          </div>
+          <div class="submit-btn" @click="sendMsg" v-if="inputMsg">发送</div>
         </div>
-        <div class="submit-btn" @click="sendMsg">发送</div>
+        <div class="more-box">
+          <div class="emoji-list" v-if="emojiShow">
+            <div class="emoji-item" v-for="(item, index) in emojiList" :key="index" @click.stop="chioceEmoji(item)">
+              <img :src="item.url" class="emoji-icon">
+            </div>
+          </div>
+          <div class="addimg-list" v-if="mortListShow">
+            <div class="addimg-item" v-for="(item, index) in moreLists" :key="index" @click="nextWork(item)">
+              <img :src="item.icon" class="item-icon">
+              <p class="item-txt">{{item.txt}}</p>
+              <input type="file" class="image-file" @change="_fileImage($event)" accept="image/*" v-if="item.type == 1">
+            </div>
+          </div>
+        </div>
       </div>
       <toast ref="toast"></toast>
+      <router-view />
     </div>
   </transition>
 </template>
@@ -62,13 +127,21 @@
   import {mapActions, mapGetters} from 'vuex'
   import webimHandler from 'common/js/webim_handler'
   import storage from 'storage-controller'
-  import {Im} from 'api'
+  import {Im, UpLoad, Global} from 'api'
   import {ERR_OK, TIMELAG} from 'common/js/config'
   import utils from 'common/js/utils'
+  import {emotionsFaceArr} from 'common/js/constants'
+  import wx from 'weixin-js-sdk'
+
+  const MORELIST = [
+    {txt: '图片', icon: '../../../static/img/icon-pic-_im@2x.png', type: 1},
+    {txt: '发送商品', icon: '../../../static/img/icon-goods_im@2x.png', type: 2},
+    {txt: '发送活动', icon: '../../../static/img/icon-send_im@2x.png', type: 3}
+  ]
   export default {
     name: 'Chat',
     created() {
-      this.id = this.$route.query.id
+      this.id = this.$route.params.id
       let data = {
         'end_date': this.endDate,
         limit: 40,
@@ -89,6 +162,20 @@
             this.$refs.scroll.scrollTo(0, startY, 10, ease[this.scrollToEasing])
             clearTimeout(timer)
           }, 20)
+        }
+      })
+      let url = location.href
+      Global.jssdkConfig({weixin: 'ai_radar', url, current_type: 'weishang'}).then((res) => {
+        if (res.error === ERR_OK) {
+          res = res.data
+          wx.config({
+            debug: false, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
+            appId: res.appid, // 必填，企业号的唯一标识，此处填写企业号corpid
+            timestamp: res.timestamp, // 必填，生成签名的时间戳
+            nonceStr: res.noncestr, // 必填，生成签名的随机串
+            signature: res.signature, // 必填，签名，见附录1
+            jsApiList: ['previewImage'] // 必填，需要使用的JS接口列表，所有JS接口列表见附录2
+          })
         }
       })
     },
@@ -112,6 +199,9 @@
         'addListMsg',
         'setNowChat'
       ]),
+      showPic(item) {
+        wx.previewImage({urls: [item.url]})
+      },
       textHeight() {
         let timer = setTimeout(() => {
           this.textareaDom.style.height = 'auto'
@@ -206,6 +296,7 @@
         }
         this.addListMsg(addMsg)
         this.inputMsg = ''
+        this.emojiShow = false
         this.$refs.scroll.forceUpdate()
         if (this.listDom.clientHeight > this.chatDom.clientHeight) {
           let timer = setTimeout(() => {
@@ -217,6 +308,97 @@
         webimHandler.onSendMsg(value, this.id).then(res => {
         }, () => {
           this.$refs.toast.show('网络异常, 请稍后重试')
+        })
+      },
+      nextWork(item) {
+        let type = item.type * 1
+        let url
+        switch (type) {
+          case 1:
+            break
+          case 2:
+            url = this.$route.fullPath + '/select-goods?type=1'
+            this.mortListShow = false
+            this.$router.push({path: url})
+            break
+          case 3:
+            url = this.$route.fullPath + '/select-goods?type=2'
+            this.mortListShow = false
+            this.$router.push({path: url})
+            break
+        }
+      },
+      chioceEmoji(item) {
+        this.inputMsg = this.inputMsg + item.txt
+      },
+      showEmoji() {
+        this.emojiShow = !this.emojiShow
+        this.mortListShow = false
+      },
+      showMoreList() {
+        this.mortListShow = !this.mortListShow
+        this.emojiShow = false
+      },
+      _fileImage(e) {
+        let file = e.target.files[0]
+        let params = new FormData()
+        params.append('file', file, file.name)
+        UpLoad.upLoadImage(params).then((res) => {
+          if (res.error === ERR_OK) {
+            let data = {
+              image_id: res.data.id,
+              url: res.data.url
+            }
+            let desc = {log_type: 20}
+            let ext = '20005'
+            data = JSON.stringify(data)
+            desc = JSON.stringify(desc)
+            let opt = {
+              data,
+              desc,
+              ext
+            }
+            let timeStamp = parseInt(Date.parse(new Date()) / 1000)
+            let msg = {
+              from_account_id: this.imInfo.im_account,
+              avatar: this.userInfo.avatar,
+              content: '',
+              time: timeStamp,
+              url: res.data.url,
+              msgTimeStamp: timeStamp,
+              nickName: this.userInfo.nickName,
+              sessionId: this.userInfo.account,
+              unreadMsgCount: 0,
+              type: 20
+            }
+            if (this.nowChat.length) {
+              let lastItem = this.nowChat[this.nowChat.length - 1]
+              let lastTime = lastItem.created_at ? lastItem.created_at : lastItem.msgTimeStamp
+              msg.is_showtime = timeStamp - lastTime > TIMELAG
+            } else {
+              msg.is_showtime = true
+            }
+            let list = [...this.nowChat, msg]
+            this.setNowChat(list)
+            let addMsg = {
+              text: '[图片信息]',
+              time: timeStamp,
+              msgTimeStamp: timeStamp,
+              fromAccount: this.id,
+              sessionId: this.id,
+              unreadMsgCount: 0,
+              avatar: this.currentMsg.avatar,
+              nickName: this.currentMsg.nickName
+            }
+            this.addListMsg(addMsg)
+            this.mortListShow = false
+            webimHandler.onSendCustomMsg(opt, this.id).then(res => {
+            }, () => {
+              this.$refs.toast.show('发送消息不能为空')
+            })
+          } else {
+            this.$refs.toast.show('图片发送失败，请重新发送')
+          }
         })
       }
     },
@@ -235,7 +417,11 @@
         scrollToEasingOptions: ['bounce', 'swipe', 'swipeBounce'],
         id: '',
         page: 1,
-        noMore: false
+        noMore: false,
+        moreLists: MORELIST,
+        emojiList: emotionsFaceArr,
+        emojiShow: false,
+        mortListShow: false
       }
     },
     components: {
@@ -301,6 +487,11 @@
   @import "~common/stylus/variable"
   @import '~common/stylus/mixin'
   @import '~common/stylus/base'
+  .test
+    position: fixed
+    z-index: 1000
+    right: 0
+    top: 20
   .chat
     width: 100vw
     height: 100vh
@@ -348,6 +539,7 @@
           .avatar
             width: 45px
             height: 45px
+            border-radius: 2px
           .chat-msg-box
             flex: 1
             overflow: hidden
@@ -411,12 +603,86 @@
                 position: absolute
                 left: 0
                 top: 17.5px
+          .chat-msg-img
+            width: 200px
+            height: auto
+            border-radius: 4px
+          .other.chat-msg-img
+            margin-left: 10px
+          .mine.chat-msg-img
+            margin-right: 10px
+          .chat-msg-new-goods
+            width: 226px
+            border: 0.5px solid rgba(0,0,0,0.10)
+            border-radius: 4px
+            background: $color-white
+            overflow: hidden
+            font-size: 0
+            .new-goods-top
+              padding: 12.5px
+              box-sizing: border-box
+              .shop-title
+                display: flex
+                height: 20px
+                align-items: center
+                margin-bottom: 8px
+                overflow: hidden
+                white-space: nowrap
+                text-overflow: ellipsis
+                .shop-icon
+                  width: 18px
+                  height: 18px
+                  border: 0.5px solid rgba(0,0,0,0.10)
+                  border-radius: 50%
+                  margin-right: 6px
+                .shop-name
+                  flex: 1
+                  overflow: hidden
+                  white-space: nowrap
+                  text-overflow: ellipsis
+                  font-family: $font-family-regular
+                  font-size: $font-size-12
+                  color: #828AA2
+                  letter-spacing: 0.26px
+              .goods-title
+                line-height: 21px
+                font-family: $font-family-regular
+                font-size: $font-size-14
+                color: #374B63
+                letter-spacing: 0.3px
+                word-wrap: break-word
+                word-break: break-all
+                .title-icon
+                  display: inline-block
+                  width: 33.5px
+                  height: 14px
+                  margin-right: 6px
+              .goods-img
+                width: 200px
+                height: 200px
+            .new-goods-down
+              height: 25px
+              display: flex
+              align-items: center
+              font-family: $font-family-regular
+              font-size: $font-size-10
+              color: #828AA2
+              letter-spacing: 0.4px
+              .down-icon
+                width: 11.45px
+                height: 11.75px
+                margin-right: 4px
+                margin-left: 12.5px
+          .other.chat-msg-new-goods
+            margin-left: 10px
+          .mine.chat-msg-new-goods
+            margin-right: 10px
           .chat-msg-goods
             width: 200px
             border: 0.5px solid rgba(0,0,0,0.10)
-            border-radius: 8px
+            border-radius: 4px
             background: $color-white
-            margin-left: 6px
+            margin-left: 10px
             overflow: hidden
             font-size: 0
             .goods-img
@@ -437,45 +703,109 @@
       box-sizing: border-box
       min-height: 38px
       background: $color-background-f9
-      padding: 6px 15px
-      display: flex
-      align-items: center
+      padding: 6px 0
       position: absolute
       left: 0
       right: 0
       bottom: 0
-      .submit-btn
-        width: 50px
-        height: 36px
-        border: 1px solid rgba(0,0,0,0.10)
-        border-radius: 2px
-        background: $color-white
-        text-align: center
-        line-height: 36px
-        font-size: $font-size-medium
-        font-family: $font-family-regular
-        margin-left: 5px
-      .input-container
-        flex: 1
-        overflow-x: hidden
-        min-height: 28px
-        border: 1px solid rgba(0,0,0,0.10)
-        background: $color-white
-        max-height: 100px
-        overflow-y: auto
-        padding: 8px 10px 0
-        .textarea
-          width: 100%
-          height: auto
-          padding: 0
-          margin: 0
-          resize: none
-          border: 0 none
-          outline: none
-          overflow-y: visible
-          display: block
+      z-index: 10
+      .chat-input-box
+        display: flex
+        align-items: flex-end
+        min-height: 38px
+        .face-box
+          width: 53px
+          display: flex
+          align-items: center
+          .face-icon
+            margin-left: 10px
+            width: 28px
+            height: 28px
+            padding: 5px
+        .addimg-box
+          width: 53px
+          display: flex
+          align-items: center
+          .addimg-icon
+            margin-left: 5px
+            width: 28px
+            height: 28px
+            padding: 5px
+        .submit-btn
+          width: 43px
+          height: 36px
+          margin: 0 5px
+          border: 1px solid rgba(0,0,0,0.10)
+          border-radius: 2px
+          background: $color-white
+          text-align: center
+          line-height: 36px
           font-size: $font-size-medium
-
-
+          font-family: $font-family-regular
+          box-sizing: border-box
+        .input-container
+          flex: 1
+          overflow-x: hidden
+          min-height: 28px
+          border: 1px solid rgba(0,0,0,0.10)
+          background: $color-white
+          max-height: 100px
+          overflow-y: auto
+          padding: 8px 10px 0
+          .textarea
+            width: 100%
+            height: auto
+            padding: 0
+            margin: 0
+            resize: none
+            border: 0 none
+            outline: none
+            overflow-y: visible
+            display: block
+            font-size: $font-size-medium
+      .more-box
+        width: 100%
+        .emoji-list
+          display: flex
+          flex-wrap: wrap
+          padding: 6.666666vw 8vw 0
+          .emoji-item
+            width: 6.666666vw
+            height: 6.666666vw
+            margin-bottom: 6.666666vw
+            &:not(:nth-child(7n))
+              margin-right: 6.2vw
+            .emoji-icon
+              width: 6.666666vw
+              height: 6.666666vw
+        .addimg-list
+          height: 140px
+          padding: 25px 0 0 30px
+          display: flex
+          .addimg-item
+            width: 48px
+            height: 70px
+            display: flex
+            flex-direction: column
+            justify-content: space-between
+            font-size: 0
+            margin-right: 44px
+            position: relative
+            .item-icon
+              width: 48px
+              height: 48px
+            .item-txt
+              font-size: $font-size-12
+              font-family: $font-family-regular
+              color: #828AA2
+              text-align: center
+            .image-file
+              position: absolute
+              left: 0
+              top: 0
+              opacity: 0
+              width: 100%
+              height: 100%
+              z-index: 10
 
 </style>

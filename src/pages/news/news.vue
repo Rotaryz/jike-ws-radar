@@ -47,7 +47,7 @@
           account: item.sessionId
         }
         this.setCurrent(currentMsg)
-        let url = '/chat?id=' + item.sessionId
+        let url = '/chat/' + item.sessionId
         this.$router.push(url)
       }
     },
