@@ -474,7 +474,7 @@
       endDate() {
         if (this.nowChat.length) {
           if (!this.nowChat[0].created_at && !this.nowChat[0].msgTimeStamp) {
-            return this.nowChat[1].created_at ? this.nowChat[1].created_at : this.nowChat[1].msgTimeStamp
+            return this.nowChat[1] ? this.nowChat[1].created_at ? this.nowChat[1].created_at : this.nowChat[1].msgTimeStamp : ''
           } else {
             return this.nowChat[0].created_at ? this.nowChat[0].created_at : this.nowChat[0].msgTimeStamp
           }
