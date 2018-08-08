@@ -39,5 +39,17 @@ export default {
   getContactList(data, loading = true) {
     const url = `/api/employee/ws-customers-recent-contacts`
     return request.post(url, data, loading)
+  },
+
+  // 推荐商品
+  getGoodsList(data, loading = true) {
+    const url = `/api/employee/goods`
+    return request.get(url, data, loading)
+  },
+
+  // 推荐活动
+  getActivityList(data, loading = true) {
+    const url = `/api/employee/presell-activity`
+    return request.get(url, data, loading)
   }
 }

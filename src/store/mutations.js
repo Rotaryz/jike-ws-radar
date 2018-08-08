@@ -56,6 +56,14 @@ const mutations = {
     }
   },
   [TYPES.ADD_LIST_MSG](state, msg) {
+    if (msg.desc) {
+      let desc = JSON.parse(msg.desc)
+      if (desc.log_type * 1 === 3 || desc.log_type * 1 === 4 || desc.log_type * 1 === 5) {
+        msg.text = '[商品信息]'
+      } else if (desc.log_type * 1 === 20) {
+        msg.text = '[图片信息]'
+      }
+    }
     let hasIn = state.latelyList.filter((item) => {
       return item.sessionId === msg.fromAccount
     })
@@ -64,10 +72,11 @@ const mutations = {
     })
     let inItem
     if (hasIn.length) {
-      inItem = Object.assign({}, hasIn[0], {lastMsg: msg.text, msgTimeStamp: msg.msgTimeStamp, time: Utils.formatDate(msg.time).date})
+      inItem = Object.assign({}, hasIn[0], {html: Utils.msgFaceToHtml(msg.text), lastMsg: msg.text, msgTimeStamp: msg.msgTimeStamp, time: Utils.formatDate(msg.time).date})
     } else {
       let addMsg = {
         lastMsg: msg.text,
+        html: Utils.msgFaceToHtml(msg.text),
         msgTimeStamp: msg.msgTimeStamp ? msg.msgTimeStamp : msg.time,
         time: Utils.formatDate(msg.time).date,
         sessionId: msg.fromAccount,
@@ -83,7 +92,10 @@ const mutations = {
     state.imInfo = imInfo
   },
   [TYPES.SET_NOW_CHAT](state, arr) {
-    state.nowChat = arr
+    state.nowChat = arr.map((item) => {
+      item.html = Utils.msgFaceToHtml(item.content)
+      return item
+    })
   },
   [TYPES.ADD_NOW_CHAT](state, msg) {
     let newMsg
@@ -97,21 +109,27 @@ const mutations = {
         nickName: state.currentMsg.nickName,
         sessionId: msg.fromAccount,
         unreadMsgCount: 0,
-        type: 1
+        type: 1,
+        html: Utils.msgFaceToHtml(msg.text)
       }
     } else {
       let data = JSON.parse(msg.data)
+      let desc = JSON.parse(msg.desc)
       newMsg = {
         from_account_id: msg.fromAccount,
-        avatar: state.currentMsg.avatar,
         time: msg.time,
         url: data.url,
         title: data.title,
+        goods_id: data.goods_id,
+        goods_price: data.goods_price,
+        original_price: data.original_price,
+        avatar: data.avatar,
+        shop_name: data.shop_name,
         msgTimeStamp: msg.time,
         nickName: state.currentMsg.nickName,
         sessionId: msg.fromAccount,
         unreadMsgCount: 0,
-        type: 2
+        type: desc.log_type
       }
     }
     if (state.nowChat.length) {
