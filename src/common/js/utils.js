@@ -132,21 +132,31 @@ export default class utils {
 
   // 讲文本中的表情转为img
   static msgFaceToHtml(msg) {
+    if (!msg) return msg
+    msg = this.labelEscape(msg)
     let expr = /\[[^[\]]{1,3}\]/mg
     let emotions = msg.match(expr)
     if (!emotions || emotions.length < 1) {
       return msg
     } else { // 有表情
       for (let i = 0; i < emotions.length; i++) {
-        let html = `<img class="face-img" src="${emotionsFace[emotions[i]]}"/>`
-        let str = emotions[i].replace(/(\[|])/g, '\\' + '$1')
-        console.log(str)
-        let reg = new RegExp(str, 'g')
-        console.log(reg, html)
-        msg = msg.replace(reg, html)
+        if (emotionsFace[emotions[i]]) {
+          let html = `<img class="face-img" style="width: 18px;height: 18px;vertical-align: middle;" src="${emotionsFace[emotions[i]]}"/>`
+          let str = emotions[i].replace(/(\[|])/g, '\\' + '$1')
+          let reg = new RegExp(str, 'g')
+          msg = msg.replace(reg, html)
+        }
       }
       return msg
     }
+  }
+
+  // 标签转义
+  static labelEscape(msg) {
+    if (!msg) return msg
+    let res = msg.replace(/</g, '&lt;')
+    res = res.replace(/>/g, '&gt;')
+    return res
   }
 }
 

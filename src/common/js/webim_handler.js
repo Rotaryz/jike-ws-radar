@@ -89,8 +89,15 @@ export default class webimHandler {
         let sess = sessMap[name]
         let arr = sess.msgs()
         let textArr = arr.filter((item) => {
-          let type = item.getElems()[0].type
-          return type === webim.MSG_ELEMENT_TYPE.TEXT
+          let elems = item.getElems() // 获取消息包含的元素数组
+          let elem = elems[0]
+          let type = elem.type
+          let ext
+          if (type === webim.MSG_ELEMENT_TYPE.CUSTOM) {
+            let content = elem.getContent() // 获取元素对象
+            ext = content.getExt()
+          }
+          return type === webim.MSG_ELEMENT_TYPE.TEXT || (type === webim.MSG_ELEMENT_TYPE.CUSTOM && ext * 1 === 20005)
         })
         let customArr = arr.filter((item) => {
           let elems = item.getElems() // 获取消息包含的元素数组
@@ -101,7 +108,7 @@ export default class webimHandler {
             let content = elem.getContent() // 获取元素对象
             ext = content.getExt()
           }
-          return type === webim.MSG_ELEMENT_TYPE.CUSTOM && ext !== 20005
+          return type === webim.MSG_ELEMENT_TYPE.CUSTOM && ext * 1 !== 20005
         })
         item.unreadMsgCount = textArr.length // 未读文本消息数
         item.unreadCustomCount = customArr.length // 未读行为消息数
@@ -188,7 +195,6 @@ export default class webimHandler {
               // webim.c2CMsgReaded(opts)
               let customer = await this.getCustomerMsg(fromAccount)
               let data = Object.assign({}, {fromAccount, fromAccountNick, avatar: customer.avatar, isSelfSend, time: msg.getTime()}, content, seq, random)
-              console.log(data)
               resolve(data)
               console.error('收到一条c2c消息(好友消息或者全员推送消息): 发送人=' + fromAccountNick + ', 内容=' + content)
               break
@@ -206,7 +212,6 @@ export default class webimHandler {
       let elem = elems[0]
       let type = elem.getType() // 获取元素类型
       let content = elem.getContent() // 获取元素对象
-      console.log(type, content)
       switch (type) {
         case webim.MSG_ELEMENT_TYPE.TEXT: // 聊天
           data = {
@@ -237,13 +242,17 @@ export default class webimHandler {
     return new Promise((resolve, reject) => {
       webim.getProfilePortrait(ops, (res) => {
         let arr = res.UserProfileItem[0].ProfileItem
-        let nickName = arr.filter((item) => {
-          return item.Tag === 'Tag_Profile_IM_Nick'
-        })[0]
-        let nickAvatar = arr.filter((item) => {
-          return item.Tag === 'Tag_Profile_IM_Image'
-        })[0]
-        resolve({name: nickName.Value, avatar: nickAvatar.Value})
+        if (arr) {
+          let nickName = arr.filter((item) => {
+            return item.Tag === 'Tag_Profile_IM_Nick'
+          })[0]
+          let nickAvatar = arr.filter((item) => {
+            return item.Tag === 'Tag_Profile_IM_Image'
+          })[0]
+          resolve({name: nickName.Value, avatar: nickAvatar.Value})
+        } else {
+          resolve({name: '', avatar: ''})
+        }
       }, (err) => {
         reject(err)
       })
@@ -435,7 +444,6 @@ export default class webimHandler {
           resTxt = `${nickName}正在对砍价活动${productName}向你咨询, 请做好准备应答`
           break
         case 20003:
-        case 20005:
           data = JSON.parse(msg.data)
           if (data.title.length > 8) {
             productName = data.title.slice(0, 8) + '···'
@@ -452,6 +460,14 @@ export default class webimHandler {
             productName = data.title
           }
           resTxt = `${nickName}正在对拼团活动${productName}向你咨询, 请做好准备应答`
+          break
+        case 20005:
+          let desc = JSON.parse(msg.desc)
+          if (desc.log_type * 1 === 20) {
+            resTxt = `收到一条图片信息`
+          } else {
+            resTxt = `收到一条商品信息`
+          }
           break
         case 20006:
           resTxt = `${nickName}通过扫描他人分享的商品海报查看了你的商品`
@@ -569,6 +585,15 @@ export default class webimHandler {
             productName = data.title
           }
           resTxt = `${nickName}提交了商品${productName}的订单,金额为${data.total}元，并支付成功`
+          break
+        case 20021:
+          data = JSON.parse(msg.data)
+          if (data.title.length > 8) {
+            productName = data.title.slice(0, 8) + '···'
+          } else {
+            productName = data.title
+          }
+          resTxt = `${nickName}正在查看你的商城`
           break
         case 30001:
           resTxt = nickName + '正在查看你发布的动态'

@@ -12,9 +12,7 @@
               <span class="top-name">{{item.nickName}}</span>
               <span class="top-time">{{item.time}}</span>
             </div>
-            <div class="right-down">
-              {{item.lastMsg ? item.lastMsg : ' '}}
-            </div>
+            <div class="right-down" v-html="item.html"></div>
           </div>
         </div>
       </div>
@@ -49,7 +47,7 @@
           account: item.sessionId
         }
         this.setCurrent(currentMsg)
-        let url = '/chat?id=' + item.sessionId
+        let url = '/chat/' + item.sessionId
         this.$router.push(url)
       }
     },
@@ -141,5 +139,7 @@
             font-family: $font-family-regular
             font-size: $font-size-small
             color: $color-text-88
+            line-height: 14px
+            vertical-align: middle
 
 </style>
