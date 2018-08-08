@@ -10,7 +10,7 @@
             <img class="mine-header" :src="mine.avatar">
           </div>
           <p class="peo-name">{{mine.name}}</p>
-          <p class="mine-free" v-if="mine.expire_status === 2">免费试用</p>
+          <!--<p class="mine-free" v-if="mine.expire_status === 2">免费试用</p>-->
           <div class="mine-btn">
             <router-link tag="div" class="mine-btn-item" to="/shareCard">
               <img src="./icon-shopcode@2x.png" class="mine-btn-item-icon">
