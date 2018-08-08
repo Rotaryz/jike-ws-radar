@@ -7,7 +7,7 @@ const LOCAL_URL = {
 }
 
 const DEV_URL = {
-  api: 'https://ws-api.jerryf.cn' + version,
+  api: 'https://ws-api.jerryf.cn',
   image: 'https://img.jerryf.cn/defaults'
 }
 
