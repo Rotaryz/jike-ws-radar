@@ -3,7 +3,7 @@ import storage from 'storage-controller'
 import {emotionsFace} from 'common/js/constants'
 
 const LOSE_EFFICACY = 10000
-const DISABLE = 110002
+const DISABLE = 11001
 const DELETE = 1 // TODO
 const NET_404 = 404
 
