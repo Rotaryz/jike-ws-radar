@@ -617,7 +617,7 @@ export default class webimHandler {
           resTxt = nickName + '通过点击他人分享的小店链接访问了你的小店'
           break
         case 60003:
-          resTxt = nickName + '查看了你的海报'
+          resTxt = nickName + '查看了你的小店'
           break
         case 60004:
           resTxt = nickName + '转发了你的小店, 你的人脉圈正在裂变'
