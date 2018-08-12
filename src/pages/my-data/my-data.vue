@@ -81,7 +81,7 @@
             <div class="pie-list">
               <div class="list">
                 <div class="icon one"></div>
-                <div class="text">个人</div>
+                <div class="text">动态</div>
               </div>
               <div class="list">
                 <div class="icon two"></div>

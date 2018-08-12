@@ -1,19 +1,24 @@
 const env = process.env
 
+const version = `/v1`
+
 const LOCAL_URL = {
   api: 'http://zantui-api.com'
 }
 
 const DEV_URL = {
-  api: 'https://ws-api.jerryf.cn'
+  api: 'https://ws-api.jerryf.cn',
+  image: 'https://img.jerryf.cn/defaults'
 }
 
 const TEST_URL = {
-  api: 'https://ws-api.jkweixin.net'
+  api: 'https://ws-api.jkweixin.net' + version,
+  image: 'https://img.jerryf.cn/defaults'
 }
 
 const PROD_URL = {
-  api: 'https://ws-api.jkweixin.com'
+  api: 'https://ws-api.jkweixin.com' + version,
+  image: 'https://img.jerryf.com/defaults'
 }
 
 export const BASE_URL = env.NODE_ENV === 'production' ? PROD_URL : env.NODE_ENV === 'test' ? TEST_URL : env.NODE_ENV === 'dev' ? DEV_URL : LOCAL_URL

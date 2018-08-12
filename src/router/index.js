@@ -29,6 +29,7 @@ const AddFlow = () => import('pages/add-flow/add-flow')
 const MyData = () => import('pages/my-data/my-data')
 const PageError = () => import('pages/page-error/page-error')
 const Home = () => import('pages/home/home')
+const SelectGoods = () => import('pages/select-goods/select-goods')
 
 Vue.use(Router)
 
@@ -109,11 +110,18 @@ const route = new Router({
           }]
         }]
       }, {
-        path: '/chat',
+        path: '/chat/:id',
         component: Chat,
         meta: {
           title: ''
-        }
+        },
+        children: [{
+          path: 'select-goods',
+          component: SelectGoods,
+          meta: {
+            title: '选择商品'
+          }
+        }]
       },
       {
         path: '/scroll-demo',

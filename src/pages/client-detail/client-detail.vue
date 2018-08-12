@@ -113,6 +113,7 @@
                       <p class="msgs-p" v-show="item.event_no * 1 === 20018">{{item.nickname}}<span class="green">转发</span>了你的商品<span class="green">{{item.title  | titleCut}}</span></p>
                       <p class="msgs-p" v-show="item.event_no * 1 === 20019">{{item.nickname}}<span class="green">保存</span>了你的商品<span class="green">{{item.title  | titleCut}}</span>的海报图片</p>
                       <p class="msgs-p" v-show="item.event_no * 1 === 20020">{{item.nickname}}提交了商品<span class="green">{{item.title  | titleCut}}</span>的订单，金额为<span class="green">{{item.total}}元</span>，并完成了支付</p>
+                      <p class="msgs-p" v-show="item.event_no * 1 === 20021">{{item.nickname}}正在<span class="green">查看</span>你的<span class="green">商城</span></p>
                       <p class="msgs-p" v-show="item.event_no * 1 === 30001">{{item.nickname}}第{{item.count_sum}}次<span class="green">查看</span>了你发布的<span class="green">动态</span></p>
                       <p class="msgs-p" v-show="item.event_no * 1 === 30002">{{item.nickname}}给你发布的动态<span class="green">点了</span><span class="green">赞</span></p>
                       <p class="msgs-p" v-show="item.event_no * 1 === 30003">{{item.nickname}}<span class="green">评论</span>了你发布的<span class="green">动态</span></p>
@@ -120,7 +121,7 @@
                       <p class="msgs-p" v-show="item.event_no * 1 === 50001">{{item.nickname}}正在向你<span class="green">咨询</span>，请做好准备应答</p>
                       <p class="msgs-p" v-show="item.event_no * 1 === 60001">{{item.nickname}}通过扫描他人分享的小店海报<span class="green">访问</span>了<span class="green">你的小店</span></p>
                       <p class="msgs-p" v-show="item.event_no * 1 === 60002">{{item.nickname}}通过扫描他人分享的小店链接<span class="green">访问</span>了<span class="green">你的小店</span></p>
-                      <p class="msgs-p" v-show="item.event_no * 1 === 60003">{{item.nickname}}第{{item.count_sum}}次<span class="green">查看</span>了<span class="green">你的海报</span></p>
+                      <p class="msgs-p" v-show="item.event_no * 1 === 60003">{{item.nickname}}第{{item.count_sum}}次<span class="green">查看</span>了<span class="green">你的小店</span></p>
                       <p class="msgs-p" v-show="item.event_no * 1 === 60004">{{item.nickname}}<span class="green">转发</span>了你的<span class="green">小店</span>，你的人脉圈正在裂变</p>
                       <p class="msgs-p" v-show="item.event_no * 1 === 60005">{{item.nickname}}<span class="green">保存</span>了你的<span class="green">小店海报</span>，看来TA对你感兴趣</p>
                       <p class="msgs-p" v-show="item.event_no * 1 === 60006">{{item.nickname}}正在<span class="green">查看</span>你的<span class="green">名片</span>，看来TA对你感兴趣</p>
@@ -163,7 +164,7 @@
               <div class="pie-list">
                 <div class="list">
                   <div class="icon one"></div>
-                  <div class="text">个人</div>
+                  <div class="text">动态</div>
                 </div>
                 <div class="list">
                   <div class="icon two"></div>
@@ -690,7 +691,7 @@
           account: this.clientData.im_account
         }
         this.setCurrent(currentMsg)
-        let url = '/chat?id=' + this.clientData.im_account
+        let url = '/chat/' + this.clientData.im_account
         this.$router.push(url)
       },
       onPullingUp() {
