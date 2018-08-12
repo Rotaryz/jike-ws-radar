@@ -56,6 +56,7 @@
       <div class="submit-btn-box border-top-1px">
         <div class="submit-btn" :class="selectGoods ? '' : 'disabled'" @click="sendGoods">发送</div>
       </div>
+      <toast ref="toast"></toast>
     </div>
   </transition>
 </template>
@@ -68,6 +69,7 @@
   import storage from 'storage-controller'
   import {ease} from 'common/js/ease'
   import webimHandler from 'common/js/webim_handler'
+  import Toast from 'components/toast/toast'
   export default {
     name: 'SelectGoods',
     created() {
@@ -135,6 +137,10 @@
         this.selectGoods = item
       },
       sendGoods() {
+        if (this.selectGoods) {
+          this.$refs.toast.show('请先选择商品')
+          return
+        }
         let data
         if (this.selectGoods.goods_type * 1 === 0) {
           data = {
@@ -282,7 +288,8 @@
       }
     },
     components: {
-      Scroll
+      Scroll,
+      Toast
     },
     computed: {
       ...mapGetters([
