@@ -13,12 +13,12 @@ const DEV_URL = {
 
 const TEST_URL = {
   api: 'https://ws-api.jkweixin.net' + version,
-  image: 'https://img.jerryf.cn/defaults'
+  image: 'https://img.jkweixin.net/defaults'
 }
 
 const PROD_URL = {
   api: 'https://ws-api.jkweixin.com' + version,
-  image: 'https://img.jerryf.com/defaults'
+  image: 'https://img.jkweixin.com/defaults'
 }
 
 export const BASE_URL = env.NODE_ENV === 'production' ? PROD_URL : env.NODE_ENV === 'test' ? TEST_URL : env.NODE_ENV === 'dev' ? DEV_URL : LOCAL_URL
