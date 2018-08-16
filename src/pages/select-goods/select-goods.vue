@@ -137,7 +137,7 @@
         this.selectGoods = item
       },
       sendGoods() {
-        if (this.selectGoods) {
+        if (!this.selectGoods) {
           this.$refs.toast.show('请先选择商品')
           return
         }
