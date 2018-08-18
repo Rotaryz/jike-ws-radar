@@ -3,7 +3,7 @@ import storage from 'storage-controller'
 import {emotionsFace} from 'common/js/constants'
 
 const LOSE_EFFICACY = 10000
-const DISABLE = 11001
+const DISABLE = 11001 // 11001 AI雷达没有权限, 11002 BOSS雷达没有权限
 const DELETE = 1 // TODO
 const NET_404 = 404
 

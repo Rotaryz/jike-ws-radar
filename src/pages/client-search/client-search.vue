@@ -76,7 +76,8 @@
       },
       check(item) {
         const path = `/client-detail`
-        this.$router.push({path, query: {id: item.id}})
+        const pageUrl = `/client/client-user-list/client-detail`
+        this.$router.push({path, query: {id: item.id, pageUrl}})
       },
       searchUser(name) {
         this.isAll = false
