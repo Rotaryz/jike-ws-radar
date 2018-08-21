@@ -193,8 +193,7 @@ export default class webimHandler {
               //   'LastedMsgTime': msg.getTime()// 消息时间戳
               // }
               // webim.c2CMsgReaded(opts)
-              let customer = await this.getCustomerMsg(fromAccount)
-              let data = Object.assign({}, {fromAccount, fromAccountNick, avatar: customer.avatar, isSelfSend, time: msg.getTime()}, content, seq, random)
+              let data = Object.assign({}, {fromAccount, fromAccountNick, avatar: nameObj.avatar, isSelfSend, time: msg.getTime()}, content, seq, random)
               resolve(data)
               console.error('收到一条c2c消息(好友消息或者全员推送消息): 发送人=' + fromAccountNick + ', 内容=' + content)
               break
