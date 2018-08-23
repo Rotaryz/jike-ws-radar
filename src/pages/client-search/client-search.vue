@@ -76,7 +76,7 @@
       },
       check(item) {
         const path = `/client-detail`
-        const pageUrl = `/client/client-user-list/client-detail`
+        const pageUrl = `/client/client-detail`
         this.$router.push({path, query: {id: item.id, pageUrl}})
       },
       searchUser(name) {
