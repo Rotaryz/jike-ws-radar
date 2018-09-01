@@ -143,6 +143,19 @@ const mutations = {
   },
   [TYPES.SET_IM_ING](state, boolean) {
     state.imIng = boolean
+  },
+  [TYPES.SET_GROUP_ITEM] (state, msg) {
+    state.groupItem = {
+      time: Utils.formatDate(msg.time).date,
+      lastMsg: msg.lastMsg,
+      html: Utils.msgFaceToHtml(msg.lastMsg)
+    }
+  },
+  [TYPES.SET_CURRENT_GROUP] (state, msg) {
+    state.currentGroupMsg = msg
+  },
+  [TYPES.SET_NEWS_GETTYPE] (state, boolean) {
+    state.newsGetType = boolean
   }
 }
 

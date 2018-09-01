@@ -11,7 +11,10 @@ const state = {
   imInfo: {},
   nowChat: [], // 当前会话
   platform, // 平台信息
-  imIng: false
+  imIng: false,
+  groupItem: {}, // 群发助手对象
+  currentGroupMsg: [], // 当前群发对象
+  newsGetType: false // 是否刷新群发助手
 }
 
 export default state

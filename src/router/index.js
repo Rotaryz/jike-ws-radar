@@ -30,6 +30,10 @@ const MyData = () => import('pages/my-data/my-data')
 const PageError = () => import('pages/page-error/page-error')
 const Home = () => import('pages/home/home')
 const SelectGoods = () => import('pages/select-goods/select-goods')
+const NewGroupMsg = () => import('pages/new-group-msg/new-group-msg')
+const NewsAddGroup = () => import('pages/news-add-group/news-add-group')
+const NewsChatGroup = () => import('pages/news-chat-group/news-chat-group')
+const UsefulWord = () => import('pages/useful-word/useful-word')
 
 Vue.use(Router)
 
@@ -121,6 +125,12 @@ const route = new Router({
           meta: {
             title: '选择商品'
           }
+        }, {
+          path: 'useful-word',
+          component: UsefulWord,
+          meta: {
+            title: '常用语'
+          }
         }]
       },
       {
@@ -194,6 +204,27 @@ const route = new Router({
         component: News,
         meta: {
           title: '消息'
+        }
+      },
+      {
+        path: '/news-add-group',
+        component: NewsAddGroup,
+        meta: {
+          title: '添加组'
+        }
+      },
+      {
+        path: '/news-chat-group',
+        component: NewsChatGroup,
+        meta: {
+          title: '群发'
+        }
+      },
+      {
+        path: '/new-group-msg',
+        component: NewGroupMsg,
+        meta: {
+          title: '新建群发'
         }
       },
       {

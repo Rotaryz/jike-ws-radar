@@ -107,7 +107,9 @@
           </div>
           <div class="addimg-list" v-if="mortListShow">
             <div class="addimg-item" v-for="(item, index) in moreLists" :key="index" @click="nextWork(item)">
-              <img :src="item.icon" class="item-icon">
+              <div class="img-box">
+                <div class="item-icon" :class="item.icon"></div>
+              </div>
               <p class="item-txt">{{item.txt}}</p>
               <input type="file" class="image-file" @change="_fileImage($event)" accept="image/*" v-if="item.type == 1">
             </div>
@@ -134,9 +136,12 @@
   import wx from 'weixin-js-sdk'
 
   const MORELIST = [
-    {txt: '图片', icon: '../../../static/img/icon-pic-_im@2x.png', type: 1},
-    {txt: '发送商品', icon: '../../../static/img/icon-goods_im@2x.png', type: 2},
-    {txt: '发送活动', icon: '../../../static/img/icon-send_im@2x.png', type: 3}
+    {txt: '图片', icon: 'im-image', type: 1},
+    {txt: '个人微信', icon: 'im-weixin', type: 4},
+    {txt: '微信群码', icon: 'im-group', type: 5},
+    {txt: '常用语', icon: 'im-useful', type: 6},
+    {txt: '发送商品', icon: 'im-goods', type: 2},
+    {txt: '发送活动', icon: 'im-activity', type: 3}
   ]
   export default {
     name: 'Chat',
@@ -323,6 +328,15 @@
             break
           case 3:
             url = this.$route.fullPath + '/select-goods?type=2'
+            this.mortListShow = false
+            this.$router.push({path: url})
+            break
+          case 4:
+            break
+          case 5:
+            break
+          case 6:
+            url = this.$route.fullPath + '/useful-word'
             this.mortListShow = false
             this.$router.push({path: url})
             break
@@ -783,22 +797,42 @@
               width: 6.666666vw
               height: 6.666666vw
         .addimg-list
-          height: 140px
-          padding: 25px 0 0 30px
+          padding: 25px 0 0 8vw
           display: flex
+          flex-wrap: wrap
           .addimg-item
-            width: 48px
-            height: 70px
+            width: 16vw
             display: flex
             flex-direction: column
             justify-content: space-between
             font-size: 0
-            margin-right: 44px
+            margin-right: 6.6666vw
+            margin-bottom: 15px
             position: relative
-            .item-icon
-              width: 48px
-              height: 48px
+            .img-box
+              width: 16vw
+              height: 16vw
+              border-1px(#ccc, 12px)
+              display: flex
+              justify-content: center
+              align-items: center
+              .item-icon
+                width: 33px
+                height: 33px
+              .im-image
+                icon-image('./icon-picture')
+              .im-weixin
+                icon-image('./icon-wechat')
+              .im-group
+                icon-image('./icon-groupcode')
+              .im-useful
+                icon-image('./icon-Comlanguage')
+              .im-goods
+                icon-image('./icon-sendgoods')
+              .im-activity
+                icon-image('./icon-activity')
             .item-txt
+              margin-top: 5px
               font-size: $font-size-12
               font-family: $font-family-regular
               color: #828AA2
