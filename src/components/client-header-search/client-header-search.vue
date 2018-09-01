@@ -23,20 +23,15 @@
   @import "~common/stylus/mixin"
 
   .search-box
-    height: 45px
-    background-color: $color-F0F2F5
-    layout()
-    justify-content: center
-    align-items: center
-    box-sizing: border-box
-    padding: 4.5px 15px
+    background-color: $color-white-fff
+    padding: 9.5px 15px 0
     .input-box
-      height: 100%
-      width: 100%
-      background-color: $color-white-fff
+      height: 36px
+      background-color: $color-F0F2F5
       layout(row)
       justify-content: center
       align-items: center
+      border-radius: 2px
       .icon
         width: 12.8px
         height: 13.2px
