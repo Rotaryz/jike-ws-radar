@@ -15,8 +15,8 @@
                     <div class="label-right">
                       <div class="label-name">{{flow.nickname}}</div>
                       <div class="add-text">
-                        <div class="text">{{flow.created_at}}</div>
-                        <div class="text">{{flow.sources}}</div>
+                        <div class="text">加入时间：{{flow.created_at}}</div>
+                        <!--<div class="text">{{flow.sources}}</div>-->
                       </div>
                     </div>
                   </div>
