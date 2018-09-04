@@ -206,7 +206,7 @@
             this.wechatCode = res.data.wx_group_count
             this.codeNumber = res.data.click_num
             this.groupImg = res.data.scan_url
-            this.groupBigImg = res.data.shop_image
+            this.groupBigImg = res.data.scan_url
             this.groupName = res.data.shop_name
           }
         })
