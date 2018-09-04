@@ -14,7 +14,7 @@
               <div class="sub-title">一大波福利在靠近，点击获取入群二维码</div>
             </div>
           </div>
-          <div class="title-right" @click="showPic" v-if="groupImg">
+          <div class="title-right" @click="showPic" v-if="groupImg && groupList.length * 1 !== 0">
             <div class="code">
               <img :src="groupImg" alt="">
             </div>
@@ -148,6 +148,10 @@
     methods: {
       showPic() {
         if (!this.groupBigImg) return
+        if (this.groupList.length * 1 === 0) {
+          this.$refs.toast.show('请上传微信群码')
+          return
+        }
         wx.previewImage({urls: [this.groupBigImg]})
       },
       cropImage () {

@@ -30,13 +30,13 @@
                 <img :src="robotImg" v-if="robotImg" class="text-img-show">
               </div>
             </div>
-            <router-link class="item-list" to="person-code/robot-code">
+            <div class="item-list" @click="jumpRobot">
               <div class="text">远程登录该微信</div>
               <div class="login-right">
                 <div class="login-text">登陆</div>
                 <div class="icon"></div>
               </div>
-            </router-link>
+            </div>
           </div>
           <div class="robot-area">
             <div class="robot-title">添加欢迎语</div>
@@ -115,7 +115,8 @@
         robotImg: '',
         robotId: '',
         note: '',
-        inputValue: ''
+        inputValue: '',
+        upRobotId: true
       }
     },
     created () {
@@ -194,6 +195,7 @@
                 this.robotImg = item.image_url
                 this.note = item.text
                 this.robotId = item.image_id
+                this.upRobotId = false
               }
             })
           } else {
@@ -217,10 +219,18 @@
           if (res.error === ERR_OK) {
             this.$refs.toast.show('保存成功')
             this.$emit('getQrCode')
+            this.upRobotId = false
           } else {
             this.$refs.toast.show(res.message)
           }
         })
+      },
+      jumpRobot() {
+        if (this.upRobotId) {
+          this.$refs.toast.show('请上传微信二维码')
+          return
+        }
+        this.$router.push('person-code/robot-code')
       }
     },
     computed: {
