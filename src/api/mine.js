@@ -11,6 +11,33 @@ export default {
     return request.post(url, data)
   },
   /**
+   * 清空扫描活码数
+   * @param data
+   * @returns {*}
+   */
+  cleanCodeNumber (data) {
+    let url = 'api/employee/clear-click-num'
+    return request.get(url, data)
+  },
+  /**
+   * 添加微信群二维码
+   * @param data
+   * @returns {*}
+   */
+  upLoadGroupWechat (data) {
+    let url = 'api/employee/add-wxgroup-qrcode'
+    return request.post(url, data)
+  },
+  /**
+   * 删除微信群二维码
+   * @param data
+   * @returns {*}
+   */
+  deleteGroupWechat (data) {
+    let url = 'api/employee/delete-wxgroup-qrcode'
+    return request.post(url, data)
+  },
+  /**
    * 更新机器人微信二维码
    * @param data
    * @returns {*}
@@ -44,6 +71,15 @@ export default {
    */
   getWechatLoginCode (data) {
     let url = 'api/employee/wx-mock-image'
+    return request.get(url, data)
+  },
+  /**
+   * 获取群二维码详情
+   * @param data
+   * @returns {*}
+   */
+  getGroupDetail (data) {
+    let url = 'api/employee/qrcode-detail'
     return request.get(url, data)
   }
 }

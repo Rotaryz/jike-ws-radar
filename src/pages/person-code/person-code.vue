@@ -251,7 +251,7 @@
     left: 0
     right: 0
     bottom: 0
-    z-index: 50
+    z-index: 100
     background: #000
     .img-big
       background: #000

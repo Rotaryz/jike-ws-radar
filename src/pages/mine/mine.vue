@@ -7,10 +7,10 @@
             <img class="mine-header" :src="mine.avatar">
             <p class="peo-name">{{mine.name}}店铺二维码</p>
           </div>
-          <div class="top-box-right">
+          <router-link class="top-box-right" to="mine/shareCard">
             <span class="code"></span>
             <span class="icon"></span>
-          </div>
+          </router-link>
         </div>
         <div class="mine-shadow">
           <div class="mian-box">
