@@ -1,41 +1,43 @@
 <template>
-  <div class="robot-main-box">
-    <Scroll bcColor="#fff">
-      <div class="wechat-top">
-        <div class="wechat-img">
-          <img :src="wechatImg" alt="">
-        </div>
-        <div class="wehcat-text">
-          用机器人的微信账号扫描上方二维码(<span class="green">长按识别无效</span>)，重新登录微信机器人
-        </div>
-      </div>
-      <div class="f0f2f5"></div>
-      <div class="wechat-bottom">
-        <div class="wechat-title">如何让专属机器人更加稳定，不容易掉线？</div>
-        <div class="wechat-noet">
-          <p class="wechat-text">1.添加掉线提醒客服为好友，即可享受实时的掉线提醒服务。<span class="green">(本产品中提供的所有服务均以机器人在线为基础，为保证您的正常使用，强烈建议添加）</span></p>
-          <p class="wechat-text"> 添加方法：复制微信号<span class="green">wykt_wl</span>，在微信右上角“添加朋友“中搜索添加。</p>
-        </div>
-        <div class="wechat-noet">
-          <div class="wechat-text">2.机器人微信账号不要退出微信登录，也不要在电脑上登录微信；
+  <transition :name="slide">
+    <div class="robot-main-box">
+      <Scroll bcColor="#fff">
+        <div class="wechat-top">
+          <div class="wechat-img">
+            <img :src="wechatImg" alt="">
+          </div>
+          <div class="wehcat-text">
+            用机器人的微信账号扫描上方二维码(<span class="green">长按识别无效</span>)，重新登录微信机器人
           </div>
         </div>
-        <div class="wechat-noet">
-          <div class="wechat-text">3.机器人手机不要长时间处于断网或关机状态；</div>
+        <div class="f0f2f5"></div>
+        <div class="wechat-bottom">
+          <div class="wechat-title">如何让专属机器人更加稳定，不容易掉线？</div>
+          <div class="wechat-noet">
+            <p class="wechat-text">1.添加掉线提醒客服为好友，即可享受实时的掉线提醒服务。<span class="green">(本产品中提供的所有服务均以机器人在线为基础，为保证您的正常使用，强烈建议添加）</span></p>
+            <p class="wechat-text"> 添加方法：复制微信号<span class="green">wykt_wl</span>，在微信右上角“添加朋友“中搜索添加。</p>
+          </div>
+          <div class="wechat-noet">
+            <div class="wechat-text">2.机器人微信账号不要退出微信登录，也不要在电脑上登录微信；
+            </div>
+          </div>
+          <div class="wechat-noet">
+            <div class="wechat-text">3.机器人手机不要长时间处于断网或关机状态；</div>
+          </div>
+          <div class="wechat-noet">
+            <div class="wechat-text">4.机器人微信最好设置微信ID号；</div>
+          </div>
+          <div class="wechat-noet">
+            <div class="wechat-text">5.7天左右定时查看登录机器人的手机微信存储量。</div>
+          </div>
         </div>
-        <div class="wechat-noet">
-          <div class="wechat-text">4.机器人微信最好设置微信ID号；</div>
-        </div>
-        <div class="wechat-noet">
-          <div class="wechat-text">5.7天左右定时查看登录机器人的手机微信存储量。</div>
-        </div>
+      </Scroll>
+      <router-view></router-view>
+      <div class="loding-box" v-show="loading">
+        <img class="loading" src="./loading.gif" alt="" width="30" height="30">
       </div>
-    </Scroll>
-    <router-view></router-view>
-    <div class="loding-box" v-show="loading">
-      <img class="loading" src="./loading.gif" alt="" width="30" height="30">
     </div>
-  </div>
+  </transition>
 </template>
 
 <script>
@@ -43,6 +45,7 @@
   import { Mine } from 'api'
   import { ERR_OK } from '../../common/js/config'
   import storage from 'storage-controller'
+  import { mapGetters } from 'vuex'
 
   export default {
     name: 'robot-code',
@@ -86,6 +89,7 @@
       userInfo() {
         return storage.get('info')
       },
+      ...mapGetters(['ios']),
       slide() {
         return this.ios ? '' : 'slide'
       }

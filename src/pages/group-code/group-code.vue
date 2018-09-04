@@ -1,5 +1,6 @@
 <template>
-  <div class="group-main-box">
+  <transition :name="slide">
+    <div class="group-main-box">
     <Scroll bcColor="#fff">
       <div class="f0f2f5"></div>
       <div class="group-top">
@@ -91,6 +92,7 @@
     <toast ref="toast"></toast>
     <confirm-msg ref="confirm" @confirm="_sureDel"></confirm-msg>
   </div>
+  </transition>
 </template>
 
 <script>
@@ -103,6 +105,7 @@
   import Toast from 'components/toast/toast'
   import ConfirmMsg from 'components/confirm-msg/confirm-msg'
   import wx from 'weixin-js-sdk'
+  import { mapGetters } from 'vuex'
 
   export default {
     name: 'group-code',
@@ -200,7 +203,6 @@
       getGroupData() {
         Mine.getGroupDetail().then((res) => {
           if (res.error === ERR_OK) {
-            console.log(res)
             this.wechatCode = res.data.wx_group_count
             this.codeNumber = res.data.click_num
             this.groupImg = res.data.scan_url
@@ -212,17 +214,7 @@
       getGroupList() {
         Mine.getEmployeeCode({type: 3}).then((res) => {
           if (res.error === ERR_OK) {
-            // res.data.forEach((item) => {
-            //   if (item.type === 1) {
-            //     this.presonImg = item.image_url
-            //   }
-            //   if (item.type === 2) {
-            //     this.robotImg = item.image_url
-            //     this.note = item.text
-            //   }
-            // })
             this.groupList = res.data
-            console.log(res.data)
           } else {
             this.$refs.toast.show(res.message)
           }
@@ -234,12 +226,10 @@
       },
       deleteCode(id) {
         this.deleteId = id
-        console.log(this.deleteId)
         this.typeMsg = 2
         this.$refs.confirm.show({msg: '确定删除吗？'})
       },
       _sureDel() {
-        console.log(this.typeMsg)
         if (this.typeMsg * 1 === 1) {
           this.deleteNumerMsg()
         } else if (this.typeMsg === 2) {
@@ -265,7 +255,8 @@
       userInfo() {
         return storage.get('info')
       },
-      slide() {
+      ...mapGetters(['ios']),
+      slide () {
         return this.ios ? '' : 'slide'
       }
     },

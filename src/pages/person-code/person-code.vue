@@ -1,90 +1,92 @@
 <template>
-  <div class="group-box">
-    <Scroll bcColor="#fff">
-      <div class="preson-box">
-        <div class="item-box" v-for="(item, index) in tabList" v-bind:key="index" @click="clickTab(index)">
-          <div class="item-box-con" :class="tabIndex * 1=== index ? 'active' : ''">
-            <div class="item-box-con-top">
-              <div class="icon" :class="item.icon"></div>
-              <div class="text">{{item.title}}</div>
-            </div>
-            <div class="content">{{item.content}}</div>
-          </div>
-        </div>
-      </div>
-      <div class="preson-main-box" v-if="tabIndex * 1 === 0">
-        <div class="upimg-box">
-          <img :src="presonImg" class="upimg-box-img" v-if="presonImg">
-          <div class="upimg-box-colse" v-if="presonImg" @click="clearPresonImg"></div>
-          <input type="file" class="header-icon" id="header-logo" @change="_fileChange($event, 'preson')" accept="image/*" v-if="!presonImg"  :value="inputValue">
-        </div>
-        <p class="updata-text">上传个人微信二维码</p>
-      </div>
-      <div class="robot-box" v-if="tabIndex * 1 === 1">
-        <div class="robot-list">
-          <div class="item-list">
-            <div class="text">上传微信二维码</div>
-            <div class="text-img">
-              <input type="file" class="header-icon" id="header-logo1" @change="_fileChange($event, 'robot')" accept="image/*" :value="inputValue">
-              <img :src="robotImg" v-if="robotImg" class="text-img-show">
+  <transition :name="slide">
+    <div class="group-box">
+      <Scroll bcColor="#fff">
+        <div class="preson-box">
+          <div class="item-box" v-for="(item, index) in tabList" v-bind:key="index" @click="clickTab(index)">
+            <div class="item-box-con" :class="tabIndex * 1=== index ? 'active' : ''">
+              <div class="item-box-con-top">
+                <div class="icon" :class="item.icon"></div>
+                <div class="text">{{item.title}}</div>
+              </div>
+              <div class="content">{{item.content}}</div>
             </div>
           </div>
-          <router-link class="item-list" to="person-code/robot-code">
-            <div class="text">远程登录该微信</div>
-            <div class="login-right">
-              <div class="login-text">登陆</div>
-              <div class="icon"></div>
-            </div>
-          </router-link>
         </div>
-        <div class="robot-area">
-          <div class="robot-title">添加欢迎语</div>
-          <div class="data-area-box">
-            <textarea class="data-area" v-model="note" maxlength="200" name="" id="" cols="30" rows="10"></textarea>
-            <div class="data-area-pla" v-if="!note">
-              <div class="text">请添加欢迎语</div>
-              <div class="text">(用户添加机器人后，会自动验证通过，且默认发文字信息给客户。)</div>
-            </div>
-            <div class="textarea-number">{{note.length}}<span>/200</span></div>
+        <div class="preson-main-box" v-if="tabIndex * 1 === 0">
+          <div class="upimg-box">
+            <img :src="presonImg" class="upimg-box-img" v-if="presonImg">
+            <div class="upimg-box-colse" v-if="presonImg" @click="clearPresonImg"></div>
+            <input type="file" class="header-icon" id="header-logo" @change="_fileChange($event, 'preson')" accept="image/*" v-if="!presonImg"  :value="inputValue">
           </div>
-          <div class="note-des">温馨提示：</div>
-          <ul class="note-list">
-            <li class="item">1.  机器人微信是将私人微信远程机器化。</li>
-            <li class="item">2. 机器人可以自动验证通过，且默认发送欢迎语。</li>
-            <li class="item">3. 机器人成功登录后，请不要退出，退出后需要重新登录。</li>
-            <li class="item">4. 新注册的微信号，不发当机器人。(微信限制)</li>
-            <li class="item">5. 微信号每天添加好友的数量有限制500个/日。</li>
-          </ul>
+          <p class="updata-text">上传个人微信二维码</p>
         </div>
-      </div>
-    </Scroll>
-    <div class="submit-btn" v-if="tabIndex * 1 === 1" @click="submitSave">保存</div>
-    <router-view></router-view>
-    <toast ref="toast"></toast>
-    <div class="img-cut" v-show="visible">
-      <vueCropper
-        :viewMode="1"
-        class="img-big"
-        :guides="false"
-        ref="cropper"
-        :img="imageBig"
-        :rotatable="true"
-        :background="status"
-        :cropBoxResizable="status"
-        :aspectRatio="1"
-        :autoCropArea="1"
-        :dragMode="'move'"
-        :checkCrossOrigin="false"
-        :cropBoxMovable="false"
-      >
-      </vueCropper>
-      <div class="img-btn">
-        <div class="btn-item" @click="cropImage">确定</div>
+        <div class="robot-box" v-if="tabIndex * 1 === 1">
+          <div class="robot-list">
+            <div class="item-list">
+              <div class="text">上传微信二维码</div>
+              <div class="text-img">
+                <input type="file" class="header-icon" id="header-logo1" @change="_fileChange($event, 'robot')" accept="image/*" :value="inputValue">
+                <img :src="robotImg" v-if="robotImg" class="text-img-show">
+              </div>
+            </div>
+            <router-link class="item-list" to="person-code/robot-code">
+              <div class="text">远程登录该微信</div>
+              <div class="login-right">
+                <div class="login-text">登陆</div>
+                <div class="icon"></div>
+              </div>
+            </router-link>
+          </div>
+          <div class="robot-area">
+            <div class="robot-title">添加欢迎语</div>
+            <div class="data-area-box">
+              <textarea class="data-area" v-model="note" maxlength="200" name="" id="" cols="30" rows="10"></textarea>
+              <div class="data-area-pla" v-if="!note">
+                <div class="text">请添加欢迎语</div>
+                <div class="text">(用户添加机器人后，会自动验证通过，且默认发文字信息给客户。)</div>
+              </div>
+              <div class="textarea-number">{{note.length}}<span>/200</span></div>
+            </div>
+            <div class="note-des">温馨提示：</div>
+            <ul class="note-list">
+              <li class="item">1.  机器人微信是将私人微信远程机器化。</li>
+              <li class="item">2. 机器人可以自动验证通过，且默认发送欢迎语。</li>
+              <li class="item">3. 机器人成功登录后，请不要退出，退出后需要重新登录。</li>
+              <li class="item">4. 新注册的微信号，不发当机器人。(微信限制)</li>
+              <li class="item">5. 微信号每天添加好友的数量有限制500个/日。</li>
+            </ul>
+          </div>
+        </div>
+      </Scroll>
+      <div class="submit-btn" v-if="tabIndex * 1 === 1" @click="submitSave">保存</div>
+      <router-view></router-view>
+      <toast ref="toast"></toast>
+      <div class="img-cut" v-show="visible">
+        <vueCropper
+          :viewMode="1"
+          class="img-big"
+          :guides="false"
+          ref="cropper"
+          :img="imageBig"
+          :rotatable="true"
+          :background="status"
+          :cropBoxResizable="status"
+          :aspectRatio="1"
+          :autoCropArea="1"
+          :dragMode="'move'"
+          :checkCrossOrigin="false"
+          :cropBoxMovable="false"
+        >
+        </vueCropper>
+        <div class="img-btn">
+          <div class="btn-item" @click="cropImage">确定</div>
           <div class="btn-item" @click="cropImageCosle">取消</div>
+        </div>
+        <img class="loading" src="./loading.gif" alt="" width="30" height="30" v-show="loading">
       </div>
-      <img class="loading" src="./loading.gif" alt="" width="30" height="30" v-show="loading">
     </div>
-  </div>
+  </transition>
 </template>
 
 <script>
@@ -94,6 +96,7 @@
   import storage from 'storage-controller'
   import VueCropper from 'vue-cropperjs'
   import Toast from 'components/toast/toast'
+  import { mapGetters } from 'vuex'
 
   const ICONTAB = [{icon: 'person', title: '普通微信', content: '成员自己有商品，可以修改库存和价格。'}, {icon: 'all', title: '机器人微信', content: '成员没有商品，分享团长收入。'}]
   export default {
@@ -223,6 +226,7 @@
       userInfo() {
         return storage.get('info')
       },
+      ...mapGetters(['ios']),
       slide() {
         return this.ios ? '' : 'slide'
       }
