@@ -324,6 +324,8 @@
         this.tabIndex = index
         if (index * 1 === 2 && this.firstGet) {
           this.getPeopleList()
+        } else if (index * 1 === 1 && this.firstGet) {
+          this.getAllData()
         }
       },
       getRadarList() {
