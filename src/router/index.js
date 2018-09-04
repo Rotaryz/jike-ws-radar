@@ -30,6 +30,8 @@ const MyData = () => import('pages/my-data/my-data')
 const PageError = () => import('pages/page-error/page-error')
 const Home = () => import('pages/home/home')
 const SelectGoods = () => import('pages/select-goods/select-goods')
+const GroupCode = () => import('pages/group-code/group-code')
+const PersonCode = () => import('pages/person-code/person-code')
 
 Vue.use(Router)
 
@@ -72,6 +74,20 @@ const route = new Router({
           component: MyData,
           meta: {
             title: '我的图表'
+          }
+        },
+        {
+          path: 'group-code',
+          component: GroupCode,
+          meta: {
+            title: '微信群码'
+          }
+        },
+        {
+          path: 'person-code',
+          component: PersonCode,
+          meta: {
+            title: '个人微信'
           }
         },
         {
