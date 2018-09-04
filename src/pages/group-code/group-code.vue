@@ -14,7 +14,7 @@
               <div class="sub-title">一大波福利在靠近，点击获取入群二维码</div>
             </div>
           </div>
-          <div class="title-right" @click="showPic">
+          <div class="title-right" @click="showPic" v-if="groupImg">
             <div class="code">
               <img :src="groupImg" alt="">
             </div>
@@ -336,7 +336,7 @@
       .code
         width: 35px
         height: 35px
-        margin: 0 auto
+        margin: 0 auto 5px
         img
           width: 100%
           height: 100%
