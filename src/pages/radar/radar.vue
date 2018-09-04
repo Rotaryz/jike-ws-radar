@@ -21,10 +21,10 @@
         <img src="./icon-news_up@3x.png" class="msg-arrow">
         <span class="msg-hint">{{customCount}}条信息</span>
       </span>
-      <div class="container"  v-if="tabIndex * 1 === 0">
+      <div class="container" :class="tabIndex * 1 === 0 ? 'tabactive' : ''">
         <scroll ref="scroll"
                 :data="list"
-                :bcColor="'#f1f2f5'"
+                bcColor="#f1f2f5"
                 :pullUpLoad="pullUpLoadObj"
                 @pullingUp="onPullingUp"
                 :showNoMore="showNoMore"
@@ -93,10 +93,11 @@
           </div>
         </scroll>
       </div>
-      <div class="action-box"  v-if="tabIndex * 1 === 1">
+      <div class="action-box":class="tabIndex * 1 === 1 ? 'tabactive' : ''">
         <div class="action-scroll">
           <scroll
-            ref="scrollAction">
+            ref="scrollAction"
+            bcColor="#f1f2f5">
             <ul class="action-tab">
               <li class="tab-item"  :class="actionIndex===index?'active':''"
                   v-for="(item,index) in actionList"
@@ -120,11 +121,11 @@
           </scroll>
         </div>
       </div>
-      <div class="people-box" v-if="tabIndex * 1 === 2">
+      <div class="people-box":class="tabIndex * 1 === 2 ? 'tabactive' : ''">
         <div class="action-scroll">
           <scroll  ref="scrollPeople"
                    :data="peopleDataList"
-                   :bcColor="'#f1f2f5'"
+                   bcColor="#f1f2f5"
                    :pullUpLoad="pullUpPeoleLoadObj"
                    :showNoMore="false"
                    @pullingUp="onPeoplePullingUp">
@@ -798,4 +799,6 @@
 
   .exception-box
     padding-top: 70px
+  .tabactive
+    z-index: 11
 </style>
