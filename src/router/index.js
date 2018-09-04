@@ -34,6 +34,7 @@ const NewGroupMsg = () => import('pages/new-group-msg/new-group-msg')
 const NewsAddGroup = () => import('pages/news-add-group/news-add-group')
 const NewsChatGroup = () => import('pages/news-chat-group/news-chat-group')
 const UsefulWord = () => import('pages/useful-word/useful-word')
+const AddWord = () => import('pages/add-word/add-word')
 
 Vue.use(Router)
 
@@ -130,7 +131,16 @@ const route = new Router({
           component: UsefulWord,
           meta: {
             title: '常用语'
-          }
+          },
+          children: [
+            {
+              path: 'add-word',
+              component: AddWord,
+              meta: {
+                title: '常用语'
+              }
+            }
+          ]
         }]
       },
       {

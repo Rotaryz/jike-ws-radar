@@ -55,7 +55,8 @@ const mutations = {
       }
     }
   },
-  [TYPES.ADD_LIST_MSG](state, msg) {
+  [TYPES.ADD_LIST_MSG](state, typeObj) {
+    let msg = typeObj.msg
     if (msg.desc) {
       let desc = JSON.parse(msg.desc)
       if (desc.log_type * 1 === 3 || desc.log_type * 1 === 4 || desc.log_type * 1 === 5) {
@@ -82,7 +83,7 @@ const mutations = {
         sessionId: msg.fromAccount,
         avatar: msg.avatar,
         nickName: msg.nickName ? msg.nickName : msg.fromAccountNick,
-        unreadMsgCount: 1
+        unreadMsgCount: typeObj.type === 'mineAdd' ? 0 : 1
       }
       inItem = Object.assign({}, addMsg)
     }

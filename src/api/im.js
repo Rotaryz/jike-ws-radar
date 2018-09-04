@@ -65,9 +65,39 @@ export default {
     return request.get(url, data, loading)
   },
 
-  // 发送群发消息
+  // 群发记录
   setGroupList(data, loading = true) {
     const url = `/api/employee/store-group-message`
     return request.post(url, data, loading)
+  },
+
+  // 获取话术库
+  getMyWordList(loading = true) {
+    const url = `/api/employee/message-hub`
+    return request.get(url, {}, loading)
+  },
+
+  // 编辑话术
+  editWord(data, loading = true) {
+    const url = `/api/employee/message-hub`
+    return request.put(url, data, loading)
+  },
+
+  // 编辑话术
+  delWord(data, loading = true) {
+    const url = `/api/employee/message-hub`
+    return request.delete(url, data, loading)
+  },
+
+  // 编辑话术
+  addWordAny(data, loading = true) {
+    const url = `/api/employee/message-hub`
+    return request.post(url, data, loading)
+  },
+
+  // 获取个人和群微信状态
+  getCodeStatus(loading = true) {
+    const url = `/api/employee/check-employee-qrcode`
+    return request.get(url, {}, loading)
   }
 }

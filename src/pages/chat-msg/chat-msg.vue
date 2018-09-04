@@ -80,6 +80,24 @@
                 <div>
                   <img class="chat-msg-img mine" :src="item.url" v-if="item.type * 1 == 20" @load="refushBox" @click.stop="showPic(item)">
                 </div>
+                <div class="chat-msg-qrCode mine" v-if="item.type * 1 === 6">
+                  <div class="qrCode-content">
+                    <p class="qrCode-title">欢迎光临我的小店</p>
+                    <div class="qrCode-text-content">
+                      <div class="qrCode-txt">点击本条消息加微信，随时找我聊天</div>
+                      <img src="./pic-code@3x.png" class="qrCode-img">
+                    </div>
+                  </div>
+                </div>
+                <div class="chat-msg-qrCode mine" v-if="item.type * 1 === 7">
+                  <div class="qrCode-content">
+                    <p class="qrCode-title">欢迎加入我的微信福利群</p>
+                    <div class="qrCode-text-content">
+                      <div class="qrCode-txt">点击本条消息加入微信群，不定时抢购福利</div>
+                      <img src="./pic-code@3x.png" class="qrCode-img">
+                    </div>
+                  </div>
+                </div>
                 <div class="avatar" :style="{backgroundImage: 'url(' + userInfo.avatar + ')',backgroundPosition: 'center',backgroundRepeat: 'no-repeat',backgroundSize: 'cover'}"></div>
               </div>
             </div>
@@ -116,8 +134,19 @@
           </div>
         </div>
       </div>
+      <transition name="fade">
+        <div class="cover-full" v-if="coverFullShow">
+          <div class="cover-container">
+            <div class="cover-top">
+              <span v-if="coverShowType === 'person'" class="top-txt">暂未上传个人微信二维码，无法发送</span>
+              <span v-if="coverShowType === 'group'" class="top-txt">暂未上传群二维码，无法发送</span>
+            </div>
+            <div class="cover-down border-top-1px" @click="toMineCode">现在上传</div>
+          </div>
+        </div>
+      </transition>
       <toast ref="toast"></toast>
-      <router-view />
+      <router-view @refushBox="refushBox" @getQrCode="getQrCodeStatus"/>
     </div>
   </transition>
 </template>
@@ -183,6 +212,7 @@
           })
         }
       })
+      this.getQrCodeStatus()
     },
     mounted() {
       this.textareaDom = this.$refs.inputTxt
@@ -206,6 +236,13 @@
       ]),
       showPic(item) {
         wx.previewImage({urls: [item.url]})
+      },
+      getQrCodeStatus() {
+        Im.getCodeStatus().then(res => {
+          if (res.error === ERR_OK) {
+            this.codeStatus = res.data
+          }
+        })
       },
       textHeight() {
         let timer = setTimeout(() => {
@@ -299,7 +336,7 @@
           avatar: this.currentMsg.avatar,
           nickName: this.currentMsg.nickName
         }
-        this.addListMsg(addMsg)
+        this.addListMsg({msg: addMsg, type: 'mineAdd'})
         this.inputMsg = ''
         this.emojiShow = false
         this.$refs.scroll.forceUpdate()
@@ -332,8 +369,112 @@
             this.$router.push({path: url})
             break
           case 4:
+            if (!this.codeStatus.have_personal_qrcode) {
+              this.coverFullShow = true
+              this.coverShowType = 'person'
+            } else {
+              let data = {}
+              let desc = {log_type: 6}
+              let ext = '20005'
+              data = JSON.stringify(data)
+              desc = JSON.stringify(desc)
+              let opt = {
+                data,
+                desc,
+                ext
+              }
+              let timeStamp = parseInt(Date.parse(new Date()) / 1000)
+              let msg = {
+                from_account_id: this.imInfo.im_account,
+                avatar: this.userInfo.avatar,
+                content: '',
+                time: timeStamp,
+                msgTimeStamp: timeStamp,
+                nickName: this.userInfo.nickName,
+                sessionId: this.userInfo.account,
+                unreadMsgCount: 0,
+                type: 6
+              }
+              if (this.nowChat.length) {
+                let lastItem = this.nowChat[this.nowChat.length - 1]
+                let lastTime = lastItem.created_at ? lastItem.created_at : lastItem.msgTimeStamp
+                msg.is_showtime = timeStamp - lastTime > TIMELAG
+              } else {
+                msg.is_showtime = true
+              }
+              let list = [...this.nowChat, msg]
+              this.setNowChat(list)
+              let addMsg = {
+                text: '[其他消息]',
+                time: timeStamp,
+                msgTimeStamp: timeStamp,
+                fromAccount: this.id,
+                sessionId: this.id,
+                unreadMsgCount: 0,
+                avatar: this.currentMsg.avatar,
+                nickName: this.currentMsg.nickName
+              }
+              this.addListMsg({msg: addMsg, type: 'mineAdd'})
+              this.mortListShow = false
+              webimHandler.onSendCustomMsg(opt, this.id).then(res => {
+              }, () => {
+                this.$refs.toast.show('发送失败，请重新发送')
+              })
+            }
             break
           case 5:
+            if (!this.codeStatus.have_wxgroup_qrcode) {
+              this.coverFullShow = true
+              this.coverShowType = 'group'
+            } else {
+              let data = {}
+              let desc = {log_type: 7}
+              let ext = '20005'
+              data = JSON.stringify(data)
+              desc = JSON.stringify(desc)
+              let opt = {
+                data,
+                desc,
+                ext
+              }
+              let timeStamp = parseInt(Date.parse(new Date()) / 1000)
+              let msg = {
+                from_account_id: this.imInfo.im_account,
+                avatar: this.userInfo.avatar,
+                content: '',
+                time: timeStamp,
+                msgTimeStamp: timeStamp,
+                nickName: this.userInfo.nickName,
+                sessionId: this.userInfo.account,
+                unreadMsgCount: 0,
+                type: 7
+              }
+              if (this.nowChat.length) {
+                let lastItem = this.nowChat[this.nowChat.length - 1]
+                let lastTime = lastItem.created_at ? lastItem.created_at : lastItem.msgTimeStamp
+                msg.is_showtime = timeStamp - lastTime > TIMELAG
+              } else {
+                msg.is_showtime = true
+              }
+              let list = [...this.nowChat, msg]
+              this.setNowChat(list)
+              let addMsg = {
+                text: '[其他消息]',
+                time: timeStamp,
+                msgTimeStamp: timeStamp,
+                fromAccount: this.id,
+                sessionId: this.id,
+                unreadMsgCount: 0,
+                avatar: this.currentMsg.avatar,
+                nickName: this.currentMsg.nickName
+              }
+              this.addListMsg({msg: addMsg, type: 'mineAdd'})
+              this.mortListShow = false
+              webimHandler.onSendCustomMsg(opt, this.id).then(res => {
+              }, () => {
+                this.$refs.toast.show('发送失败，请重新发送')
+              })
+            }
             break
           case 6:
             url = this.$route.fullPath + '/useful-word'
@@ -341,6 +482,19 @@
             this.$router.push({path: url})
             break
         }
+      },
+      toMineCode() {
+        let url
+        switch (this.coverShowType) {
+          case 'person':
+            url = this.$route.fullPath + '/useful-word'
+            break
+          case 'group':
+            url = this.$route.fullPath + '/useful-word'
+            break
+        }
+        this.coverFullShow = false
+        this.$router.push({path: url})
       },
       chioceEmoji(item) {
         this.inputMsg = this.inputMsg + item.txt
@@ -404,11 +558,11 @@
               avatar: this.currentMsg.avatar,
               nickName: this.currentMsg.nickName
             }
-            this.addListMsg(addMsg)
+            this.addListMsg({msg: addMsg, type: 'mineAdd'})
             this.mortListShow = false
             webimHandler.onSendCustomMsg(opt, this.id).then(res => {
             }, () => {
-              this.$refs.toast.show('发送消息不能为空')
+              this.$refs.toast.show('图片发送失败，请重新发送')
             })
           } else {
             this.$refs.toast.show('图片发送失败，请重新发送')
@@ -435,7 +589,10 @@
         moreLists: MORELIST,
         emojiList: emotionsFaceArr,
         emojiShow: false,
-        mortListShow: false
+        mortListShow: false,
+        codeStatus: {},
+        coverFullShow: false,
+        coverShowType: ''
       }
     },
     components: {
@@ -449,9 +606,6 @@
           return res.time
         }
         return ''
-      },
-      test(val) {
-        return '<div>123</div>'
       }
     },
     watch: {
@@ -505,11 +659,6 @@
   @import "~common/stylus/variable"
   @import '~common/stylus/mixin'
   @import '~common/stylus/base'
-  .test
-    position: fixed
-    z-index: 1000
-    right: 0
-    top: 20
   .chat
     width: 100vw
     height: 100vh
@@ -713,6 +862,35 @@
               overflow: hidden
               text-overflow: ellipsis
               white-space: nowrap
+          .chat-msg-qrCode
+            margin-right: 10px
+            .qrCode-content
+              width: 230px
+              padding: 10px 12px
+              border: 0.5px solid rgba(0,0,0,0.10)
+              border-radius: 4px
+              background: $color-white
+              overflow: hidden
+              .qrCode-title
+                font-family: $font-family-regular
+                font-size: $font-size-16
+                color: $color-20202E
+                margin: 0 0 6px
+              .qrCode-text-content
+                width: 100%
+                display: flex
+                font-size: 0
+                .qrCode-txt
+                  flex: 1
+                  overflow: hidden
+                  line-height: 18px
+                  font-size: $font-size-12
+                  color: $color-888888
+                  font-family: $font-family-regular
+                .qrCode-img
+                  width: 45px
+                  height: 45px
+                  margin-left: 12px
         .chat-content.mine
           justify-content: flex-end
 
@@ -721,7 +899,6 @@
       box-sizing: border-box
       min-height: 38px
       background: $color-background-f9
-      padding: 6px 0
       position: absolute
       left: 0
       right: 0
@@ -731,6 +908,7 @@
         display: flex
         align-items: flex-end
         min-height: 38px
+        padding: 6px 0
         .face-box
           width: 53px
           display: flex
@@ -846,4 +1024,38 @@
               height: 100%
               z-index: 10
 
+    .cover-full
+      fill-box()
+      z-index: 100
+      layout()
+      align-items: center
+      background: rgba(32,32,46,0.8)
+      .cover-container
+        width: 300px
+        height: 160px
+        background: $color-white
+        border: 1px solid rgba(32,32,46,0.10)
+        border-radius: 2px
+        all-center()
+        .cover-top
+          width: 100%
+          height: 115px
+          display: flex
+          align-items: center
+          justify-content: center
+          .top-txt
+            font-size: $font-size-16
+            font-family: $font-family-regular
+            color: $color-20202E
+            letter-spacing: 0.8px
+            line-height: 18px
+        .cover-down
+          width: 100%
+          height: 45px
+          line-height: 44px
+          text-align: center
+          font-family: $font-family-medium
+          font-size: $font-size-14
+          color: $color-56BA15
+          letter-spacing: 0.6px
 </style>
