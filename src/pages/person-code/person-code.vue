@@ -1,0 +1,462 @@
+<template>
+  <div class="group-box">
+    <Scroll bcColor="#fff">
+      <div class="preson-box">
+        <div class="item-box" v-for="(item, index) in tabList" v-bind:key="index" @click="clickTab(index)">
+          <div class="item-box-con" :class="tabIndex * 1=== index ? 'active' : ''">
+            <div class="item-box-con-top">
+              <div class="icon" :class="item.icon"></div>
+              <div class="text">{{item.title}}</div>
+            </div>
+            <div class="content">{{item.content}}</div>
+          </div>
+        </div>
+      </div>
+      <div class="preson-main-box" v-if="tabIndex * 1 === 0">
+        <div class="upimg-box">
+          <img :src="presonImg" class="upimg-box-img" v-if="presonImg">
+          <div class="upimg-box-colse" v-if="presonImg" @click="clearPresonImg"></div>
+          <input type="file" class="header-icon" id="header-logo" @change="_fileChange($event, 'preson')" accept="image/*" v-if="!presonImg"  :value="inputValue">
+        </div>
+        <p class="updata-text">上传个人微信二维码</p>
+      </div>
+      <div class="robot-box" v-if="tabIndex * 1 === 1">
+        <div class="robot-list">
+          <div class="item-list">
+            <div class="text">上传微信二维码</div>
+            <div class="text-img">
+              <input type="file" class="header-icon" id="header-logo1" @change="_fileChange($event, 'robot')" accept="image/*" :value="inputValue">
+              <img :src="robotImg" v-if="robotImg" class="text-img-show">
+            </div>
+          </div>
+          <router-link class="item-list" to="person-code/robot-code">
+            <div class="text">远程登录该微信</div>
+            <div class="login-right">
+              <div class="login-text">登陆</div>
+              <div class="icon"></div>
+            </div>
+          </router-link>
+        </div>
+        <div class="robot-area">
+          <div class="robot-title">添加欢迎语</div>
+          <div class="data-area-box">
+            <textarea class="data-area" v-model="note" maxlength="200" name="" id="" cols="30" rows="10"></textarea>
+            <div class="data-area-pla" v-if="!note">
+              <div class="text">请添加欢迎语</div>
+              <div class="text">(用户添加机器人后，会自动验证通过，且默认发文字信息给客户。)</div>
+            </div>
+            <div class="textarea-number">{{note.length}}<span>/200</span></div>
+          </div>
+          <div class="note-des">温馨提示：</div>
+          <ul class="note-list">
+            <li class="item">1.  机器人微信是将私人微信远程机器化。</li>
+            <li class="item">2. 机器人可以自动验证通过，且默认发送欢迎语。</li>
+            <li class="item">3. 机器人成功登录后，请不要退出，退出后需要重新登录。</li>
+            <li class="item">4. 新注册的微信号，不发当机器人。(微信限制)</li>
+            <li class="item">5. 微信号每天添加好友的数量有限制500个/日。</li>
+          </ul>
+        </div>
+      </div>
+    </Scroll>
+    <div class="submit-btn" v-if="tabIndex * 1 === 1" @click="submitSave">保存</div>
+    <router-view></router-view>
+    <toast ref="toast"></toast>
+    <div class="img-cut" v-show="visible">
+      <vueCropper
+        :viewMode="1"
+        class="img-big"
+        :guides="false"
+        ref="cropper"
+        :img="imageBig"
+        :rotatable="true"
+        :background="status"
+        :cropBoxResizable="status"
+        :aspectRatio="1"
+        :autoCropArea="1"
+        :dragMode="'move'"
+        :checkCrossOrigin="false"
+        :cropBoxMovable="false"
+      >
+      </vueCropper>
+      <div class="img-btn">
+        <div class="btn-item" @click="cropImage">确定</div>
+          <div class="btn-item" @click="cropImageCosle">取消</div>
+      </div>
+      <img class="loading" src="./loading.gif" alt="" width="30" height="30" v-show="loading">
+    </div>
+  </div>
+</template>
+
+<script>
+  import Scroll from 'components/scroll/scroll'
+  import { UpLoad, Mine } from 'api'
+  import { ERR_OK } from '../../common/js/config'
+  import storage from 'storage-controller'
+  import VueCropper from 'vue-cropperjs'
+  import Toast from 'components/toast/toast'
+
+  const ICONTAB = [{icon: 'person', title: '普通微信', content: '成员自己有商品，可以修改库存和价格。'}, {icon: 'all', title: '机器人微信', content: '成员没有商品，分享团长收入。'}]
+  export default {
+    name: 'person-code',
+    data () {
+      return {
+        tabList: ICONTAB,
+        tabIndex: 0,
+        imageBig: '',
+        visible: false,
+        status: false,
+        cropImg: '',
+        loading: false,
+        presonImg: '',
+        chooseType: '',
+        robotImg: '',
+        robotId: '',
+        note: '',
+        inputValue: ''
+      }
+    },
+    created () {
+      this.getDataCode()
+    },
+    methods: {
+      cropImage () {
+        this.loading = true
+        let src = this.$refs.cropper.getCroppedCanvas().toDataURL()
+        let $Blob = this.getBlobBydataURI(src, 'image/png')
+        let formData = new FormData()
+        formData.append('file', $Blob, 'file_' + Date.parse(new Date()) + '.png')
+        UpLoad.upLoadImage(formData).then((res) => {
+          if (res.error === ERR_OK) {
+            this.presonImg = res.data.url
+            if (this.chooseType === 'preson') {
+              Mine.upLoadPerson({image_id: res.data.id}).then((res) => {
+                if (res.error === ERR_OK) {
+                  this.$refs.toast.show('上传成功')
+                  this.$emit('getQrCode')
+                  this.loading = false
+                  this.visible = false
+                } else {
+                  this.$refs.toast.show(res.message)
+                }
+              })
+            } else if (this.chooseType === 'robot') {
+              this.loading = false
+              this.visible = false
+              this.robotImg = res.data.url
+              this.robotId = res.data.id
+            }
+            return false
+          }
+          this.loading = false
+          this.visible = false
+          this.$refs.toast.show(res.message)
+        })
+      },
+      cropImageCosle() {
+        this.visible = false
+        this.inputValue = ''
+      },
+      getBlobBydataURI (dataURI, type) {
+        var binary = atob(dataURI.split(',')[1])
+        var array = []
+        for (var i = 0; i < binary.length; i++) {
+          array.push(binary.charCodeAt(i))
+        }
+        return new Blob([new Uint8Array(array)], {type: type})
+      },
+      _fileChange (e, type) {
+        this.chooseType = type
+        if (e.target) {
+          const file = e.target.files[0]
+          const reader = new FileReader()
+          reader.onload = async (event) => {
+            this.imageBig = event.target.result
+            this.$refs.cropper.replace(event.target.result)
+            this.visible = true
+          }
+          reader.readAsDataURL(file)
+        }
+      },
+      clearPresonImg() {
+        this.presonImg = ''
+      },
+      getDataCode() {
+        Mine.getEmployeeCode({type: 0}).then((res) => {
+          if (res.error === ERR_OK) {
+            res.data.forEach((item) => {
+              if (item.type === 1) {
+                this.presonImg = item.image_url
+              }
+              if (item.type === 2) {
+                this.robotImg = item.image_url
+                this.note = item.text
+              }
+            })
+          } else {
+            this.$refs.toast.show(res.message)
+          }
+        })
+      },
+      clickTab(index) {
+        this.tabIndex = index
+      },
+      submitSave() {
+        if (this.robotId.length === 0) {
+          this.$refs.toast.show('请上传微信二维码')
+          return
+        }
+        if (this.note.length === 0) {
+          this.$refs.toast.show('请添加欢迎语')
+          return
+        }
+        Mine.upLoadRobot({image_id: this.robotId, text: this.note}).then((res) => {
+          if (res.error === ERR_OK) {
+            this.$refs.toast.show('上传成功')
+            this.$emit('getQrCode')
+          } else {
+            this.$refs.toast.show(res.message)
+          }
+        })
+      }
+    },
+    computed: {
+      userInfo() {
+        return storage.get('info')
+      },
+      slide() {
+        return this.ios ? '' : 'slide'
+      }
+    },
+    components: {
+      Scroll,
+      VueCropper,
+      Toast
+    }
+  }
+</script>
+
+<!-- Add "scoped" attribute to limit CSS to this component only -->
+<style scoped lang="stylus" rel="stylesheet/stylus">
+  @import "~common/stylus/variable"
+  @import '~common/stylus/mixin'
+  *
+    box-sizing: border-box
+    -moz-box-sizing: border-box
+    -webkit-box-sizing: border-box
+  .robot-box
+    padding-bottom: 65px
+  .img-cut
+    position: fixed
+    top: 0
+    left: 0
+    right: 0
+    bottom: 0
+    z-index: 100
+    background: #000
+    .img-big
+      background: #000
+      height: 100%
+    .img-btn
+      width: 100vw
+      position: absolute
+      bottom: 0
+      height: 60px
+      display: flex
+      align-items: center
+      background: $color-white
+      border-top: 0.5px solid $color-col-line
+      .btn-item
+        flex: 1
+        text-align: center
+        font-size: $font-size-16
+        color: $color-20202E
+        &:last-child
+          border-left: 0.5px solid $color-col-line
+    .loading
+      all-center()
+
+  .group-box
+    position: fixed
+    background: $color-background
+    z-index: 121
+    left: 0
+    right: 0
+    bottom: 0
+    top: 0
+  .preson-box
+    padding: 15px
+    layout(row)
+    background: $color-white
+    border-bottom: 10px solid #f1f2f5
+    .item-box
+      width: 50%
+      &:nth-child(odd)
+        padding-right: 5px
+      &:nth-child(even)
+        padding-left: 5px
+      .item-box-con
+        border-radius: 2px
+        width: 100%
+        background: #fff
+        border: 3px solid transparent
+        box-shadow: 0 2px 8px 0 rgba(43,43,145,0.20)
+        padding: 12px 12.5px 12px 12.5px
+        .item-box-con-top
+          layout(row)
+          align-items: center
+          margin-bottom: 6px
+          .icon
+            width: 18px
+            height: 18px
+            margin-right: 4px
+            &.person
+              icon-image('icon-comwechat')
+            &.all
+              icon-image('icon-robot')
+          .text
+            font-size: $font-size-16
+            color: $color-20202E
+            font-family: $font-family-medium
+        .content
+          font-size: $font-size-12
+          color: $color-888888
+          font-family: $font-family-regular
+      .active
+        border: 3px solid rgba(32,32,46,0.80)
+  .preson-main-box
+    padding-top: 35px
+    .upimg-box
+      width: 156px
+      height: 156px
+      icon-image(btn-upload)
+      position: relative
+      display: block
+      margin: 0 auto 0
+      margin-bottom: 15px
+      .upimg-box-img
+        width: 100%
+        height: 100%
+        display: block
+        border: 1px solid #F0EFF5
+      .upimg-box-colse
+        position: absolute
+        icon-image(icon-delete)
+        width: 20px
+        height: 20px
+        right: 0
+        top: 0
+        z-index: 1111
+    .updata-text
+      font-family: $font-family-regular
+      font-size: $font-size-14
+      color: $color-888888
+      text-align: center
+  .robot-list
+    padding-left: 15px
+    .item-list
+      layout(row)
+      align-items: center
+      justify-content: space-between
+      height: 55px
+      padding-right: 15px
+      border-bottom-1px(#e0e0e0)
+      .text
+        font-size: $font-size-14
+        font-family: $font-family-regular
+        color: $color-20202E
+      .text-img
+        position: relative
+        width: 35px
+        height: 35px
+        icon-image(btn-add)
+        .text-img-show
+          width: 100%
+          height: 100%
+          display: block
+      .login-right
+        layout(row)
+        align-items: center
+        .login-text
+          font-size: $font-size-14
+          font-family: $font-family-regular
+          color: $color-20202E
+          margin-right: 5px
+        .icon
+          icon-image('icon-pressed')
+          width: 5px
+          height: 10px
+  .robot-area
+    padding: 0 15px
+    .robot-title
+      font-size: $font-size-14
+      font-family: $font-family-regular
+      color: $color-20202E
+      padding: 20px 0 17px
+    .data-area
+      margin-top: 10px
+      width: 100%
+      border-color: rgba(0, 0, 0, 0.1)
+      background: transparent
+      padding: 10px 15px
+      font-size: $font-size-medium
+      color: #20202e
+      font-family: $font-family-regular
+      height: 185px
+      outline:none
+      -webkit-appearance: none
+      box-shadow:0 0 0 rgba(0,0,0,0)
+      position: relative
+      z-index: 2
+    .textarea-number
+      position: absolute
+      bottom: 25px
+      right: 25px
+      font-size: $font-size-small
+      font-family: $font-family-regular
+      color: #202020
+      span
+        color: #ddd
+    .data-area-box
+      position: relative
+      .data-area-pla
+        position: absolute
+        top: 0
+        left: 0
+        padding: 20px 15px
+        font-size: $font-size-14
+        font-family: $font-family-regular
+        color: $color-ccc
+        line-height: 20px
+  .note-des
+    font-size: $font-size-12
+    font-family: $font-family-medium
+    color: $color-888888
+    padding: 20px 0 10px
+  .header-icon
+    top: 0
+    left: 0
+    width: 100%
+    height: 100%
+    position: absolute
+    z-index: 1000
+    opacity: 0
+  .note-list
+    .item
+      font-size: $font-size-12
+      font-family: $font-family-regular
+      color: $color-888888
+      line-height: 18px
+  .submit-btn
+    position: fixed
+    height: 45px
+    background: $color-20202E
+    font-size: $font-size-16
+    font-family: $font-family-medium
+    color: $color-white
+    bottom: 0
+    text-align: center
+    left: 0
+    width: 100%
+    line-height: 45px
+    z-index: 49
+</style>

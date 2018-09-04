@@ -30,6 +30,14 @@ const MyData = () => import('pages/my-data/my-data')
 const PageError = () => import('pages/page-error/page-error')
 const Home = () => import('pages/home/home')
 const SelectGoods = () => import('pages/select-goods/select-goods')
+const NewGroupMsg = () => import('pages/new-group-msg/new-group-msg')
+const NewsAddGroup = () => import('pages/news-add-group/news-add-group')
+const NewsChatGroup = () => import('pages/news-chat-group/news-chat-group')
+const UsefulWord = () => import('pages/useful-word/useful-word')
+const AddWord = () => import('pages/add-word/add-word')
+const GroupCode = () => import('pages/group-code/group-code')
+const PersonCode = () => import('pages/person-code/person-code')
+const RobotCode = () => import('pages/robot-code/robot-code')
 
 Vue.use(Router)
 
@@ -73,6 +81,27 @@ const route = new Router({
           meta: {
             title: '我的图表'
           }
+        },
+        {
+          path: 'group-code',
+          component: GroupCode,
+          meta: {
+            title: '微信群码'
+          }
+        },
+        {
+          path: 'person-code',
+          component: PersonCode,
+          meta: {
+            title: '个人微信'
+          },
+          children: [{
+            path: 'robot-code',
+            component: RobotCode,
+            meta: {
+              title: '机器人微信'
+            }
+          }]
         },
         {
           path: 'shareCard',
@@ -121,6 +150,41 @@ const route = new Router({
           meta: {
             title: '选择商品'
           }
+        }, {
+          path: 'useful-word',
+          component: UsefulWord,
+          meta: {
+            title: '常用语'
+          },
+          children: [
+            {
+              path: 'add-word',
+              component: AddWord,
+              meta: {
+                title: '常用语'
+              }
+            }
+          ]
+        }, {
+          path: 'group-code',
+          component: GroupCode,
+          meta: {
+            title: '微信群码'
+          }
+        },
+        {
+          path: 'person-code',
+          component: PersonCode,
+          meta: {
+            title: '个人微信'
+          },
+          children: [{
+            path: 'robot-code',
+            component: RobotCode,
+            meta: {
+              title: '机器人微信'
+            }
+          }]
         }]
       },
       {
@@ -194,6 +258,27 @@ const route = new Router({
         component: News,
         meta: {
           title: '消息'
+        }
+      },
+      {
+        path: '/news-add-group',
+        component: NewsAddGroup,
+        meta: {
+          title: '添加组'
+        }
+      },
+      {
+        path: '/news-chat-group',
+        component: NewsChatGroup,
+        meta: {
+          title: '群发'
+        }
+      },
+      {
+        path: '/new-group-msg',
+        component: NewGroupMsg,
+        meta: {
+          title: '新建群发'
         }
       },
       {

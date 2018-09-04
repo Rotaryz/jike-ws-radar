@@ -23,3 +23,9 @@ export const SET_NOW_CHAT = 'SET_NOW_CHAT'
 export const ADD_NOW_CHAT = 'ADD_NOW_CHAT'
 
 export const SET_IM_ING = 'SET_IM_ING'
+
+export const SET_GROUP_ITEM = 'SET_GROUP_ITEM'
+
+export const SET_CURRENT_GROUP = 'SET_CURRENT_GROUP'
+
+export const SET_NEWS_GETTYPE = 'SET_NEWS_GETTYPE'

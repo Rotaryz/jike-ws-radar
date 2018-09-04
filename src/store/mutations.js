@@ -55,7 +55,8 @@ const mutations = {
       }
     }
   },
-  [TYPES.ADD_LIST_MSG](state, msg) {
+  [TYPES.ADD_LIST_MSG](state, typeObj) {
+    let msg = typeObj.msg
     if (msg.desc) {
       let desc = JSON.parse(msg.desc)
       if (desc.log_type * 1 === 3 || desc.log_type * 1 === 4 || desc.log_type * 1 === 5) {
@@ -82,7 +83,7 @@ const mutations = {
         sessionId: msg.fromAccount,
         avatar: msg.avatar,
         nickName: msg.nickName ? msg.nickName : msg.fromAccountNick,
-        unreadMsgCount: 1
+        unreadMsgCount: typeObj.type === 'mineAdd' ? 0 : 1
       }
       inItem = Object.assign({}, addMsg)
     }
@@ -143,6 +144,19 @@ const mutations = {
   },
   [TYPES.SET_IM_ING](state, boolean) {
     state.imIng = boolean
+  },
+  [TYPES.SET_GROUP_ITEM] (state, msg) {
+    state.groupItem = {
+      time: Utils.formatDate(msg.time).date,
+      lastMsg: msg.lastMsg,
+      html: Utils.msgFaceToHtml(msg.lastMsg)
+    }
+  },
+  [TYPES.SET_CURRENT_GROUP] (state, msg) {
+    state.currentGroupMsg = msg
+  },
+  [TYPES.SET_NEWS_GETTYPE] (state, boolean) {
+    state.newsGetType = boolean
   }
 }
 

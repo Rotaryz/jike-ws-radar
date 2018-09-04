@@ -211,8 +211,9 @@
           avatar: this.currentMsg.avatar,
           nickName: this.currentMsg.nickName
         }
-        this.addListMsg(addMsg)
+        this.addListMsg({msg: addMsg, type: 'mineAdd'})
         this.$router.back()
+        this.$emit('refushBox')
         webimHandler.onSendCustomMsg(option, this.currentMsg.account).then(res => {
         }, () => {
           this.$refs.toast.show('网络异常, 请稍后重试')
