@@ -43,7 +43,8 @@
     data() {
       return {
         itemChecked: {},
-        wordList: []
+        wordList: [],
+        slide: 'slide'
       }
     },
     methods: {
@@ -120,10 +121,7 @@
         'imInfo',
         'nowChat',
         'ios'
-      ]),
-      slide() {
-        return this.ios ? '' : 'slide'
-      }
+      ])
     },
     components: {
       Scroll,

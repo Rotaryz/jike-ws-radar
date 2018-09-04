@@ -63,7 +63,8 @@
         deleteAny: {},
         editorShow: false,
         editorMsg: '',
-        editorItem: {}
+        editorItem: {},
+        slide: 'slide'
       }
     },
     methods: {
@@ -162,10 +163,7 @@
     computed: {
       ...mapGetters([
         'ios'
-      ]),
-      slide() {
-        return this.ios ? '' : 'slide'
-      }
+      ])
     }
   }
 </script>
