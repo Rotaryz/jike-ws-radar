@@ -35,6 +35,9 @@ const NewsAddGroup = () => import('pages/news-add-group/news-add-group')
 const NewsChatGroup = () => import('pages/news-chat-group/news-chat-group')
 const UsefulWord = () => import('pages/useful-word/useful-word')
 const AddWord = () => import('pages/add-word/add-word')
+const GroupCode = () => import('pages/group-code/group-code')
+const PersonCode = () => import('pages/person-code/person-code')
+const RobotCode = () => import('pages/robot-code/robot-code')
 
 Vue.use(Router)
 
@@ -78,6 +81,27 @@ const route = new Router({
           meta: {
             title: '我的图表'
           }
+        },
+        {
+          path: 'group-code',
+          component: GroupCode,
+          meta: {
+            title: '微信群码'
+          }
+        },
+        {
+          path: 'person-code',
+          component: PersonCode,
+          meta: {
+            title: '个人微信'
+          },
+          children: [{
+            path: 'robot-code',
+            component: RobotCode,
+            meta: {
+              title: '机器人微信'
+            }
+          }]
         },
         {
           path: 'shareCard',

@@ -10,6 +10,7 @@ import goods from './goods'
 import echart from './echart'
 import global from './global'
 import news from './news'
+import mine from './mine'
 // 授权模块
 export const Jwt = jwt
 
@@ -42,3 +43,7 @@ export const Global = global
 
 // 消息相关
 export const News = news
+
+
+// 我的
+export const Mine = mine
