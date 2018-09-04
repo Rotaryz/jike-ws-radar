@@ -193,6 +193,7 @@
               if (item.type === 2) {
                 this.robotImg = item.image_url
                 this.note = item.text
+                this.robotId = item.image_id
               }
             })
           } else {
@@ -214,7 +215,7 @@
         }
         Mine.upLoadRobot({image_id: this.robotId, text: this.note}).then((res) => {
           if (res.error === ERR_OK) {
-            this.$refs.toast.show('上传成功')
+            this.$refs.toast.show('保存成功')
             this.$emit('getQrCode')
           } else {
             this.$refs.toast.show(res.message)
