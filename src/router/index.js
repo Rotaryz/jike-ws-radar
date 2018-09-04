@@ -165,6 +165,26 @@ const route = new Router({
               }
             }
           ]
+        }, {
+          path: 'group-code',
+          component: GroupCode,
+          meta: {
+            title: '微信群码'
+          }
+        },
+        {
+          path: 'person-code',
+          component: PersonCode,
+          meta: {
+            title: '个人微信'
+          },
+          children: [{
+            path: 'robot-code',
+            component: RobotCode,
+            meta: {
+              title: '机器人微信'
+            }
+          }]
         }]
       },
       {

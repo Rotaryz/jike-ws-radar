@@ -416,6 +416,14 @@
               }
               this.addListMsg({msg: addMsg, type: 'mineAdd'})
               this.mortListShow = false
+              this.$refs.scroll.forceUpdate()
+              if (this.listDom.clientHeight > this.chatDom.clientHeight) {
+                let timer = setTimeout(() => {
+                  let startY = this.chatDom.clientHeight - this.listDom.clientHeight - 20
+                  this.$refs.scroll.scrollTo(0, startY, 300, ease[this.scrollToEasing])
+                  clearTimeout(timer)
+                }, 20)
+              }
               webimHandler.onSendCustomMsg(opt, this.id).then(res => {
               }, () => {
                 this.$refs.toast.show('发送失败，请重新发送')
@@ -470,6 +478,14 @@
               }
               this.addListMsg({msg: addMsg, type: 'mineAdd'})
               this.mortListShow = false
+              this.$refs.scroll.forceUpdate()
+              if (this.listDom.clientHeight > this.chatDom.clientHeight) {
+                let timer = setTimeout(() => {
+                  let startY = this.chatDom.clientHeight - this.listDom.clientHeight - 20
+                  this.$refs.scroll.scrollTo(0, startY, 300, ease[this.scrollToEasing])
+                  clearTimeout(timer)
+                }, 20)
+              }
               webimHandler.onSendCustomMsg(opt, this.id).then(res => {
               }, () => {
                 this.$refs.toast.show('发送失败，请重新发送')
@@ -487,10 +503,10 @@
         let url
         switch (this.coverShowType) {
           case 'person':
-            url = this.$route.fullPath + '/useful-word'
+            url = this.$route.fullPath + '/person-code'
             break
           case 'group':
-            url = this.$route.fullPath + '/useful-word'
+            url = this.$route.fullPath + '/group-code'
             break
         }
         this.coverFullShow = false

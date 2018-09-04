@@ -44,6 +44,5 @@ export const Global = global
 // 消息相关
 export const News = news
 
-
 // 我的
 export const Mine = mine
