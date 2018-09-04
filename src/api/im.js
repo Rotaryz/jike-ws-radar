@@ -23,6 +23,20 @@ export default {
     return request.post(url, data, loading)
   },
 
+  // 行为雷达消息（所有人）
+  getActionList(from = 0, limit = 30, id, type = 1, time, loading = true) {
+    const url = `/api/employee/ws-action-logs`
+    const data = {
+      from,
+      limit,
+      page: 0,
+      type,
+      time,
+      customer_id: 0,
+      employee_id: id
+    }
+    return request.post(url, data, loading)
+  },
   // 聊天记录
   getMsgList(data, loading = true) {
     const url = `/api/employee/ws-message-logs`

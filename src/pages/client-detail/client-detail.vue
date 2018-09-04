@@ -16,25 +16,28 @@
             <div class="cliten-box">
               <div class="cliten-con">
                 <img class="cliten-con-bg" src="./bg-customer_details@2x.png" alt="">
-                <div class="cliten-img">
-                  <div class="detail-img-box">
-                    <div class="img">
-                      <img :src="clientData.image_url" alt="">
-                    </div>
-                    <div class="label-right">
-                      <div class="label-name">{{clientData.name}}</div>
-                      <div class="label-box">
-                        <div class="label-content">
-                          <div class="label active" v-for="(item, index) in labelList" v-bind:key="index"
-                               @click="toClientTag">{{item.label_name}}
-                          </div>
-                          <div class="label" v-if="labelList.length<3" @click="toClientTag">添加标签</div>
-                        </div>
+                <div class="cliten-top">
+                  <div class="cliten-img">
+                    <div class="detail-img-box">
+                      <div class="img">
+                        <img :src="clientData.image_url" alt="">
+                      </div>
+                      <div class="label-right">
+                        <div class="label-name">{{clientData.name}}</div>
+                        <div class="text">{{clientData.sources}}</div>
                       </div>
                     </div>
+                    <div class="detail-jump" @click="jumpData">
+                      <img class="jump-img" src="./icon-pressed@2x.png" alt="">
+                    </div>
                   </div>
-                  <div class="detail-jump" @click="jumpData">
-                    <img class="jump-img" src="./icon-pressed@2x.png" alt="">
+                  <div class="label-box">
+                    <div class="label-content">
+                      <div class="label active" v-for="(item, index) in labelList" v-bind:key="index"
+                           @click="toClientTag">{{item.label_name}}
+                      </div>
+                      <div class="label" v-if="labelList.length<3" @click="toClientTag">添加标签</div>
+                    </div>
                   </div>
                 </div>
                 <div class="cliten-bottom">
@@ -846,8 +849,6 @@
           layout(row)
           justify-content: space-between
           align-items: center
-          padding-bottom: 15px
-          border-bottom: 0.5px solid rgba(0, 0, 0, .1)
           position: relative
           z-index: 1
           .detail-img-box
@@ -856,6 +857,7 @@
             layout(row)
             .img
               position: relative
+              height: 0
               width: 60px
               height: 60px
               background: #333
@@ -873,25 +875,10 @@
                 font-family: $font-family-regular
                 padding-top: 5px
                 margin-bottom: 15px
-              .label-box
-                overflow-x: auto
-                .label-content
-                  display: inline-block
-                  white-space: nowrap
-                .label
-                  padding: 0 10px
-                  height: 20px
-                  line-height: 20px
-                  text-align: center
-                  display: inline-block
-                  font-size: $font-size-12
-                  color: $color-text-88
-                  font-family: $font-family-regular
-                  background: #F0F2F5
-                  margin-right: 5px
-                .active
-                  background: rgba(86, 186, 21, 0.2)
-                  color: #56BA15
+              .text
+                font-size: $font-size-12
+                color: $color-888888
+                font-family: $font-family-medium
           .detail-jump
             height: 45px
             width: 25px
@@ -904,6 +891,31 @@
               top: 0
               bottom: 0
               margin: auto
+        .label-box
+          overflow-x: auto
+          position:relative
+          margin-top: 10px
+          z-index: 66
+          .label-content
+            display: inline-block
+            white-space: nowrap
+          .label
+            padding: 0 10px
+            height: 20px
+            line-height: 20px
+            text-align: center
+            display: inline-block
+            font-size: $font-size-12
+            color: $color-text-88
+            font-family: $font-family-regular
+            background: #F0F2F5
+            margin-right: 5px
+          .active
+            background: rgba(86, 186, 21, 0.2)
+            color: #56BA15
+        .cliten-top
+          padding-bottom: 10px
+          border-bottom-1px(#e5e5e5)
         .cliten-bottom
           position: relative
           z-index: 1

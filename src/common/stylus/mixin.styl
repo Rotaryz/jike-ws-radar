@@ -175,3 +175,13 @@ cut-off-rule-bottom($line-left = 0, $line-right = 0, $line-color = $color-cut-li
     bottom: 0px
     left: $line-left
     right: $line-right
+lr-border-bottom-1px($color = $color-col-line, $left = 15px, $right = 0px)
+  position: relative
+  &:after
+    content: ""
+    position: absolute
+    bottom: 0
+    left: $left
+    right: $right
+    transform: scaleY(.5) translateZ(0)
+    border-bottom: 1px solid $color
