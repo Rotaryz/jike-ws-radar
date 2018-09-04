@@ -13,7 +13,7 @@
           </router-link>
         </div>
         <div class="mine-shadow">
-          <div class="mian-box">
+          <router-link class="mian-box" to="mine/my-data">
             <div class="item-box">
               <div class="number">{{allDatas.customer_sum || 0}}</div>
               <div class="text">客户总数</div>
@@ -26,7 +26,7 @@
               <div class="number">{{allDatas.order_finish_sum || 0}}</div>
               <div class="text">成交总数</div>
             </div>
-          </div>
+          </router-link>
         </div>
       </div>
       <ul class="content-list">

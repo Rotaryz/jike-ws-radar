@@ -94,15 +94,15 @@
         </scroll>
       </div>
       <div class="action-box"  v-if="tabIndex * 1 === 1">
-        <ul class="action-tab">
-          <li class="tab-item"  :class="actionIndex===index?'active':''"
-              v-for="(item,index) in actionList"
-              :key="index"
-              @click="actionTab(index)">{{item}}</li>
-        </ul>
         <div class="action-scroll">
           <scroll
             ref="scrollAction">
+            <ul class="action-tab">
+              <li class="tab-item"  :class="actionIndex===index?'active':''"
+                  v-for="(item,index) in actionList"
+                  :key="index"
+                  @click="actionTab(index)">{{item}}</li>
+            </ul>
             <div class="action-all">
               <div class="action-list-con" v-for="(item, index) in actionListData" :key="index">
                 <div class="item-list" v-for="(data, itemindex) in item" :key="itemindex">
@@ -121,12 +121,6 @@
         </div>
       </div>
       <div class="people-box" v-if="tabIndex * 1 === 2">
-        <ul class="action-tab">
-          <li class="tab-item"  :class="tabPeopleIndex===index?'active':''"
-              v-for="(item,index) in actionList"
-              :key="index"
-              @click="peopleTab(index)">{{item}}</li>
-        </ul>
         <div class="action-scroll">
           <scroll  ref="scrollPeople"
                    :data="peopleDataList"
@@ -134,6 +128,12 @@
                    :pullUpLoad="pullUpPeoleLoadObj"
                    :showNoMore="false"
                    @pullingUp="onPeoplePullingUp">
+            <ul class="action-tab">
+              <li class="tab-item"  :class="tabPeopleIndex===index?'active':''"
+                  v-for="(item,index) in actionList"
+                  :key="index"
+                  @click="peopleTab(index)">{{item}}</li>
+            </ul>
             <div class="people-all">
               <div class="msgs-list msgs-people" v-if="peopleDataList.length !== 0">
                 <div class="msgs-item" v-for="(item, index) in peopleDataList" :key="index" @click="toDetail(item)">
@@ -321,6 +321,13 @@
         'setImInfo'
       ]),
       changeTab(index) {
+        if (index * 1 === 0 && this.tabIndex * 1 === 0) {
+          this.$refs.scroll.scrollTo(0, 0)
+        } else if (index * 1 === 1 && this.tabIndex * 1 === 1) {
+          this.$refs.scrollAction.scrollTo(0, 0)
+        } else if (index * 1 === 2 && this.tabIndex * 1 === 2) {
+          this.$refs.scrollPeople.scrollTo(0, 0)
+        }
         this.tabIndex = index
         if (index * 1 === 2 && this.firstGet) {
           this.getPeopleList()
@@ -571,13 +578,13 @@
         color: $color-202020
     .line
       width: 33.333%
-      height: 100%
+      height: 3px
       display: flex
       flex-direction: column-reverse
       align-items: center
       position: absolute
       left: 0
-      top: 0
+      bottom: 0
       transition: all 0.3s
       .chilen-line
         height: 3px
@@ -679,7 +686,7 @@
       width: 100%
       overflow: hidden
       position: absolute
-      top: 70px
+      top: 0px
       left: 0
       right: 0
       bottom: 0
