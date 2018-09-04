@@ -91,7 +91,6 @@
       layout(row, block, no-warp)
       align-items: center
       padding: 15px 0
-      border-bottom: 0.5px solid $color-col-line
       height: 45px
       overflow: hidden
       .user-icon
@@ -118,6 +117,9 @@
             letter-spacing: 0.6px
             layout(row, block, nowrap)
             align-items: flex-start
+            .txt
+              max-width :30vw
+              no-wrap()
             .is-new
               width: 19px
               height: 13.5px
