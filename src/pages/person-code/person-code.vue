@@ -16,26 +16,26 @@
         <div class="upimg-box">
           <img :src="presonImg" class="upimg-box-img" v-if="presonImg">
           <div class="upimg-box-colse" v-if="presonImg" @click="clearPresonImg"></div>
-          <input type="file" class="header-icon" id="header-logo" @change="_fileChange($event, 'preson')" accept="image/*" v-if="!presonImg">
+          <input type="file" class="header-icon" id="header-logo" @change="_fileChange($event, 'preson')" accept="image/*" v-if="!presonImg"  :value="inputValue">
         </div>
         <p class="updata-text">上传个人微信二维码</p>
       </div>
-      <div class="robot-box"  v-if="tabIndex * 1 === 1">
+      <div class="robot-box" v-if="tabIndex * 1 === 1">
         <div class="robot-list">
           <div class="item-list">
             <div class="text">上传微信二维码</div>
             <div class="text-img">
-              <input type="file" class="header-icon" id="header-logo1" @change="_fileChange($event, 'robot')" accept="image/*">
+              <input type="file" class="header-icon" id="header-logo1" @change="_fileChange($event, 'robot')" accept="image/*" :value="inputValue">
               <img :src="robotImg" v-if="robotImg" class="text-img-show">
             </div>
           </div>
-          <div class="item-list">
+          <router-link class="item-list" to="person-code/robot-code">
             <div class="text">远程登录该微信</div>
             <div class="login-right">
               <div class="login-text">登陆</div>
               <div class="icon"></div>
             </div>
-          </div>
+          </router-link>
         </div>
         <div class="robot-area">
           <div class="robot-title">添加欢迎语</div>
@@ -45,7 +45,7 @@
               <div class="text">请添加欢迎语</div>
               <div class="text">(用户添加机器人后，会自动验证通过，且默认发文字信息给客户。)</div>
             </div>
-            <div class="textarea-number">{{note.length}}<span>/500</span></div>
+            <div class="textarea-number">{{note.length}}<span>/200</span></div>
           </div>
           <div class="note-des">温馨提示：</div>
           <ul class="note-list">
@@ -58,6 +58,7 @@
         </div>
       </div>
     </Scroll>
+    <div class="submit-btn" v-if="tabIndex * 1 === 1" @click="submitSave">保存</div>
     <router-view></router-view>
     <toast ref="toast"></toast>
     <div class="img-cut" v-show="visible">
@@ -79,7 +80,7 @@
       </vueCropper>
       <div class="img-btn">
         <div class="btn-item" @click="cropImage">确定</div>
-        <div class="btn-item" @click="cropImageCosle">取消</div>
+          <div class="btn-item" @click="cropImageCosle">取消</div>
       </div>
       <img class="loading" src="./loading.gif" alt="" width="30" height="30" v-show="loading">
     </div>
@@ -100,7 +101,7 @@
     data () {
       return {
         tabList: ICONTAB,
-        tabIndex: 1,
+        tabIndex: 0,
         imageBig: '',
         visible: false,
         status: false,
@@ -109,8 +110,9 @@
         presonImg: '',
         chooseType: '',
         robotImg: '',
-        robotId: 0,
-        note: ''
+        robotId: '',
+        note: '',
+        inputValue: ''
       }
     },
     created () {
@@ -125,7 +127,6 @@
         formData.append('file', $Blob, 'file_' + Date.parse(new Date()) + '.png')
         UpLoad.upLoadImage(formData).then((res) => {
           if (res.error === ERR_OK) {
-            console.log(res.data)
             this.presonImg = res.data.url
             if (this.chooseType === 'preson') {
               Mine.upLoadPerson({image_id: res.data.id}).then((res) => {
@@ -153,7 +154,7 @@
       },
       cropImageCosle() {
         this.visible = false
-        this.imageBig = ''
+        this.inputValue = ''
       },
       getBlobBydataURI (dataURI, type) {
         var binary = atob(dataURI.split(',')[1])
@@ -182,11 +183,13 @@
       getDataCode() {
         Mine.getEmployeeCode({type: 0}).then((res) => {
           if (res.error === ERR_OK) {
-            console.log(res.data)
             res.data.forEach((item) => {
-              console.log(item)
               if (item.type === 1) {
                 this.presonImg = item.image_url
+              }
+              if (item.type === 2) {
+                this.robotImg = item.image_url
+                this.note = item.text
               }
             })
           } else {
@@ -196,6 +199,24 @@
       },
       clickTab(index) {
         this.tabIndex = index
+      },
+      submitSave() {
+        if (this.robotId.length === 0) {
+          this.$refs.toast.show('请上传微信二维码')
+          return
+        }
+        if (this.note.length === 0) {
+          this.$refs.toast.show('请添加欢迎语')
+          return
+        }
+        Mine.upLoadRobot({image_id: this.robotId, text: this.note}).then((res) => {
+          if (res.error === ERR_OK) {
+            this.$refs.toast.show('上传成功')
+            this.$emit('getQrCode')
+          } else {
+            this.$refs.toast.show(res.message)
+          }
+        })
       }
     },
     computed: {
@@ -222,6 +243,8 @@
     box-sizing: border-box
     -moz-box-sizing: border-box
     -webkit-box-sizing: border-box
+  .robot-box
+    padding-bottom: 65px
   .img-cut
     position: fixed
     top: 0
@@ -255,7 +278,7 @@
   .group-box
     position: fixed
     background: $color-background
-    z-index: 21
+    z-index: 121
     left: 0
     right: 0
     bottom: 0
@@ -401,7 +424,7 @@
         left: 0
         padding: 20px 15px
         font-size: $font-size-14
-        font-family: $font-family-medium
+        font-family: $font-family-regular
         color: $color-ccc
         line-height: 20px
   .note-des
@@ -417,6 +440,23 @@
     position: absolute
     z-index: 1000
     opacity: 0
-  .w
+  .note-list
+    .item
+      font-size: $font-size-12
+      font-family: $font-family-regular
+      color: $color-888888
+      line-height: 18px
+  .submit-btn
+    position: fixed
+    height: 45px
+    background: $color-20202E
+    font-size: $font-size-16
+    font-family: $font-family-medium
+    color: $color-white
+    bottom: 0
+    text-align: center
+    left: 0
     width: 100%
+    line-height: 45px
+    z-index: 49
 </style>

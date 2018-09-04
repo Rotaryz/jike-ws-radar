@@ -32,6 +32,7 @@ const Home = () => import('pages/home/home')
 const SelectGoods = () => import('pages/select-goods/select-goods')
 const GroupCode = () => import('pages/group-code/group-code')
 const PersonCode = () => import('pages/person-code/person-code')
+const RobotCode = () => import('pages/robot-code/robot-code')
 
 Vue.use(Router)
 
@@ -88,7 +89,14 @@ const route = new Router({
           component: PersonCode,
           meta: {
             title: '个人微信'
-          }
+          },
+          children: [{
+            path: 'robot-code',
+            component: RobotCode,
+            meta: {
+              title: '机器人微信'
+            }
+          }]
         },
         {
           path: 'shareCard',
