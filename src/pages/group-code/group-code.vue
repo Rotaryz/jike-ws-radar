@@ -168,6 +168,7 @@
                 this.$emit('getQrCode')
                 this.loading = false
                 this.visible = false
+                this.getGroupData()
                 this.getGroupList()
               } else {
                 this.$refs.toast.show(res.message)
@@ -251,6 +252,7 @@
         Mine.deleteGroupWechat({id: this.deleteId}).then((res) => {
           if (res.error === ERR_OK) {
             this.getGroupList()
+            this.getGroupData()
           }
         })
       }
