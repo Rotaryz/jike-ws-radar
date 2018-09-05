@@ -9,6 +9,12 @@ const NET_404 = 404
 
 export default class utils {
   static formatDate (time) {
+    if (!time) {
+      return {
+        date: '',
+        time: ''
+      }
+    }
     let resTime = new Date(time * 1000)
     let nowDate = this.formatDateTime(resTime)
     let nowTime = this.formatTime(resTime)
@@ -27,6 +33,12 @@ export default class utils {
     }
   }
   static radarTimeFormat(time) {
+    if (!time) {
+      return {
+        date: '',
+        time: ''
+      }
+    }
     let resTime = new Date(time * 1000)
     let nowDate = resTime.toLocaleDateString()
     let nowTime = this.formatTime(resTime)
