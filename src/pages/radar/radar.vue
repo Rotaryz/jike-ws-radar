@@ -30,7 +30,7 @@
                 :showNoMore="showNoMore"
                 :pullDownRefresh="pullDownRefreshObj"
                 @pullingDown="onPullingDown">
-          <div class="msgs-list">
+          <div class="msgs-list" v-if="list.length !== 0">
             <div class="msgs-item" v-for="(item, index) in list" :key="index" @click="toDetail(item)">
               <div class="item-time" v-if="item.is_showtime">{{item.created_at | timeFormat}}</div>
               <div class="msg-item-content">
@@ -90,6 +90,9 @@
                 </div>
               </div>
             </div>
+          </div>
+          <div class="null-time"  v-if="list.length === 0">
+            <exception errType="nodata"></exception>
           </div>
         </scroll>
       </div>
@@ -312,7 +315,8 @@
         peopleMore: false,
         actionListData: WORKLIST,
         page: 0,
-        tabTime: ['', 'today', 'week', 'month']
+        tabTime: ['', 'today', 'week', 'month'],
+        tabContent: ['scroll', 'scrollAction', 'scrollPeople']
       }
     },
     methods: {
@@ -322,12 +326,8 @@
         'setImInfo'
       ]),
       changeTab(index) {
-        if (index * 1 === 0 && this.tabIndex * 1 === 0) {
-          this.$refs.scroll.scrollTo(0, 0)
-        } else if (index * 1 === 1 && this.tabIndex * 1 === 1) {
-          this.$refs.scrollAction.scrollTo(0, 0)
-        } else if (index * 1 === 2 && this.tabIndex * 1 === 2) {
-          this.$refs.scrollPeople.scrollTo(0, 0)
+        if (index * 1 === this.tabIndex * 1) {
+          this.$refs[this.tabContent[index]].scrollTo(0, 0)
         }
         this.tabIndex = index
         if (index * 1 === 2 && this.firstGet) {
@@ -790,6 +790,8 @@
             width: 7.5px
             height: 11.5px
             margin-left: 33px
+    .null-time
+      padding-top: 120px
     .msgs-people
       padding-top: 0
       .msgs-item
