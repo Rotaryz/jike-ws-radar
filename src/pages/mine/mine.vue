@@ -195,7 +195,7 @@
             color: $color-20202E
             font-family: 'DINCondensed-Bold'
             font-size: 40px
-            margin-bottom: 15px
+            margin-bottom: 5px
           .text
             color: $color-20202E
             font-family: $font-family-regular
