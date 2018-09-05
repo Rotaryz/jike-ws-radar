@@ -38,6 +38,15 @@ export default {
     return request.post(url, data)
   },
   /**
+   * 删除个人二维码
+   * @param data
+   * @returns {*}
+   */
+  deletePersonCode (data) {
+    let url = 'api/employee/delete-personal-qrcode'
+    return request.post(url, data)
+  },
+  /**
    * 更新机器人微信二维码
    * @param data
    * @returns {*}
