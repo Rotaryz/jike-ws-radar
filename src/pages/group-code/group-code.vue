@@ -149,11 +149,6 @@
     },
     methods: {
       showPic() {
-        if (!this.groupBigImg) return
-        if (this.groupList.length * 1 === 0) {
-          this.$refs.toast.show('请上传微信群码')
-          return
-        }
         wx.previewImage({urls: [this.groupBigImg]})
       },
       cropImage () {
