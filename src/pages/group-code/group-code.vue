@@ -49,7 +49,9 @@
             </div>
             <div class="item-right">
               <div class="text" :class="item.is_expire * 1 === 1? 'text-ccc':''">上传时间：{{item.created_at}}</div>
-              <div class="icon" @click="deleteCode(item.id)"></div>
+              <div class="icon-box">
+                <div class="icon" @click="deleteCode(item.id)"></div>
+              </div>
             </div>
           </li>
         </ul>
@@ -365,7 +367,6 @@
           font-size: 40px
           font-family: 'DINCondensed-Bold'
           margin-bottom: 15px
-          line-height: 32px
           position: relative
           display: inline-block
           .clear-number
@@ -454,13 +455,18 @@
           font-size: $font-size-14
           font-family: $font-family-regular
           color: $color-20202E
-          margin-right: 20px
         .text-ccc
           color: $color-ccc
-        .icon
-          width: 15px
-          height: 15px
-          icon-image('btn-delete')
+        .icon-box
+          width: 35px
+          height:  75px
+          padding-left: 20px
+          layout(row)
+          align-items: center
+          .icon
+            width: 15px
+            height: 15px
+            icon-image('btn-delete')
       &:last-child
         border-bottom-1px(rgba(0,0,0,0))
   .img-cut
