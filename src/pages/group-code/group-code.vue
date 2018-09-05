@@ -366,7 +366,7 @@
           color: $color-20202E
           font-size: 40px
           line-height: 42px
-          font-family: $font-family-medium
+          font-family: 'DINCondensed-Bold'
           margin-bottom: 10px
           position: relative
           display: block
