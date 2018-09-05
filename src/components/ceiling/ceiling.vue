@@ -7,7 +7,7 @@
     <div class="ceiling-right">
       <div class="content">
         <p class="msgs-p" v-show="newMsg.type === 'custom'">{{newMsg.content}}</p>
-        <p class="txt-p" v-show="newMsg.type === 'chat'">{{newMsg.content}}</p>
+        <p class="txt-p" v-show="newMsg.type === 'chat'" v-html="newMsg.html"></p>
       </div>
       <div class="time">刚刚</div>
     </div>
@@ -95,22 +95,25 @@
               if (Number(res.ext) === 20005 && res.fromAccount === this.currentMsg.account) {
                 let goods = JSON.parse(res.data)
                 let goodsRes = Object.assign({}, res, goods)
-                console.log(goodsRes)
                 this.addNowChat(goodsRes)
               }
               if (Number(res.ext) === 20005) {
                 this.addListCount(res)
-                this.addListMsg(res)
+                this.addListMsg({msg: res, type: ''})
               }
             } else {
               this.addListCount(res)
-              this.addListMsg(res)
+              this.addListMsg({msg: res, type: ''})
               if (res.fromAccount === this.currentMsg.account) {
                 this.addNowChat(res)
               }
             }
             let content = webimHandler.transitionMsg(res)
-            this.setNewMsg({avatar: res.avatar, content, type: res.type})
+            let html = ''
+            if (res.type === 'chat') {
+              html = Utils.msgFaceToHtml(content)
+            }
+            this.setNewMsg({avatar: res.avatar, content, html, type: res.type})
           }, // 监听新消息(私聊(包括普通消息和全员推送消息)，普通群(非直播聊天室)消息)事件，必填
           'onGroupSystemNotifys': (msg) => {
           } // 监听（多终端同步）群系统消息事件，必填
