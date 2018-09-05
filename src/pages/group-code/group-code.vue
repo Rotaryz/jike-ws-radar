@@ -367,7 +367,7 @@
           font-size: 40px
           line-height: 42px
           font-family: 'DINCondensed-Bold'
-          margin-bottom: 10px
+          margin-bottom: 5px
           position: relative
           display: block
           .clear-number

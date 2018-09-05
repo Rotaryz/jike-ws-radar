@@ -595,6 +595,7 @@
             padding: 18px 0 0
             .number
               font-size: 32px
+              line-height: 34px
               color: #20202e
               font-family: 'DINCondensed-Bold'
             .text
