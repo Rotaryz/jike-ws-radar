@@ -51,8 +51,17 @@ export default {
    * @param data
    * @returns {*}
    */
-  upLoadRobot (data) {
+  upLoadRobotText (data) {
     let url = 'api/employee/update-robot-qrcode'
+    return request.post(url, data)
+  },
+  /**
+   * 更新机器人微信二维码
+   * @param data
+   * @returns {*}
+   */
+  upLoadRobotCode (data) {
+    let url = 'api/employee/add-robot-qrcode'
     return request.post(url, data)
   },
   /**

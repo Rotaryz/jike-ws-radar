@@ -121,7 +121,7 @@
         presonImg: '',
         chooseType: '',
         robotImg: '',
-        robotId: '',
+        robotId: 0,
         note: '',
         inputValue: '',
         upRobotId: true
@@ -140,8 +140,8 @@
         formData.append('file', $Blob, 'file_' + Date.parse(new Date()) + '.png')
         UpLoad.upLoadImage(formData).then((res) => {
           if (res.error === ERR_OK) {
-            this.presonImg = res.data.url
             if (this.chooseType === 'preson') {
+              this.presonImg = res.data.url
               Mine.upLoadPerson({image_id: res.data.id}).then((res) => {
                 if (res.error === ERR_OK) {
                   this.$refs.toast.show('上传成功')
@@ -153,10 +153,20 @@
                 }
               })
             } else if (this.chooseType === 'robot') {
-              this.loading = false
-              this.visible = false
               this.robotImg = res.data.url
-              this.robotId = res.data.id
+              let id = res.data.id
+              Mine.upLoadRobotCode({image_id: id}).then((res) => {
+                if (res.error === ERR_OK) {
+                  this.$refs.toast.show('上传成功')
+                  this.$emit('getQrCode')
+                  this.loading = false
+                  this.visible = false
+                  this.upRobotId = false
+                  this.robotId = id
+                } else {
+                  this.$refs.toast.show(res.message)
+                }
+              })
             }
             return false
           }
@@ -238,19 +248,13 @@
         this.tabIndex = index
       },
       submitSave() {
-        if (this.robotId.length === 0) {
-          this.$refs.toast.show('请上传微信二维码')
-          return
-        }
         if (this.note.length === 0) {
           this.$refs.toast.show('请添加欢迎语')
           return
         }
-        Mine.upLoadRobot({image_id: this.robotId, text: this.note}).then((res) => {
+        Mine.upLoadRobotText({image_id: this.robotId, text: this.note}).then((res) => {
           if (res.error === ERR_OK) {
-            this.$refs.toast.show('保存成功')
-            this.$emit('getQrCode')
-            this.upRobotId = false
+            this.$refs.toast.show('保存欢迎语成功')
           } else {
             this.$refs.toast.show(res.message)
           }
