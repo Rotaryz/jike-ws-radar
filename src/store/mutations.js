@@ -56,6 +56,7 @@ const mutations = {
     }
   },
   [TYPES.ADD_LIST_MSG](state, typeObj) {
+    console.log(typeObj)
     let msg = typeObj.msg
     if (msg.desc) {
       let desc = JSON.parse(msg.desc)
