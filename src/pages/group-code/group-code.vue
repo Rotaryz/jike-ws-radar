@@ -366,10 +366,10 @@
           color: $color-20202E
           font-size: 40px
           line-height: 42px
-          font-family: 'DINCondensed-Bold'
+          font-family: $font-family-medium
           margin-bottom: 10px
           position: relative
-          display: inline-block
+          display: block
           .clear-number
             width: 40px
             height: 18px
