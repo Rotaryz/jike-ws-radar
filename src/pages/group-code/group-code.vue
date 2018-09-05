@@ -365,6 +365,7 @@
         .number
           color: $color-20202E
           font-size: 40px
+          line-height: 42px
           font-family: 'DINCondensed-Bold'
           margin-bottom: 10px
           position: relative
