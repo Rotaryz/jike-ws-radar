@@ -49,8 +49,8 @@
             </div>
             <div class="item-right">
               <div class="text" :class="item.is_expire * 1 === 1? 'text-ccc':''">上传时间：{{item.created_at}}</div>
-              <div class="icon-box">
-                <div class="icon" @click="deleteCode(item.id)"></div>
+              <div class="icon-box" @click="deleteCode(item.id)">
+                <div class="icon"></div>
               </div>
             </div>
           </li>
@@ -366,7 +366,7 @@
           color: $color-20202E
           font-size: 40px
           font-family: 'DINCondensed-Bold'
-          margin-bottom: 15px
+          margin-bottom: 10px
           position: relative
           display: inline-block
           .clear-number
