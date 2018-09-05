@@ -28,7 +28,7 @@
               <div class="text">微信群数</div>
             </div>
             <div class="item item-line">
-              <div class="number"><div>{{codeNumber}}</div><div class="clear-number" v-if="codeNumber * 1 !== 0" @click="cleanNumber">清零</div>
+              <div class="number twonumber"><div>{{codeNumber}}</div><div class="clear-number" v-if="codeNumber * 1 !== 0" @click="cleanNumber">清零</div>
               </div>
               <div class="text">活码扫码数</div>
             </div>
@@ -382,6 +382,8 @@
             position: absolute
             bottom: 0
             right: -42px
+        .twonumber
+          display: inline-block
         .text
           color: $color-20202E
           font-size: $font-size-12
