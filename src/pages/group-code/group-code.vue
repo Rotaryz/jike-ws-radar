@@ -14,7 +14,7 @@
               <div class="sub-title">一大波福利在靠近，点击获取入群二维码</div>
             </div>
           </div>
-          <div class="title-right" @click="showPic" v-if="groupImg">
+          <div class="title-right" @click="showPic" v-if="groupImg && groupList.length * 1 !== 0">
             <div class="code">
               <img :src="groupImg" alt="">
             </div>
@@ -28,7 +28,7 @@
               <div class="text">微信群数</div>
             </div>
             <div class="item item-line">
-              <div class="number"><div>{{codeNumber}}</div><div class="clear-number" v-if="codeNumber * 1 !== 0" @click="cleanNumber">清零</div>
+              <div class="number twonumber"><div>{{codeNumber}}</div><div class="clear-number" v-if="codeNumber * 1 !== 0" @click="cleanNumber">清零</div>
               </div>
               <div class="text">活码扫码数</div>
             </div>
@@ -49,7 +49,9 @@
             </div>
             <div class="item-right">
               <div class="text" :class="item.is_expire * 1 === 1? 'text-ccc':''">上传时间：{{item.created_at}}</div>
-              <div class="icon" @click="deleteCode(item.id)"></div>
+              <div class="icon-box" @click="deleteCode(item.id)">
+                <div class="icon"></div>
+              </div>
             </div>
           </li>
         </ul>
@@ -148,9 +150,14 @@
     methods: {
       showPic() {
         if (!this.groupBigImg) return
+        if (this.groupList.length * 1 === 0) {
+          this.$refs.toast.show('请上传微信群码')
+          return
+        }
         wx.previewImage({urls: [this.groupBigImg]})
       },
       cropImage () {
+        if (this.loading) return
         this.loading = true
         let src = this.$refs.cropper.getCroppedCanvas().toDataURL()
         let $Blob = this.getBlobBydataURI(src, 'image/png')
@@ -164,6 +171,7 @@
                 this.$emit('getQrCode')
                 this.loading = false
                 this.visible = false
+                this.getGroupData()
                 this.getGroupList()
               } else {
                 this.$refs.toast.show(res.message)
@@ -206,7 +214,7 @@
             this.wechatCode = res.data.wx_group_count
             this.codeNumber = res.data.click_num
             this.groupImg = res.data.scan_url
-            this.groupBigImg = res.data.shop_image
+            this.groupBigImg = res.data.scan_url
             this.groupName = res.data.shop_name
           }
         })
@@ -247,6 +255,7 @@
         Mine.deleteGroupWechat({id: this.deleteId}).then((res) => {
           if (res.error === ERR_OK) {
             this.getGroupList()
+            this.getGroupData()
           }
         })
       }
@@ -357,11 +366,11 @@
         .number
           color: $color-20202E
           font-size: 40px
+          line-height: 42px
           font-family: 'DINCondensed-Bold'
-          margin-bottom: 15px
-          line-height: 32px
+          margin-bottom: 5px
           position: relative
-          display: inline-block
+          display: block
           .clear-number
             width: 40px
             height: 18px
@@ -374,6 +383,8 @@
             position: absolute
             bottom: 0
             right: -42px
+        .twonumber
+          display: inline-block
         .text
           color: $color-20202E
           font-size: $font-size-12
@@ -448,13 +459,18 @@
           font-size: $font-size-14
           font-family: $font-family-regular
           color: $color-20202E
-          margin-right: 20px
         .text-ccc
           color: $color-ccc
-        .icon
-          width: 15px
-          height: 15px
-          icon-image('btn-delete')
+        .icon-box
+          width: 35px
+          height:  75px
+          padding-left: 20px
+          layout(row)
+          align-items: center
+          .icon
+            width: 15px
+            height: 15px
+            icon-image('btn-delete')
       &:last-child
         border-bottom-1px(rgba(0,0,0,0))
   .img-cut

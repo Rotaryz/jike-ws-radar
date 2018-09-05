@@ -878,7 +878,7 @@
               .text
                 font-size: $font-size-12
                 color: $color-888888
-                font-family: $font-family-medium
+                font-family: $font-family-regular
           .detail-jump
             height: 45px
             width: 25px

@@ -17,7 +17,8 @@
           <div class="upimg-box">
             <img :src="presonImg" class="upimg-box-img" v-if="presonImg">
             <div class="upimg-box-colse" v-if="presonImg" @click="clearPresonImg"></div>
-            <input type="file" class="header-icon" id="header-logo" @change="_fileChange($event, 'preson')" accept="image/*" v-if="!presonImg"  :value="inputValue">
+            <input type="file" class="header-icon" id="header-logo" @change="_fileChange($event, 'preson')"
+                   accept="image/*" :value="inputValue">
           </div>
           <p class="updata-text">上传个人微信二维码</p>
         </div>
@@ -26,17 +27,18 @@
             <div class="item-list">
               <div class="text">上传微信二维码</div>
               <div class="text-img">
-                <input type="file" class="header-icon" id="header-logo1" @change="_fileChange($event, 'robot')" accept="image/*" :value="inputValue">
+                <input type="file" class="header-icon" id="header-logo1" @change="_fileChange($event, 'robot')"
+                       accept="image/*" :value="inputValue">
                 <img :src="robotImg" v-if="robotImg" class="text-img-show">
               </div>
             </div>
-            <router-link class="item-list" to="person-code/robot-code">
+            <div class="item-list" @click="jumpRobot">
               <div class="text">远程登录该微信</div>
               <div class="login-right">
                 <div class="login-text">登陆</div>
                 <div class="icon"></div>
               </div>
-            </router-link>
+            </div>
           </div>
           <div class="robot-area">
             <div class="robot-title">添加欢迎语</div>
@@ -50,7 +52,7 @@
             </div>
             <div class="note-des">温馨提示：</div>
             <ul class="note-list">
-              <li class="item">1.  机器人微信是将私人微信远程机器化。</li>
+              <li class="item">1. 机器人微信是将私人微信远程机器化。</li>
               <li class="item">2. 机器人可以自动验证通过，且默认发送欢迎语。</li>
               <li class="item">3. 机器人成功登录后，请不要退出，退出后需要重新登录。</li>
               <li class="item">4. 新注册的微信号，不发当机器人。(微信限制)</li>
@@ -62,6 +64,7 @@
       <div class="submit-btn" v-if="tabIndex * 1 === 1" @click="submitSave">保存</div>
       <router-view></router-view>
       <toast ref="toast"></toast>
+      <confirm-msg ref="confirm" @confirm="_sureDel"></confirm-msg>
       <div class="img-cut" v-show="visible">
         <vueCropper
           :viewMode="1"
@@ -91,17 +94,22 @@
 
 <script>
   import Scroll from 'components/scroll/scroll'
-  import { UpLoad, Mine } from 'api'
-  import { ERR_OK } from '../../common/js/config'
+  import {UpLoad, Mine} from 'api'
+  import {ERR_OK} from '../../common/js/config'
   import storage from 'storage-controller'
   import VueCropper from 'vue-cropperjs'
   import Toast from 'components/toast/toast'
-  import { mapGetters } from 'vuex'
+  import {mapGetters} from 'vuex'
+  import ConfirmMsg from 'components/confirm-msg/confirm-msg'
 
-  const ICONTAB = [{icon: 'person', title: '普通微信', content: '成员自己有商品，可以修改库存和价格。'}, {icon: 'all', title: '机器人微信', content: '成员没有商品，分享团长收入。'}]
+  const ICONTAB = [{icon: 'person', title: '普通微信', content: '成员自己有商品，可以修改库存和价格。'}, {
+    icon: 'all',
+    title: '机器人微信',
+    content: '成员没有商品，分享团长收入。'
+  }]
   export default {
     name: 'person-code',
-    data () {
+    data() {
       return {
         tabList: ICONTAB,
         tabIndex: 0,
@@ -115,14 +123,16 @@
         robotImg: '',
         robotId: '',
         note: '',
-        inputValue: ''
+        inputValue: '',
+        upRobotId: true
       }
     },
-    created () {
+    created() {
       this.getDataCode()
     },
     methods: {
-      cropImage () {
+      cropImage() {
+        if (this.loading) return
         this.loading = true
         let src = this.$refs.cropper.getCroppedCanvas().toDataURL()
         let $Blob = this.getBlobBydataURI(src, 'image/png')
@@ -159,7 +169,7 @@
         this.visible = false
         this.inputValue = ''
       },
-      getBlobBydataURI (dataURI, type) {
+      getBlobBydataURI(dataURI, type) {
         var binary = atob(dataURI.split(',')[1])
         var array = []
         for (var i = 0; i < binary.length; i++) {
@@ -167,7 +177,7 @@
         }
         return new Blob([new Uint8Array(array)], {type: type})
       },
-      _fileChange (e, type) {
+      _fileChange(e, type) {
         this.chooseType = type
         if (e.target) {
           const file = e.target.files[0]
@@ -181,7 +191,7 @@
         }
       },
       clearPresonImg() {
-        this.presonImg = ''
+        this.$refs.confirm.show({msg: '确定删除吗？'})
       },
       getDataCode() {
         Mine.getEmployeeCode({type: 0}).then((res) => {
@@ -193,12 +203,36 @@
               if (item.type === 2) {
                 this.robotImg = item.image_url
                 this.note = item.text
+                this.robotId = item.image_id
+                this.upRobotId = false
               }
             })
           } else {
             this.$refs.toast.show(res.message)
           }
         })
+      },
+      deletePersonImg() {
+        Mine.getEmployeeCode({type: 1}).then((res) => {
+          if (res.error === ERR_OK) {
+            this.delPersonCode(res.data[0].id)
+          } else {
+            this.$refs.toast.show(res.message)
+          }
+        })
+      },
+      delPersonCode(data) {
+        Mine.deletePersonCode({id: data}).then((res) => {
+          if (res.error === ERR_OK) {
+            this.presonImg = ''
+            this.$refs.toast.show('删除成功')
+          } else {
+            this.$refs.toast.show(res.message)
+          }
+        })
+      },
+      _sureDel() {
+        this.deletePersonImg()
       },
       clickTab(index) {
         this.tabIndex = index
@@ -214,12 +248,20 @@
         }
         Mine.upLoadRobot({image_id: this.robotId, text: this.note}).then((res) => {
           if (res.error === ERR_OK) {
-            this.$refs.toast.show('上传成功')
+            this.$refs.toast.show('保存成功')
             this.$emit('getQrCode')
+            this.upRobotId = false
           } else {
             this.$refs.toast.show(res.message)
           }
         })
+      },
+      jumpRobot() {
+        if (this.upRobotId) {
+          this.$refs.toast.show('请上传微信二维码')
+          return
+        }
+        this.$router.push('person-code/robot-code')
       }
     },
     computed: {
@@ -234,7 +276,8 @@
     components: {
       Scroll,
       VueCropper,
-      Toast
+      Toast,
+      ConfirmMsg
     }
   }
 </script>
@@ -247,8 +290,10 @@
     box-sizing: border-box
     -moz-box-sizing: border-box
     -webkit-box-sizing: border-box
+
   .robot-box
     padding-bottom: 65px
+
   .img-cut
     position: fixed
     top: 0
@@ -287,6 +332,7 @@
     right: 0
     bottom: 0
     top: 0
+
   .preson-box
     padding: 15px
     layout(row)
@@ -303,7 +349,7 @@
         width: 100%
         background: #fff
         border: 3px solid transparent
-        box-shadow: 0 2px 8px 0 rgba(43,43,145,0.20)
+        box-shadow: 0 2px 8px 0 rgba(43, 43, 145, 0.20)
         padding: 12px 12.5px 12px 12.5px
         .item-box-con-top
           layout(row)
@@ -326,7 +372,8 @@
           color: $color-888888
           font-family: $font-family-regular
       .active
-        border: 3px solid rgba(32,32,46,0.80)
+        border: 3px solid rgba(32, 32, 46, 0.80)
+
   .preson-main-box
     padding-top: 35px
     .upimg-box
@@ -355,6 +402,7 @@
       font-size: $font-size-14
       color: $color-888888
       text-align: center
+
   .robot-list
     padding-left: 15px
     .item-list
@@ -389,6 +437,7 @@
           icon-image('icon-pressed')
           width: 5px
           height: 10px
+
   .robot-area
     padding: 0 15px
     .robot-title
@@ -406,9 +455,9 @@
       color: #20202e
       font-family: $font-family-regular
       height: 185px
-      outline:none
+      outline: none
       -webkit-appearance: none
-      box-shadow:0 0 0 rgba(0,0,0,0)
+      box-shadow: 0 0 0 rgba(0, 0, 0, 0)
       position: relative
       z-index: 2
     .textarea-number
@@ -431,11 +480,13 @@
         font-family: $font-family-regular
         color: $color-ccc
         line-height: 20px
+
   .note-des
     font-size: $font-size-12
     font-family: $font-family-medium
     color: $color-888888
     padding: 20px 0 10px
+
   .header-icon
     top: 0
     left: 0
@@ -444,12 +495,14 @@
     position: absolute
     z-index: 1000
     opacity: 0
+
   .note-list
     .item
       font-size: $font-size-12
       font-family: $font-family-regular
       color: $color-888888
       line-height: 18px
+
   .submit-btn
     position: fixed
     height: 45px

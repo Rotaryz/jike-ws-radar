@@ -5,7 +5,7 @@
         <div class="top-box">
           <div class="top-box-left">
             <img class="mine-header" :src="mine.avatar">
-            <p class="peo-name">{{mine.name}}店铺二维码</p>
+            <p class="peo-name">{{mine.name}}</p>
           </div>
           <router-link class="top-box-right" to="mine/shareCard">
             <span class="code"></span>
@@ -146,6 +146,8 @@
           font-size: $font-size-16
           font-family: $font-family-medium
           color: $color-white
+          width: 180px
+          no-wrap()
       .top-box-right
         layout(row)
         align-items: center
