@@ -373,7 +373,10 @@
         })
       },
       onPullingUp() {
-        if (this.showNoMore) return
+        if (this.showNoMore) {
+          this.$refs.scroll.forceUpdate()
+          return
+        }
         const num = this.list.length * 1 + this.customCount * 1
         Im.getRadarList(num, 30, this.userInfo.id).then((res) => {
           if (res.error === ERR_OK) {
@@ -396,13 +399,13 @@
         this.getMorePeopleList(this.tabTime[this.tabPeopleIndex * 1])
       },
       rebuildScroll() {
-        this.nextTick(() => {
+        this.$nextTick(() => {
           this.$refs.scroll.destroy()
           this.$refs.scroll.initScroll()
         })
       },
       rebuildPeopleScroll() {
-        this.nextTick(() => {
+        this.$nextTick(() => {
           this.$refs.scrollPeople.destroy()
           this.$refs.scrollPeople.initScroll()
         })
@@ -497,14 +500,14 @@
         } : false
       },
       pullDownRefreshObj: function () {
-        return this.pullDownRefresh && !this.noMore ? {
+        return this.pullDownRefresh ? {
           threshold: parseInt(this.pullDownRefreshThreshold),
           stop: parseInt(this.pullDownRefreshStop),
           txt: '没有更多了'
         } : false
       },
       pullDownPeopleRefreshObj: function () {
-        return this.pullDownRefresh && !this.noMore ? {
+        return this.pullDownRefresh ? {
           threshold: parseInt(this.pullDownRefreshThreshold),
           stop: parseInt(this.pullDownRefreshStop),
           txt: '没有更多了'
@@ -517,6 +520,7 @@
     watch: {
       pullUpLoadObj: {
         handler() {
+          if (!this.pullUpLoad) return
           this.rebuildScroll()
         },
         deep: true
@@ -529,6 +533,7 @@
       },
       pullDownRefreshObj: {
         handler() {
+          if (!this.pullDownRefresh) return
           this.rebuildScroll()
         },
         deep: true

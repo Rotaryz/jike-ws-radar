@@ -118,7 +118,7 @@
         console.info('pulling up and load data')
       },
       rebuildScroll() {
-        this.nextTick(() => {
+        this.$nextTick(() => {
           this.$refs.scroll.destroy()
           this.$refs.scroll.initScroll()
         })
