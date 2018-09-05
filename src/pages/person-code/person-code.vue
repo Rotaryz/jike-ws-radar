@@ -191,7 +191,6 @@
       },
       clearPresonImg() {
         this.$refs.confirm.show({msg: '确定删除吗？'})
-        console.log(this.$refs.confirm)
       },
       getDataCode() {
         Mine.getEmployeeCode({type: 0}).then((res) => {
