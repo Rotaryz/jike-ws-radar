@@ -15,7 +15,8 @@
         </div>
         <div class="preson-main-box" v-if="tabIndex * 1 === 0">
           <div class="upimg-box">
-            <img :src="presonImg" class="upimg-box-img" v-if="presonImg">
+            <img :src="presonImg" class="upimg-box-img" v-if="presonImg" @load="imgSuccess">
+            <img class="loading" src="./loading.gif" v-if="imgSc">
             <div class="upimg-box-colse" v-if="presonImg" @click="clearPresonImg"></div>
             <input type="file" class="header-icon" id="header-logo" @change="_fileChange($event, 'preson')"
                    accept="image/*" :value="inputValue">
@@ -29,7 +30,8 @@
               <div class="text-img">
                 <input type="file" class="header-icon" id="header-logo1" @change="_fileChange($event, 'robot')"
                        accept="image/*" :value="inputValue">
-                <img :src="robotImg" v-if="robotImg" class="text-img-show">
+                <img :src="robotImg" v-if="robotImg" class="text-img-show"  @load="imgAllSuccess">
+                <img class="loading" src="./loading.gif" v-if="imgAllSc">
               </div>
             </div>
             <div class="item-list" @click="jumpRobot">
@@ -124,7 +126,9 @@
         robotId: 0,
         note: '',
         inputValue: '',
-        upRobotId: true
+        upRobotId: true,
+        imgSc: true,
+        imgAllSc: true
       }
     },
     created() {
@@ -141,6 +145,8 @@
         UpLoad.upLoadImage(formData).then((res) => {
           if (res.error === ERR_OK) {
             if (this.chooseType === 'preson') {
+              this.presonImg = ''
+              this.imgSc = true
               this.presonImg = res.data.url
               Mine.upLoadPerson({image_id: res.data.id}).then((res) => {
                 if (res.error === ERR_OK) {
@@ -153,6 +159,8 @@
                 }
               })
             } else if (this.chooseType === 'robot') {
+              this.robotImg = ''
+              this.imgAllSc = true
               this.robotImg = res.data.url
               let id = res.data.id
               Mine.upLoadRobotCode({image_id: id}).then((res) => {
@@ -174,6 +182,12 @@
           this.visible = false
           this.$refs.toast.show(res.message)
         })
+      },
+      imgSuccess() {
+        this.imgSc = false
+      },
+      imgAllSuccess() {
+        this.imgAllSc = false
       },
       cropImageCosle() {
         this.visible = false
@@ -393,6 +407,14 @@
         height: 100%
         display: block
         border: 1px solid #F0EFF5
+      .loading
+        background: #fff
+        width: 100%
+        height: 100%
+        position: absolute
+        left: 0
+        top: 0
+        z-index: 1112
       .upimg-box-colse
         position: absolute
         icon-image(icon-delete)
@@ -424,11 +446,20 @@
         position: relative
         width: 35px
         height: 35px
+        position: relative
         icon-image(btn-add)
         .text-img-show
           width: 100%
           height: 100%
           display: block
+        .loading
+          background: #fff
+          width: 100%
+          height: 100%
+          position: absolute
+          left: 0
+          top: 0
+          z-index: 2
       .login-right
         layout(row)
         align-items: center
