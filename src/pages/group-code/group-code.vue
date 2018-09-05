@@ -157,6 +157,7 @@
         wx.previewImage({urls: [this.groupBigImg]})
       },
       cropImage () {
+        if (this.loading) return
         this.loading = true
         let src = this.$refs.cropper.getCroppedCanvas().toDataURL()
         let $Blob = this.getBlobBydataURI(src, 'image/png')
