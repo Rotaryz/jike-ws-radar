@@ -569,6 +569,7 @@
       justify-content: center
       align-items: center
       line-height: 45px
+      font-family: $font-family-regular
       font-size: $font-size-16
       color: $color-202020
       letter-spacing: 0.6px
