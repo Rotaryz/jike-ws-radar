@@ -143,7 +143,7 @@
         let src = this.$refs.cropper.getCroppedCanvas().toDataURL()
         let $Blob = this.getBlobBydataURI(src, 'image/png')
         let formData = new FormData()
-        formData.append('file', $Blob, 'file_' + Date.parse(new Date()) + '.png')
+        formData.append('file', $Blob, 'file_' + Date.parse(new Date()) + '.JPEG')
         UpLoad.upLoadImage(formData).then((res) => {
           if (res.error === ERR_OK) {
             if (this.chooseType === 'preson') {
