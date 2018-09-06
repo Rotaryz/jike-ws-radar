@@ -183,14 +183,14 @@
                 </div>
               </div>
             </div>
-            <div class="pie-box line-box">
+            <div class="pie-box">
               <div id="myLine"></div>
               <div class="title-box">
                 <div class="title">近7日客户活跃度</div>
                 <div class="sub-title">(每小时更新)</div>
               </div>
             </div>
-            <div class="pie-box bar-box">
+            <div class="pie-box">
               <div id="myBar"></div>
               <div class="title-box">
                 <div class="title">客户与我的互动</div>
@@ -385,11 +385,6 @@
         let myChart = this.$echarts.init(document.getElementById('myPie'))
         // 绘制图表
         myChart.setOption({
-          // title: {
-          //   text: '客户兴趣占比',
-          //   subtext: '(每小时更新)',
-          //   x: 'center'
-          // },
           tooltip: {
             trigger: 'item',
             formatter: '{d}%'
@@ -397,10 +392,10 @@
           color: ['#F9543C', '#23799D', '#8E3C68', '#F9B43C'],
           series: [
             {
-              name: '访问222来源',
+              name: '',
               type: 'pie',
-              radius: '40%',
-              center: ['50%', '55%'],
+              radius: '55%',
+              center: ['50%', '53%'],
               data: this.pieData,
               itemStyle: {
                 emphasis: {
@@ -417,11 +412,13 @@
         let myChart = this.$echarts.init(document.getElementById('myLine'))
         // 绘制图表
         myChart.setOption({
-          // title: {
-          //   text: '近30日客户活跃度',
-          //   subtext: '(每小时更新)',
-          //   x: 'center'
-          // },
+          grid: {
+            top: 45,
+            left: '2%',
+            right: '5%',
+            bottom: 15,
+            containLabel: true
+          },
           xAxis: {
             type: 'category',
             boundaryGap: false,
@@ -429,7 +426,25 @@
             splitLine: {
               show: true,
               lineStyle: {
-                color: '#ddd'
+                color: '#E6E6E6',
+                width: 0.5
+              }
+            },
+            axisLabel: {
+              color: '#343439',
+              align: 'center'
+            },
+            axisTick: {
+              show: false,
+              lineStyle: {
+                color: '#c4c4c4',
+                width: 0.5
+              }
+            },
+            axisLine: {
+              lineStyle: {
+                color: '#c4c4c4',
+                width: 0.5
               }
             }
           },
@@ -446,20 +461,55 @@
             splitLine: {
               show: true,
               lineStyle: {
-                color: '#ddd'
+                color: '#E6E6E6',
+                width: 0.5
+              }
+            },
+            axisTick: {
+              show: false,
+              lineStyle: {
+                color: '#c4c4c4',
+                width: 0.5
+              }
+            },
+            axisLabel: {
+              formatter: '{value}',
+              color: '#343439'
+            },
+            axisLine: {
+              lineStyle: {
+                color: '#c4c4c4',
+                width: 0.5
               }
             }
           },
           series: [{
             data: this.ationLine.y,
             type: 'line',
+            smooth: true,
             showSymbol: false,
+            smoothMonotone: 'x',
+            areaStyle: {
+              color: {
+                type: 'linear',
+                x: 0,
+                x2: 0,
+                y: 0,
+                y2: 1,
+                colorStops: [{
+                  offset: 0, color: 'rgba(249,80,60,0.55)'
+                }, {
+                  offset: 1, color: 'rgba(249,80,60,0.05)'
+                }],
+                globalCoord: false
+              }
+            },
             itemStyle: {
               normal: {
-                color: '#F9543C',
+                color: 'rgba(249,80,60,0.85)',
                 borderWidth: 2,
                 lineStyle: {
-                  color: '#F9543C',
+                  color: 'rgba(249,80,60,0.75)',
                   width: 3
                 }
               }
@@ -471,11 +521,6 @@
         let myChart = this.$echarts.init(document.getElementById('myBar'))
         // 绘制图表
         myChart.setOption({
-          // title: {
-          //   text: '客户与我的互动',
-          //   subtext: '(每小时更新)',
-          //   x: 'center'
-          // },
           tooltip: {
             trigger: 'axis',
             formatter: '{b}数：{c}',
@@ -484,9 +529,10 @@
             }
           },
           grid: {
+            top: 45,
             left: '0',
-            right: '4%',
-            bottom: '3%',
+            right: '5%',
+            bottom: 15,
             containLabel: true
           },
           xAxis: {
@@ -499,15 +545,22 @@
             axisLabel: {
               interval: 0,
               color: '#20202E',
-              fontSize: 14,
+              fontSize: 12,
               formatter: function (value) {
                 return value
               },
-              align: 'right'
+              align: 'center'
+            },
+            axisTick: {
+              lineStyle: {
+                color: '#c4c4c4',
+                width: 0.5
+              }
             },
             axisLine: {
               lineStyle: {
-                color: '#888'
+                color: '#c4c4c4',
+                width: 0.5
               }
             }
           },
@@ -517,11 +570,18 @@
             axisLabel: {
               interval: 0,
               color: '#20202E',
-              fontSize: 14
+              fontSize: 12
+            },
+            axisTick: {
+              lineStyle: {
+                color: '#c4c4c4',
+                width: 0.5
+              }
             },
             axisLine: {
               lineStyle: {
-                color: '#888'
+                color: '#c4c4c4',
+                width: 0.5
               }
             }
           },
@@ -1143,45 +1203,82 @@
 
   .ai-box
     padding: 15px
-    font-family: $font-family-regular
     .pie-box
       position: relative
-      background: linear-gradient(rgba(255, 255, 255, .1) 0%, #fff 100%)
+      background: $color-white
       height: 305px
       margin-bottom: 10px
       #myPie
         width: 100%
         height: 305px
-        margin: 20px auto
+        margin: 0 auto
         padding: 20px
       #myLine
         width: 100%
-        height: 300px
-        margin: 20px auto
-        padding: 35px 0px 0
+        height: 305px
+        margin: 0 auto
+        padding: 35px 10px 0
+      #myAddLine
+        width: 100%
+        height: 305px
+        margin: 0 auto
+        padding: 35px 10px 0
       #myBar
         width: 100%
-        height: 300px
-        margin: 20px auto
-        padding: 35px 20px 0
+        height: 305px
+        margin: 0 auto
+        padding: 35px 10px 0
+      #myChartfour
+        width: 100%
+        height: 305px
+        margin: 0 auto
+        padding: 35px 0 0
       .title-box
         position: absolute
         width: 100%
         text-align: center
-        top: 30px
+        top: 20px
         left: 0
         .title
           font-size: $font-size-medium-x
           color: #202020
+          font-family: $font-family-regular
         .sub-title
           margin-top: 5px
           font-size: $font-size-small
           color: $color-text-88
+          font-family: $font-family-regular
+      .bottom-des
+        position: absolute
+        bottom: 15px
+        layout(row)
+        width: 100%
+        .tab
+          layout(row)
+          justify-content: center
+          align-items: center
+          width: 25%
+          .icon
+            background: #F9B43C
+            width: 6px
+            height: 6px
+            border-radius: 50%
+            margin-right: 3px
+          .two
+            background: #F9543C
+          .thr
+            background: #8E3C68
+          .four
+            background: #23799D
+          .text
+            font-size: $font-size-12
+            font-family: $font-family-regular
+            color: $color-text
       .pie-list
         layout(row)
         position: absolute
         width: 100%
-        bottom: 25px
+        bottom: 15px
         left: 0
         .list
           flex: 1
@@ -1204,12 +1301,7 @@
             line-height: 1
             font-size: $font-size-small
             color: #202020
-
-    .line-box
-      height: 270px
-      #myLine
-        height: 270px
-
+            font-family: $font-family-regular
   .bottom-box
     layout(row)
     position: absolute
