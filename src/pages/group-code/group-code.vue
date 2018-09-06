@@ -79,7 +79,7 @@
         :background="status"
         :cropBoxResizable="status"
         :aspectRatio="1"
-        :autoCropArea="1"
+        :autoCropArea="0.8"
         :dragMode="'move'"
         :checkCrossOrigin="false"
         :cropBoxMovable="false"
