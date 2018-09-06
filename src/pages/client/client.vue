@@ -74,6 +74,7 @@
       </section>
     </section>
     <toast ref="toast"></toast>
+    <confirm-msg ref="confirm" @confirm="msgConfirm"></confirm-msg>
     <router-view @refresh="refresh"></router-view>
   </div>
 </template>
@@ -145,10 +146,12 @@
         this.selectTab = index
       },
       checkCustom(item) {
+        if (item.isCheck) return
         this.groupList.forEach(item => { item.isCheck = false })
         item.isCheck = true
         this.pullUpLoad = true
         this.isAll = false
+        this.page = 1
         this.changeGroup()
       },
       refresh() {
