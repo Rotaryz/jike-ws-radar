@@ -14,7 +14,8 @@ const state = {
   imIng: false,
   groupItem: {}, // 群发助手对象
   currentGroupMsg: [], // 当前群发对象
-  newsGetType: false // 是否刷新群发助手
+  newsGetType: false, // 是否刷新群发助手
+  groupMsgIng: false // 是否在群发状态中，是则不能发第二次消息
 }
 
 export default state

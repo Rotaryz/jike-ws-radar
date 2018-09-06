@@ -23,8 +23,8 @@
           <div class="editor-content">
             <div class="editor-title">添加常用语</div>
             <div class="editor-input-box">
-              <textarea class="textarea" placeholder="请输入常用语" placeholder-class="holder-class" v-model="editorMsg" maxlength="30"></textarea>
-              <div class="count-box"><span class="black-txt">{{editorMsg.length}}</span><span class="gray-txt">/30</span></div>
+              <textarea class="textarea" placeholder="请输入常用语" placeholder-class="holder-class" v-model="editorMsg" maxlength="100"></textarea>
+              <div class="count-box"><span class="black-txt">{{editorMsg.length}}</span><span class="gray-txt">/100</span></div>
             </div>
             <div class="editor-down">
               <div class="btn cancel" @click="ediCancel">取消</div>
@@ -264,6 +264,7 @@
             resize: none
             outline: none
             padding: 10px
+            padding-bottom: 25px
             font-size: $font-size-14
             font-family: $font-family-regular
             &::-webkit-input-placeholder
@@ -271,6 +272,7 @@
               font-family: $font-family-regular
               color: $color-ccc
           .count-box
+            background: $color-white
             position: absolute
             right: 20px
             bottom: 25px

@@ -21,3 +21,5 @@ export const groupItem = state => state.groupItem
 export const currentGroupMsg = state => state.currentGroupMsg
 
 export const newsGetType = state => state.newsGetType
+
+export const groupMsgIng = state => state.groupMsgIng

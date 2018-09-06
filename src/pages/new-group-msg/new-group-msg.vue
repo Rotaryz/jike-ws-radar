@@ -24,10 +24,12 @@
       </div>
     </scroll>
     <div class="new-btn" @click="newGroup">新建群发</div>
+    <toast ref="toast"></toast>
   </div>
 </template>
 
 <script>
+  import Toast from 'components/toast/toast'
   import {mapActions, mapGetters} from 'vuex'
   import Scroll from 'components/scroll/scroll'
   import { Im } from 'api'
@@ -88,6 +90,10 @@
         this.$router.push(url)
       },
       toChat(item) {
+        if (this.groupMsgIng) {
+          this.$refs.toast.show('群发消息发送中，请稍后再发')
+          return
+        }
         this.setCurrentGroupMsg(item.groups)
         let url = '/news-chat-group'
         this.$router.push(url)
@@ -131,13 +137,18 @@
         }, 20)
       },
       newGroup() {
+        if (this.groupMsgIng) {
+          this.$refs.toast.show('群发消息发送中，请稍后再发')
+          return
+        }
         let url = '/news-add-group'
         this.$router.push(url)
       }
     },
     computed: {
       ...mapGetters([
-        'groupItem'
+        'groupItem',
+        'groupMsgIng'
       ]),
       pullUpLoadObj: function () {
         return this.pullUpLoad ? {
@@ -164,7 +175,8 @@
       }
     },
     components: {
-      Scroll
+      Scroll,
+      Toast
     }
   }
 </script>
