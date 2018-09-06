@@ -235,6 +235,7 @@
             })
             this.judgeImg()
           } else {
+            this.judgeImg()
             this.$refs.toast.show(res.message)
           }
         })
