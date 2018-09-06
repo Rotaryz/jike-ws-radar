@@ -330,6 +330,8 @@
           font-size: $font-size-16
           font-family: $font-family-medium
           margin-bottom: 5px
+          width: 200px
+          no-wrap()
         .sub-title
           color: $color-828AA2
           font-size: $font-size-12
