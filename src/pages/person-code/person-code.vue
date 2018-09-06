@@ -16,7 +16,9 @@
         <div class="preson-main-box" v-if="tabIndex * 1 === 0">
           <div class="upimg-box">
             <img :src="presonImg" class="upimg-box-img" v-if="presonImg" @load="imgSuccess">
-            <img class="loading" src="./loading.gif" v-if="imgSc">
+            <div class="loading-box"  v-if="imgSc">
+              <img class="loading-img" src="./loading.gif">
+            </div>
             <div class="upimg-box-colse" v-if="presonImg" @click="clearPresonImg"></div>
             <input type="file" class="header-icon" id="header-logo" @change="_fileChange($event, 'preson')"
                    accept="image/*" :value="inputValue">
@@ -231,10 +233,19 @@
                 this.upRobotId = false
               }
             })
+            this.judgeImg()
           } else {
             this.$refs.toast.show(res.message)
           }
         })
+      },
+      judgeImg() {
+        if (this.presonImg.length === 0) {
+          this.imgSc = false
+        }
+        if (this.robotImg.length === 0) {
+          this.imgAllSc = false
+        }
       },
       deletePersonImg() {
         Mine.getEmployeeCode({type: 1}).then((res) => {
@@ -407,6 +418,18 @@
         height: 100%
         display: block
         border: 1px solid #F0EFF5
+      .loading-box
+        background: #fff
+        width: 100%
+        height: 100%
+        position: absolute
+        left: 0
+        top: 0
+        z-index: 1112
+        .loading-img
+          all-center()
+          width: 30px
+          height: 30px
       .loading
         background: #fff
         width: 100%
