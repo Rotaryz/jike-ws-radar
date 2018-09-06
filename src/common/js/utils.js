@@ -109,6 +109,16 @@ export default class utils {
     }
   }
 
+  static breakArr (arr, num) {
+    let res = []
+    let max = Math.ceil(arr.length / num)
+    for (let i = 0; i < max; i++) {
+      let arrSlice = arr.slice(i * num, num + i * num)
+      res.push(arrSlice)
+      if (i === max - 1) return res
+    }
+  }
+
   // 获取设备信息
   static getPlatform () {
     const navigator = window.navigator

@@ -363,6 +363,10 @@ export default class webimHandler {
     })
   }
 
+  static sendGroupMsg(msg, list) {
+
+  }
+
   // 获取C2C历史消息并设成已读状态
   // id 要拉取的好友id
   static getC2CMsgList(id) {
@@ -586,12 +590,6 @@ export default class webimHandler {
           resTxt = `${nickName}提交了商品${productName}的订单,金额为${data.total}元，并支付成功`
           break
         case 20021:
-          data = JSON.parse(msg.data)
-          if (data.title.length > 8) {
-            productName = data.title.slice(0, 8) + '···'
-          } else {
-            productName = data.title
-          }
           resTxt = `${nickName}正在查看你的商城`
           break
         case 30001:

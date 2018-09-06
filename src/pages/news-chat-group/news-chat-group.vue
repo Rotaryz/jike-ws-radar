@@ -71,7 +71,6 @@
       }
     },
     created() {
-
     },
     mounted() {
       this.textareaDom = this.$refs.inputTxt
@@ -89,6 +88,58 @@
           this.$router.go(-1)
           return true
         }
+      },
+      _splitArr(arr) {
+        let res = arr.map((item) => {
+          return item.customers || []
+        })
+        let res1 = [].concat.apply([], res)
+        let res2 = utils.breakArr(res1, 40)
+        return res2
+      },
+      _splitSendGroupMsg(arr, type, content) {
+        arr.map((item, index) => {
+          setTimeout(this._sendGroupMsg(item, type, content), index * 1000)
+        })
+      },
+      _sendGroupMsg(arr, type, content) {
+        arr.map((item1) => {
+          if (type === 'custom') {
+            webimHandler.onSendCustomMsg(content, item1.account).then(res => {
+              let timeStamp = parseInt(Date.now() / 1000)
+              let addMsg = {
+                text: '[图片信息]',
+                time: timeStamp,
+                msgTimeStamp: timeStamp,
+                fromAccount: item1.account,
+                sessionId: item1.account,
+                unreadMsgCount: 0,
+                avatar: item1.avatar,
+                nickName: item1.nickName
+              }
+              this.addListMsg({msg: addMsg, type: 'mineAdd'})
+            }, () => {
+              // this.$refs.toast.show('网络异常, 请稍后重试')
+            })
+          } else if (type === 'chat') {
+            webimHandler.onSendMsg(content, item1.account).then(res => {
+              let timeStamp = parseInt(Date.now() / 1000)
+              let addMsg = {
+                text: content,
+                time: timeStamp,
+                msgTimeStamp: timeStamp,
+                fromAccount: item1.account,
+                sessionId: item1.account,
+                unreadMsgCount: 0,
+                avatar: item1.avatar,
+                nickName: item1.nickName
+              }
+              this.addListMsg({msg: addMsg, type: 'mineAdd'})
+            }, () => {
+              // this.$refs.toast.show('网络异常, 请稍后重试')
+            })
+          }
+        })
       },
       hideInput() {
         this.mortListShow = false
@@ -151,7 +202,9 @@
             Im.setGroupList(reqData).then((res) => {
             })
             this.mortListShow = false
-            this.currentGroupMsg.map((item) => {
+            let reqArr = this._splitArr(this.currentGroupMsg)
+            this._splitSendGroupMsg(reqArr, 'custom', opt)
+            /** this.currentGroupMsg.map((item) => {
               item.customers.map((item1) => {
                 webimHandler.onSendCustomMsg(opt, item1.account).then(res => {
                   let timeStamp = parseInt(Date.now() / 1000)
@@ -170,7 +223,7 @@
                   // this.$refs.toast.show('网络异常, 请稍后重试')
                 })
               })
-            })
+            }) **/
           } else {
             this.$refs.toast.show('图片发送失败，请重新发送')
           }
@@ -221,7 +274,9 @@
         }
         Im.setGroupList(reqData).then((res) => {
         })
-        this.currentGroupMsg.map((item) => {
+        let reqArr = this._splitArr(this.currentGroupMsg)
+        this._splitSendGroupMsg(reqArr, 'chat', value)
+        /** this.currentGroupMsg.map((item) => {
           item.customers.map((item1) => {
             webimHandler.onSendMsg(value, item1.account).then(res => {
               let timeStamp = parseInt(Date.now() / 1000)
@@ -240,7 +295,7 @@
               // this.$refs.toast.show('网络异常, 请稍后重试')
             })
           })
-        })
+        }) **/
       }
     },
     components: {
