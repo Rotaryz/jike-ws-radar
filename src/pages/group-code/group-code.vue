@@ -192,6 +192,7 @@
         return new Blob([new Uint8Array(array)], {type: type})
       },
       _fileChange (e) {
+        this.loading = false
         if (e.target) {
           const file = e.target.files[0]
           const reader = new FileReader()

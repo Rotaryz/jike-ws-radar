@@ -182,6 +182,8 @@
           }
           this.loading = false
           this.visible = false
+          alert(JSON.stringify(res))
+          alert(res, '```')
           this.$refs.toast.show(res.message)
         })
       },
@@ -205,6 +207,7 @@
       },
       _fileChange(e, type) {
         this.chooseType = type
+        this.loading = false
         if (e.target) {
           const file = e.target.files[0]
           const reader = new FileReader()
