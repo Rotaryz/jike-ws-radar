@@ -47,8 +47,9 @@
           <div class="robot-area">
             <div class="robot-title">添加欢迎语</div>
             <div class="data-area-box">
-              <textarea class="data-area" v-model="note" maxlength="200" name="" id="" cols="30" rows="10"></textarea>
-              <div class="data-area-pla" v-if="!note">
+              <textarea class="data-area" v-model="note" maxlength="200" name="" id="" cols="30" rows="10" @blur="showPla = true"
+                        @focus="showPla = false" ></textarea>
+              <div class="data-area-pla" v-if="!note && showPla">
                 <div class="text">请添加欢迎语</div>
                 <div class="text">(用户添加机器人后，会自动验证通过，且默认发文字信息给客户。)</div>
               </div>
@@ -130,7 +131,8 @@
         inputValue: '',
         upRobotId: true,
         imgSc: true,
-        imgAllSc: true
+        imgAllSc: true,
+        showPla: true
       }
     },
     created() {
