@@ -165,21 +165,9 @@
                 <div class="sub-title">(每小时更新)</div>
               </div>
               <div class="pie-list">
-                <div class="list">
-                  <div class="icon one"></div>
-                  <div class="text">动态</div>
-                </div>
-                <div class="list">
-                  <div class="icon two"></div>
-                  <div class="text">商品</div>
-                </div>
-                <div class="list">
-                  <div class="icon thr"></div>
-                  <div class="text">拼团</div>
-                </div>
-                <div class="list">
-                  <div class="icon four"></div>
-                  <div class="text">砍价</div>
+                <div class="list" v-for="(item, index) in pieHint" v-bind:key="index">
+                  <div class="icon" :class="item.icon"></div>
+                  <div class="text">{{item.text}}</div>
                 </div>
               </div>
             </div>
@@ -245,7 +233,7 @@
   import Exception from 'components/exception/exception'
   import {mapActions, mapGetters} from 'vuex'
   import utils from 'common/js/utils'
-
+  const PIEHINT = [{text: '动态', icon: 'one'}, {text: '商品', icon: 'two'}, {text: '拼团', icon: 'thr'}, {text: '砍价', icon: 'four'}]
   export default {
     name: 'client-detail',
     data() {
@@ -322,6 +310,7 @@
           x: [],
           y: []
         },
+        pieHint: PIEHINT,
         showTab: false
       }
     },
