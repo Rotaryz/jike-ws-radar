@@ -76,6 +76,7 @@
           :guides="false"
           ref="cropper"
           :img="imageBig"
+          :outputSize= '0.5'
           :rotatable="true"
           :background="status"
           :cropBoxResizable="status"
@@ -144,7 +145,7 @@
         let $Blob = this.getBlobBydataURI(src, 'image/JPEG')
         let formData = new FormData()
         formData.append('file', $Blob, 'file_' + Date.parse(new Date()) + '.JPEG')
-        alert($Blob)
+        alert(JSON.stringify($Blob))
         UpLoad.upLoadImage(formData).then((res) => {
           if (res.error === ERR_OK) {
             if (this.chooseType === 'preson') {
@@ -184,8 +185,8 @@
           this.loading = false
           this.visible = false
           alert(JSON.stringify(res))
-          alert('2222')
-          alert(formData)
+          alert('333')
+          alert(JSON.stringify(formData))
           this.$refs.toast.show(res.message)
         })
       },
