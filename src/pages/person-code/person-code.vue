@@ -185,9 +185,6 @@
           }
           this.loading = false
           this.visible = false
-          alert(JSON.stringify(res))
-          alert('333')
-          alert(JSON.stringify(formData))
           this.$refs.toast.show(res.message)
         })
       },
