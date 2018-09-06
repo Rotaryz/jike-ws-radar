@@ -76,8 +76,9 @@
           :guides="false"
           ref="cropper"
           :img="imageBig"
-          :outputSize= '0.5'
+          :outputSize= '0.3'
           :rotatable="true"
+          :outputType="outputType"
           :background="status"
           :cropBoxResizable="status"
           :aspectRatio="1"
@@ -131,7 +132,8 @@
         inputValue: '',
         upRobotId: true,
         imgSc: true,
-        imgAllSc: true
+        imgAllSc: true,
+        outputType: 'jpeg'
       }
     },
     created() {
@@ -142,10 +144,9 @@
         if (this.loading) return
         this.loading = true
         let src = this.$refs.cropper.getCroppedCanvas().toDataURL()
-        let $Blob = this.getBlobBydataURI(src, 'image/JPEG')
+        let $Blob = this.getBlobBydataURI(src, 'image/jpeg')
         let formData = new FormData()
-        formData.append('file', $Blob, 'file_' + Date.parse(new Date()) + '.JPEG')
-        alert(JSON.stringify($Blob))
+        formData.append('file', $Blob, 'file_' + Date.parse(new Date()) + '.jpeg')
         UpLoad.upLoadImage(formData).then((res) => {
           if (res.error === ERR_OK) {
             if (this.chooseType === 'preson') {
