@@ -411,7 +411,7 @@
     margin: 20px auto 18.5px
     position: relative
   .wechat-text-box
-    padding: 0 15px
+    padding: 0 15px 15px
     .wechat-des
       font-size: $font-size-12
       font-family: $font-family-medium
@@ -419,7 +419,7 @@
       margin-bottom: 8.5px
     .wechat-text-p
       font-size: $font-size-12
-      font-family: $font-family-medium
+      font-family: $font-family-regular
       color: $color-888888
       line-height: 18px
   .code-list

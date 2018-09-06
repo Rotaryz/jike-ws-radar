@@ -179,7 +179,7 @@
               name: '',
               type: 'pie',
               radius: '55%',
-              center: ['50%', '53%'],
+              center: ['50%', '54%'],
               data: this.pieData,
               itemStyle: {
                 emphasis: {
@@ -545,7 +545,6 @@
             data: this.successData
           }]
         })
-        // myChart.on('click', this.eConsole)
       },
       getPieData() {
         Echart.getPie(this.userInfo.merchant_id, this.userInfo.id).then(res => {

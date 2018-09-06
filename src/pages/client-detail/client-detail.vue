@@ -384,7 +384,7 @@
               name: '',
               type: 'pie',
               radius: '55%',
-              center: ['50%', '53%'],
+              center: ['50%', '54%'],
               data: this.pieData,
               itemStyle: {
                 emphasis: {
