@@ -39,7 +39,7 @@
             <div class="item-list" @click="jumpRobot">
               <div class="text">远程登录该微信</div>
               <div class="login-right">
-                <div class="login-text">登陆</div>
+                <div class="login-text">登录</div>
                 <div class="icon"></div>
               </div>
             </div>
@@ -106,10 +106,10 @@
   import {mapGetters} from 'vuex'
   import ConfirmMsg from 'components/confirm-msg/confirm-msg'
 
-  const ICONTAB = [{icon: 'person', title: '普通微信', content: '成员自己有商品，可以修改库存和价格。'}, {
+  const ICONTAB = [{icon: 'person', title: '普通微信', content: '手动验证通过'}, {
     icon: 'all',
     title: '机器人微信',
-    content: '成员没有商品，分享团长收入。'
+    content: '自动验证通过，自动发送欢迎语。'
   }]
   export default {
     name: 'person-code',
@@ -375,6 +375,7 @@
       &:nth-child(even)
         padding-left: 5px
       .item-box-con
+        min-height: 78px
         border-radius: 2px
         width: 100%
         background: #fff
