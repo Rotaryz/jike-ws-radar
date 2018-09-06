@@ -141,9 +141,10 @@
         if (this.loading) return
         this.loading = true
         let src = this.$refs.cropper.getCroppedCanvas().toDataURL()
-        let $Blob = this.getBlobBydataURI(src, 'image/png')
+        let $Blob = this.getBlobBydataURI(src, 'image/JPEG')
         let formData = new FormData()
         formData.append('file', $Blob, 'file_' + Date.parse(new Date()) + '.JPEG')
+        alert($Blob)
         UpLoad.upLoadImage(formData).then((res) => {
           if (res.error === ERR_OK) {
             if (this.chooseType === 'preson') {
@@ -183,7 +184,8 @@
           this.loading = false
           this.visible = false
           alert(JSON.stringify(res))
-          alert(res, '```')
+          alert('2222')
+          alert(formData)
           this.$refs.toast.show(res.message)
         })
       },
