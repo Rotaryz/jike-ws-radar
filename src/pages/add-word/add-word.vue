@@ -253,18 +253,20 @@
           letter-spacing: 0.8px
           text-align: center
         .editor-input-box
-          height: 120px
-          padding: 0 10px
+          height: 105px
+          margin: 0 10px
+          padding: 10px
+          margin-bottom: 15px
+          border: 1px solid #e5e5e5
+          padding-bottom: 20px
+          box-sizing: border-box
           position: relative
           .textarea
-            height: 105px
+            height: 100%
             width: 100%
-            box-sizing: border-box
-            border: 1px solid #E5E5E5
+            border: 0
             resize: none
             outline: none
-            padding: 10px
-            padding-bottom: 25px
             font-size: $font-size-14
             font-family: $font-family-regular
             &::-webkit-input-placeholder
@@ -274,8 +276,8 @@
           .count-box
             background: $color-white
             position: absolute
-            right: 20px
-            bottom: 20px
+            right: 10px
+            bottom: 5px
             font-size: $font-size-12
             font-family: $font-family-regular
             .black-txt
