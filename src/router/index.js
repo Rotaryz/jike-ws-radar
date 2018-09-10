@@ -272,7 +272,14 @@ const route = new Router({
         component: NewGroupMsg,
         meta: {
           title: '新建群发'
-        }
+        },
+        children: [{
+          path: 'select-goods',
+          component: SelectGoods,
+          meta: {
+            title: '选择商品'
+          }
+        }]
       },
       {
         path: '/client',

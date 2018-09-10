@@ -4,7 +4,35 @@
       <section class="chat-container" @click.stop="hideInput">
         <div class="group-wrapper">群发组：<span v-for="(item1, index1) in currentGroupMsg" :key="index1">{{index1 == (currentGroupMsg.length - 1) ? item1.name + '(' + item1.customers.length + ')' : item1.name + '(' + item1.customers.length + ')，'}}</span></div>
       </section>
-      <section class="chat-input border-top-1px">
+      <!--<section class="chat-input border-top-1px">-->
+        <!--<div class="chat-input-box">-->
+          <!--<div class="face-box" @click.stop="showEmoji">-->
+            <!--<img src="../../../static/img/icon-emoji@2x.png" class="face-icon">-->
+          <!--</div>-->
+          <!--<div class="input-container" ref="textBox">-->
+            <!--<textarea class="textarea" type="text" ref="inputTxt" v-model="inputMsg" rows="1"></textarea>-->
+          <!--</div>-->
+          <!--<div class="addimg-box" v-if="!inputMsg" @click.stop="showMoreList">-->
+            <!--<img src="../../../static/img/icon-add_im@2x.png" class="addimg-icon">-->
+          <!--</div>-->
+          <!--<div class="submit-btn" @click="sendMsg" v-if="inputMsg">发送</div>-->
+        <!--</div>-->
+        <!--<div class="more-box">-->
+          <!--<div class="emoji-list" v-if="emojiShow">-->
+            <!--<div class="emoji-item" v-for="(item, index) in emojiList" :key="index" @click.stop="chioceEmoji(item)">-->
+              <!--<img :src="item.url" class="emoji-icon">-->
+            <!--</div>-->
+          <!--</div>-->
+          <!--<div class="addimg-list" v-if="mortListShow">-->
+            <!--<label class="addimg-item" :for="item.type == 1?'choose-pic':''" v-for="(item, index) in moreLists" :key="index" @click="nextWork(item)">-->
+              <!--<img :src="item.icon" class="item-icon">-->
+              <!--<p class="item-txt">{{item.txt}}</p>-->
+              <!--<input type="file" id="choose-pic" class="image-file" @change="_fileImage($event)" accept="image/*" v-if="item.type == 1">-->
+            <!--</label>-->
+          <!--</div>-->
+        <!--</div>-->
+      <!--</section>-->
+      <div class="chat-input border-top-1px">
         <div class="chat-input-box">
           <div class="face-box" @click.stop="showEmoji">
             <img src="../../../static/img/icon-emoji@2x.png" class="face-icon">
@@ -24,15 +52,29 @@
             </div>
           </div>
           <div class="addimg-list" v-if="mortListShow">
-            <label class="addimg-item" :for="item.type == 1?'choose-pic':''" v-for="(item, index) in moreLists" :key="index" @click="nextWork(item)">
-              <img :src="item.icon" class="item-icon">
+            <div class="addimg-item" v-for="(item, index) in moreLists" :key="index" @click="nextWork(item)">
+              <div class="img-box">
+                <div class="item-icon" :class="item.icon"></div>
+              </div>
               <p class="item-txt">{{item.txt}}</p>
-              <input type="file" id="choose-pic" class="image-file" @change="_fileImage($event)" accept="image/*" v-if="item.type == 1">
-            </label>
+              <input type="file" class="image-file" @change="_fileImage($event)" accept="image/*" v-if="item.type == 1">
+            </div>
           </div>
         </div>
-      </section>
+      </div>
+      <transition name="fade">
+        <div class="cover-full" v-if="coverFullShow">
+          <div class="cover-container">
+            <div class="cover-top">
+              <span v-if="coverShowType === 'person'" class="top-txt">暂未上传个人微信二维码，无法发送</span>
+              <span v-if="coverShowType === 'group'" class="top-txt">暂未上传群二维码，无法发送</span>
+            </div>
+            <div class="cover-down border-top-1px" @click="toMineCode">现在上传</div>
+          </div>
+        </div>
+      </transition>
       <toast ref="toast"></toast>
+      <router-view @refushBox="refushBox" @getQrCode="getQrCodeStatus"/>
     </div>
   </transition>
 </template>
@@ -48,10 +90,14 @@
   import { emotionsFaceArr } from 'common/js/constants'
 
   const MORELIST = [
-    {txt: '图片', icon: '../../../static/img/icon-pic-_im@2x.png', type: 1}
-    // {txt: '发送商品', icon: '../../../static/img/icon-goods_im@2x.png', type: 2},
-    // {txt: '发送活动', icon: '../../../static/img/icon-send_im@2x.png', type: 3}
+    {txt: '图片', icon: 'im-image', type: 1},
+    {txt: '个人微信', icon: 'im-weixin', type: 4},
+    {txt: '微信群码', icon: 'im-group', type: 5},
+    {txt: '常用语', icon: 'im-useful', type: 6},
+    {txt: '发送商品', icon: 'im-goods', type: 2},
+    {txt: '发送活动', icon: 'im-activity', type: 3}
   ]
+
   export default {
     name: 'Chat',
     data() {
@@ -389,12 +435,12 @@
         letter-spacing: 0.3px
         line-height: 1.6
         padding: 15px
+
     .chat-input
       width: 100%
       box-sizing: border-box
       min-height: 38px
       background: $color-background-f9
-      padding: 6px 0
       position: absolute
       left: 0
       right: 0
@@ -404,6 +450,7 @@
         display: flex
         align-items: flex-end
         min-height: 38px
+        padding: 6px 0
         .face-box
           width: 53px
           display: flex
@@ -426,7 +473,7 @@
           width: 43px
           height: 36px
           margin: 0 5px
-          border: 1px solid rgba(0, 0, 0, 0.10)
+          border: 1px solid rgba(0,0,0,0.10)
           border-radius: 2px
           background: $color-white
           text-align: center
@@ -438,7 +485,7 @@
           flex: 1
           overflow-x: hidden
           min-height: 28px
-          border: 1px solid rgba(0, 0, 0, 0.10)
+          border: 1px solid rgba(0,0,0,0.10)
           background: $color-white
           max-height: 100px
           overflow-y: auto
@@ -470,22 +517,42 @@
               width: 6.666666vw
               height: 6.666666vw
         .addimg-list
-          height: 140px
-          padding: 25px 0 0 30px
+          padding: 25px 0 0 8vw
           display: flex
+          flex-wrap: wrap
           .addimg-item
-            width: 48px
-            height: 70px
+            width: 16vw
             display: flex
             flex-direction: column
             justify-content: space-between
             font-size: 0
-            margin-right: 44px
+            margin-right: 6.6666vw
+            margin-bottom: 15px
             position: relative
-            .item-icon
-              width: 48px
-              height: 48px
+            .img-box
+              width: 16vw
+              height: 16vw
+              border-1px(#ccc, 12px)
+              display: flex
+              justify-content: center
+              align-items: center
+              .item-icon
+                width: 33px
+                height: 33px
+              .im-image
+                icon-image('./icon-picture')
+              .im-weixin
+                icon-image('./icon-wechat')
+              .im-group
+                icon-image('./icon-groupcode')
+              .im-useful
+                icon-image('./icon-Comlanguage')
+              .im-goods
+                icon-image('./icon-sendgoods')
+              .im-activity
+                icon-image('./icon-activity')
             .item-txt
+              margin-top: 5px
               font-size: $font-size-12
               font-family: $font-family-regular
               color: #828AA2
@@ -499,4 +566,38 @@
               height: 100%
               z-index: 10
 
+    .cover-full
+      fill-box()
+      z-index: 100
+      layout()
+      align-items: center
+      background: rgba(32,32,46,0.8)
+      .cover-container
+        width: 300px
+        height: 160px
+        background: $color-white
+        border: 1px solid rgba(32,32,46,0.10)
+        border-radius: 2px
+        all-center()
+        .cover-top
+          width: 100%
+          height: 115px
+          display: flex
+          align-items: center
+          justify-content: center
+          .top-txt
+            font-size: $font-size-16
+            font-family: $font-family-regular
+            color: $color-20202E
+            letter-spacing: 0.8px
+            line-height: 18px
+        .cover-down
+          width: 100%
+          height: 45px
+          line-height: 44px
+          text-align: center
+          font-family: $font-family-medium
+          font-size: $font-size-14
+          color: $color-56BA15
+          letter-spacing: 0.6px
 </style>
