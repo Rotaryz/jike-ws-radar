@@ -99,5 +99,14 @@ export default {
   getGroupDetail (data) {
     let url = 'api/employee/qrcode-detail'
     return request.get(url, data)
+  },
+  /**
+   * 机器人微信登录状态
+   * @param data
+   * @returns {*}
+   */
+  getWechatStatus (data) {
+    let url = 'api/employee/mock-login-status'
+    return request.get(url, data)
   }
 }
