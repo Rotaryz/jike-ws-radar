@@ -24,14 +24,14 @@
 
   export default {
     name: 'share-card',
-    data () {
+    data() {
       return {
         card: {},
         showPosition: true,
         showMobile: true
       }
     },
-    created () {
+    created() {
       Business.Myshop({is_hyaline: 0}).then((res) => {
         this.card = res.data || {}
         if (this.card.position.length === 0) {
@@ -63,7 +63,7 @@
     },
     computed: {
       ...mapGetters(['ios']),
-      slide () {
+      slide() {
         return this.ios ? '' : 'slide'
       }
     },
@@ -114,9 +114,9 @@
         margin-top: 21px
       .avatar-card
         display: block
-        width: 120px
-        height: 120px
-        padding: 20px
+        width: 100px
+        height: 100px
+        margin-bottom: 20px
         -webkit-box-sizing: border-box
         box-sizing: border-box
       .qrcode-text
@@ -126,12 +126,7 @@
         margin-top: -10px
 
   .share-card
+    height: 100vh
+    overflow: hidden
     background: $color-text
-    position: fixed
-    background: share-card
-    z-index: 10
-    left: 0
-    right: 0
-    bottom: 0
-    top: 0
 </style>
