@@ -225,7 +225,7 @@
               webimHandler.onSendCustomMsg(content, item1.account).then(res => {
                 let timeStamp = parseInt(Date.now() / 1000)
                 let addMsg = {
-                  text: '[其他消息]',
+                  text: '[个人微信二维码]',
                   time: timeStamp,
                   msgTimeStamp: timeStamp,
                   fromAccount: item1.account,
@@ -244,7 +244,7 @@
               webimHandler.onSendCustomMsg(content, item1.account).then(res => {
                 let timeStamp = parseInt(Date.now() / 1000)
                 let addMsg = {
-                  text: '[其他消息]',
+                  text: '[群微信二维码]',
                   time: timeStamp,
                   msgTimeStamp: timeStamp,
                   fromAccount: item1.account,
@@ -389,7 +389,7 @@
               }
               let msg = {
                 time: parseInt(Date.now() / 1000),
-                lastMsg: '[其他信息]'
+                lastMsg: '[个人微信二维码]'
               }
               this.setGroupItem(msg)
               this.setNewsGetType(true)
@@ -425,7 +425,7 @@
               }
               let msg = {
                 time: parseInt(Date.now() / 1000),
-                lastMsg: '[其他信息]'
+                lastMsg: '[群微信二维码]'
               }
               this.setGroupItem(msg)
               this.setNewsGetType(true)

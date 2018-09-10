@@ -39,7 +39,7 @@
                   <div>
                     <div class="goods-txt">{{item.goods_type * 1 === 3 ? '底 价' : '团购价' }}：¥{{item.goods_price}}</div>
                     <div class="goods-down">
-                      <div class="goods-txt">销  量：{{item.sale_count}}</div>
+                      <div class="goods-txt">销 量：{{item.sale_count}}</div>
                       <div class="goods-txt">库存：{{item.activity_stock}}</div>
                     </div>
                   </div>
@@ -62,15 +62,16 @@
 </template>
 
 <script>
-  import {mapActions, mapGetters} from 'vuex'
-  import {Im} from 'api'
+  import { mapActions, mapGetters } from 'vuex'
+  import { Im } from 'api'
   import Scroll from 'components/scroll/scroll'
   import { ERR_OK, TIMELAG } from 'common/js/config'
   import storage from 'storage-controller'
-  import {ease} from 'common/js/ease'
+  import { ease } from 'common/js/ease'
   import webimHandler from 'common/js/webim_handler'
   import Toast from 'components/toast/toast'
   import utils from 'common/js/utils'
+
   export default {
     name: 'SelectGoods',
     created() {
@@ -126,7 +127,8 @@
         scrollToEasing: 'bounce',
         scrollToEasingOptions: ['bounce', 'swipe', 'swipeBounce'],
         selectGoods: '',
-        userInfo: storage.get('info')
+        userInfo: storage.get('info'),
+        logType: 3
       }
     },
     methods: {
@@ -180,6 +182,7 @@
           desc,
           ext
         }
+        this.logType = logType
         if (this.$route.query.chatType === 'group') {
           // 群发
           if (this.groupMsgIng) {
@@ -188,7 +191,7 @@
           }
           let msg = {
             time: parseInt(Date.now() / 1000),
-            lastMsg: '[商品信息]'
+            lastMsg: logType === 3 ? '[商品信息]' : '[活动信息]'
           }
           this.setGroupItem(msg)
           this.setNewsGetType(true)
@@ -235,7 +238,7 @@
           let list = [...this.nowChat, msg]
           this.setNowChat(list)
           let addMsg = {
-            text: '[商品信息]',
+            text: this.logType === 3 ? '[商品信息]' : '[活动信息]',
             time: timeStamp,
             msgTimeStamp: timeStamp,
             fromAccount: this.currentMsg.account,
@@ -309,7 +312,7 @@
               webimHandler.onSendCustomMsg(content, item1.account).then(res => {
                 let timeStamp = parseInt(Date.now() / 1000)
                 let addMsg = {
-                  text: '[商品信息]',
+                  text: this.logType === 3 ? '[商品信息]' : '[活动信息]',
                   time: timeStamp,
                   msgTimeStamp: timeStamp,
                   fromAccount: item1.account,
@@ -574,7 +577,7 @@
         width: 100%
         height: 100%
         background: #F94C5F
-        box-shadow: 0 4px 16px 0 rgba(249,76,95,0.30)
+        box-shadow: 0 4px 16px 0 rgba(249, 76, 95, 0.30)
         border-radius: 22.5px
         text-align: center
         line-height: 45px
@@ -584,5 +587,5 @@
         letter-spacing: 0.6px
       .disabled.submit-btn
         background: $color-888888
-        box-shadow: 0 4px 16px 0 rgba(136,136,136,0.30)
+        box-shadow: 0 4px 16px 0 rgba(136, 136, 136, 0.30)
 </style>
