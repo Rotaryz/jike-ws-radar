@@ -43,10 +43,11 @@
 <script>
   import Scroll from 'components/scroll/scroll'
   import { Im } from 'api'
-  import {ERR_OK} from '../../common/js/config'
+  import { ERR_OK } from '../../common/js/config'
   import Toast from 'components/toast/toast'
   import ConfirmMsg from 'components/confirm-msg/confirm-msg'
-  import {mapGetters} from 'vuex'
+  import { mapGetters } from 'vuex'
+
   export default {
     name: 'News',
     created() {
@@ -64,7 +65,9 @@
         editorShow: false,
         editorMsg: '',
         editorItem: {},
-        slide: 'slide'
+        slide: 'slide',
+        allowSend: true,
+        allowConfirm: true
       }
     },
     methods: {
@@ -83,6 +86,8 @@
         this.$refs.confirm.show()
       },
       submitDelete() {
+        if (!this.allowConfirm) return
+        this.allowConfirm = false
         let data = {
           id: this.deleteAny.id
         }
@@ -93,8 +98,14 @@
             })
             this.deleteAny = {}
             this.$emit('getMsg')
+            setTimeout(() => {
+              this.allowConfirm = true
+            }, 300)
           } else {
             this.$refs.toast.show(res.message)
+            setTimeout(() => {
+              this.allowConfirm = true
+            }, 300)
           }
         })
       },
@@ -112,8 +123,13 @@
         this.editorShow = true
       },
       ediConfirm() {
+        if (!this.allowSend) return
+        this.allowSend = false
         if (!this.editorMsg) {
           this.$refs.toast.show('请先输入内容')
+          setTimeout(() => {
+            this.allowSend = true
+          }, 300)
           return
         }
         let data
@@ -135,8 +151,14 @@
               this.editorShow = false
               this.getMsgList()
               this.$emit('getMsg')
+              setTimeout(() => {
+                this.allowSend = true
+              }, 300)
             } else {
               this.$refs.toast.show(res.message)
+              setTimeout(() => {
+                this.allowSend = true
+              }, 300)
             }
           })
         } else {
@@ -149,8 +171,14 @@
               this.editorShow = false
               this.getMsgList()
               this.$emit('getMsg')
+              setTimeout(() => {
+                this.allowSend = true
+              }, 300)
             } else {
               this.$refs.toast.show(res.message)
+              setTimeout(() => {
+                this.allowSend = true
+              }, 300)
             }
           })
         }
@@ -238,12 +266,12 @@
       z-index: 100
       layout()
       align-items: center
-      background: rgba(32,32,46,0.8)
+      background: rgba(32, 32, 46, 0.8)
       .editor-content
         width: 300px
         height: 210px
         background: $color-white
-        border: 1px solid rgba(32,32,46,0.10)
+        border: 1px solid rgba(32, 32, 46, 0.10)
         border-radius: 2px
         margin-top: 152px
         .editor-title
