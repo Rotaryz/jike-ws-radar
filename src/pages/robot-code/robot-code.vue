@@ -20,22 +20,14 @@
         <div class="wechat-bottom">
           <div class="wechat-title">如何让专属机器人更加稳定，不容易掉线？</div>
           <div class="wechat-noet">
-            <p class="wechat-text">1.添加掉线提醒客服为好友，即可享受实时的掉线提醒服务。<span class="green">(本产品中提供的所有服务均以机器人在线为基础，为保证您的正常使用，强烈建议添加）</span>
-            </p>
-            <p class="wechat-text"> 添加方法：复制微信号<span class="green" v-clipboard:copy="wx_account" v-clipboard:success="onCopy" v-clipboard:error="onError">{{wx_account}}</span>，在微信右上角“添加朋友“中搜索添加。</p>
-          </div>
-          <div class="wechat-noet">
-            <div class="wechat-text">2.机器人微信账号不要退出微信登录，也不要在电脑上登录微信；
+            <div class="wechat-text">1.机器人微信账号不要退出微信登录，也不要在电脑上登录微信；
             </div>
           </div>
           <div class="wechat-noet">
-            <div class="wechat-text">3.机器人手机不要长时间处于断网或关机状态；</div>
+            <div class="wechat-text">2.机器人手机不要长时间处于断网或关机状态；</div>
           </div>
           <div class="wechat-noet">
-            <div class="wechat-text">4.机器人微信最好设置微信ID号；</div>
-          </div>
-          <div class="wechat-noet">
-            <div class="wechat-text">5.7天左右定时查看登录机器人的手机微信存储量。</div>
+            <div class="wechat-text">3.7天左右定时查看登录机器人的手机微信存储量。</div>
           </div>
         </div>
       </Scroll>
@@ -49,15 +41,12 @@
 </template>
 
 <script>
-  import Vue from 'vue'
   import Scroll from 'components/scroll/scroll'
   import {Mine} from 'api'
   import {ERR_OK} from '../../common/js/config'
   import Toast from 'components/toast/toast'
   import storage from 'storage-controller'
   import {mapGetters} from 'vuex'
-  import VueClipboard from 'vue-clipboard2'
-  Vue.use(VueClipboard)
 
   export default {
     name: 'robot-code',
@@ -68,8 +57,7 @@
         loginStatus: 0,
         loginTime: 0,
         timerStatus: '',
-        timerCode: '',
-        wx_account: 'wykt_wl'
+        timerCode: ''
       }
     },
     created() {
