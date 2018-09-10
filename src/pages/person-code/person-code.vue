@@ -40,7 +40,7 @@
             <div class="item-list" @click="jumpRobot">
               <div class="text">远程登录该微信</div>
               <div class="login-right">
-                <div class="login-text">登录</div>
+                <div class="login-text">{{loginText}}</div>
                 <div class="icon"></div>
               </div>
             </div>
@@ -56,19 +56,22 @@
               </div>
               <div class="textarea-number">{{note.length}}<span>/200</span></div>
             </div>
+            <div class="submit-btn" @click="submitSave">保存</div>
+          </div>
+          <div class="f3"></div>
+          <div class="robot-area">
             <div class="note-des">温馨提示：</div>
             <ul class="note-list">
               <li class="item">1. 机器人微信是将私人微信远程机器化。</li>
               <li class="item">2. 机器人可以自动验证通过，且默认发送欢迎语。</li>
               <li class="item">3. 机器人成功登录后，请不要退出，退出后需要重新登录。</li>
-              <li class="item">4. 新注册的微信号，不发当机器人。(微信限制)</li>
-              <li class="item">5. 微信号每天添加好友的数量有限制500个/日。</li>
+              <li class="item">4. 新注册的微信号，不能当机器人（微信限制）</li>
+              <li class="item">5. 微信号每天添加好友的数量限制500个/日。</li>
             </ul>
           </div>
         </div>
       </scroll>
-      <div class="submit-btn" v-if="tabIndex * 1 === 1" @click="submitSave">保存</div>
-      <router-view></router-view>
+      <router-view  @refReshStatus="refReshStatus"></router-view>
       <toast ref="toast"></toast>
       <confirm-msg ref="confirm" @confirm="_sureDel"></confirm-msg>
       <div class="img-cut" v-show="visible">
@@ -133,11 +136,14 @@
         upRobotId: true,
         imgSc: true,
         imgAllSc: true,
-        showPla: true
+        showPla: true,
+        loginText: '登录',
+        wechatStatus: 0
       }
     },
     created() {
       this.getDataCode()
+      this.getLoginStatus()
     },
     methods: {
       showPlaSuc() {
@@ -149,6 +155,9 @@
         if (this.slide === 'slide') {
           this.$refs.scroll.scrollTo(0, 0)
         }
+      },
+      refReshStatus() {
+        this.getLoginStatus()
       },
       cropImage() {
         if (this.loading) return
@@ -301,11 +310,29 @@
         })
       },
       jumpRobot() {
-        if (this.upRobotId) {
+        if (this.wechatStatus * 1 === 1) {
+          return
+        }
+        if (!this.robotImg) {
           this.$refs.toast.show('请上传微信二维码')
           return
         }
         this.$router.push('person-code/robot-code')
+      },
+      getLoginStatus() {
+        Mine.getWechatStatus().then((res) => {
+          if (res.error === ERR_OK) {
+            this.wechatStatus = res.data.status
+            if (res.data.status * 1 === 0) {
+              this.loginText = '登录'
+            } else if (res.data.status * 1 === 1) {
+              this.loginText = '已登录'
+              this.tabIndex = 1
+            }
+          } else {
+            this.$refs.toast.show(res.message)
+          }
+        })
       }
     },
     computed: {
@@ -524,24 +551,24 @@
       width: 100%
       border-color: rgba(0, 0, 0, 0.1)
       background: transparent
-      padding: 10px 15px
+      padding: 15px 10px 25px 10px
       font-size: $font-size-medium
       color: #20202e
       font-family: $font-family-regular
-      height: 185px
+      height: 205px
       outline: none
       -webkit-appearance: none
       box-shadow: 0 0 0 rgba(0, 0, 0, 0)
       position: relative
       z-index: 2
+      overflow: scroll
     .textarea-number
       position: absolute
-      bottom: 25px
+      bottom: 7px
       right: 25px
       font-size: $font-size-small
       font-family: $font-family-regular
       color: #202020
-      overflow: scroll
       span
         color: #ddd
     .data-area-box
@@ -579,16 +606,17 @@
       line-height: 18px
 
   .submit-btn
-    position: fixed
-    height: 45px
-    background: $color-20202E
+    height: 36px
+    background: $color-56BA15
     font-size: $font-size-16
-    font-family: $font-family-medium
+    font-family: $font-family-regular
     color: $color-white
-    bottom: 0
     text-align: center
-    left: 0
-    width: 100%
-    line-height: 45px
-    z-index: 49
+    width: 148px
+    line-height: 36px
+    border-radius: 50px
+    margin: 15px auto 20px
+  .f3
+    height: 10px
+    background: #f1f2f5
 </style>
