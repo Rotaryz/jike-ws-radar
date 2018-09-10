@@ -17,8 +17,8 @@
 
 <script>
   import Scroll from 'components/scroll/scroll'
-  import { Business } from 'api'
-  import { mapGetters } from 'vuex'
+  import {Business} from 'api'
+  import {mapGetters} from 'vuex'
 
   export default {
     name: 'share-card',
@@ -88,8 +88,8 @@
         margin-top: 21px
       .avatar-card
         display: block
-        width: 100px
-        height: 100px
+        width: 80px
+        height: 80px
         padding: 100px
         margin-top: -80px
       .qrcode-text
@@ -100,6 +100,6 @@
 
   .share-card
     height: 100vh
+    box-sizing: border-box
     overflow: hidden
-    background: $color-text
 </style>
