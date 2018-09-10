@@ -54,14 +54,12 @@
 <style scoped lang="stylus" rel="stylesheet/stylus">
   @import "~common/stylus/variable"
   @import '~common/stylus/mixin'
-  *
-    -webkit-box-sizing: border-box
-    box-sizing: border-box
 
   .card-con
     padding-top: 31px
 
   .card-main
+    box-sizing: border-box
     width: 317px
     padding: 20px 20px 25px
     margin: auto
@@ -90,16 +88,15 @@
         margin-top: 21px
       .avatar-card
         display: block
-        width: 125px
-        height: 125px
-        padding: 25px
-        -webkit-box-sizing: border-box
-        box-sizing: border-box
+        width: 100px
+        height: 100px
+        padding: 100px
+        margin-top: -100px
       .qrcode-text
         font-family: $font-family-regular
         font-size: $font-size-12
         color: #7C7C8F
-        margin-top: -10px
+        margin-top: -90px
 
   .share-card
     height: 100vh
