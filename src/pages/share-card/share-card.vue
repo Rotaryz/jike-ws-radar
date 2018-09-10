@@ -91,7 +91,7 @@
         width: 100px
         height: 100px
         padding: 100px
-        margin-top: -100px
+        margin-top: -80px
       .qrcode-text
         font-family: $font-family-regular
         font-size: $font-size-12
