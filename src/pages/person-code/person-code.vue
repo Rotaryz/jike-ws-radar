@@ -1,7 +1,8 @@
 <template>
   <transition :name="slide">
     <div class="group-box">
-      <Scroll bcColor="#fff">
+      <scroll bcColor="#fff"
+              ref="scroll">
         <div class="preson-box">
           <div class="item-box" v-for="(item, index) in tabList" v-bind:key="index" @click="clickTab(index)">
             <div class="item-box-con" :class="tabIndex * 1=== index ? 'active' : ''">
@@ -47,8 +48,8 @@
           <div class="robot-area">
             <div class="robot-title">添加欢迎语</div>
             <div class="data-area-box">
-              <textarea class="data-area" v-model="note" maxlength="200" name="" id="" cols="30" rows="10" @blur="showPla = true"
-                        @focus="showPla = false" ></textarea>
+              <textarea class="data-area" v-model="note" maxlength="200" name="" id="" cols="30" rows="10" @blur="showPlaFai"
+                        @focus="showPlaSuc" ></textarea>
               <div class="data-area-pla" v-if="!note && showPla">
                 <div class="text">请添加欢迎语</div>
                 <div class="text">(用户添加机器人后，会自动验证通过，且默认发文字信息给客户。)</div>
@@ -65,7 +66,7 @@
             </ul>
           </div>
         </div>
-      </Scroll>
+      </scroll>
       <div class="submit-btn" v-if="tabIndex * 1 === 1" @click="submitSave">保存</div>
       <router-view></router-view>
       <toast ref="toast"></toast>
@@ -139,6 +140,12 @@
       this.getDataCode()
     },
     methods: {
+      showPlaSuc() {
+        this.$refs.scroll.scrollTo(0, -200)
+      },
+      showPlaFai() {
+        this.$refs.scroll.scrollTo(0, 0)
+      },
       cropImage() {
         if (this.loading) return
         this.loading = true
