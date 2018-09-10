@@ -22,7 +22,7 @@
           <div class="wechat-noet">
             <p class="wechat-text">1.添加掉线提醒客服为好友，即可享受实时的掉线提醒服务。<span class="green">(本产品中提供的所有服务均以机器人在线为基础，为保证您的正常使用，强烈建议添加）</span>
             </p>
-            <p class="wechat-text"> 添加方法：复制微信号<span class="green">wykt_wl</span>，在微信右上角“添加朋友“中搜索添加。</p>
+            <p class="wechat-text"> 添加方法：复制微信号<span class="green" v-clipboard:copy="wx_account" v-clipboard:success="onCopy" v-clipboard:error="onError">{{wx_account}}</span>，在微信右上角“添加朋友“中搜索添加。</p>
           </div>
           <div class="wechat-noet">
             <div class="wechat-text">2.机器人微信账号不要退出微信登录，也不要在电脑上登录微信；
@@ -40,6 +40,7 @@
         </div>
       </Scroll>
       <router-view></router-view>
+      <toast ref="toast"></toast>
       <div class="loding-box" v-show="loading">
         <img class="loading" src="./loading.gif" alt="" width="30" height="30">
       </div>
@@ -48,11 +49,15 @@
 </template>
 
 <script>
+  import Vue from 'vue'
   import Scroll from 'components/scroll/scroll'
   import {Mine} from 'api'
   import {ERR_OK} from '../../common/js/config'
+  import Toast from 'components/toast/toast'
   import storage from 'storage-controller'
   import {mapGetters} from 'vuex'
+  import VueClipboard from 'vue-clipboard2'
+  Vue.use(VueClipboard)
 
   export default {
     name: 'robot-code',
@@ -63,7 +68,8 @@
         loginStatus: 0,
         loginTime: 0,
         timerStatus: '',
-        timerCode: ''
+        timerCode: '',
+        wx_account: 'wykt_wl'
       }
     },
     created() {
@@ -121,6 +127,12 @@
             this.$refs.toast.show(res.message)
           }
         })
+      },
+      onCopy(e) {
+        this.$refs.toast.show('复制成功')
+      },
+      onError(e) {
+        console.log('无法复制文本！')
       }
     },
     computed: {
@@ -133,7 +145,8 @@
       }
     },
     components: {
-      Scroll
+      Scroll,
+      Toast
     }
   }
 </script>

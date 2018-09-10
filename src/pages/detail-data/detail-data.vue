@@ -37,7 +37,7 @@
                 <div class="right">
                   <input type="number" placeholder="未完善" class="right-input"
                          oninput="if(value.length > 11)value = value.slice(0, 11)" v-model="flow.mobile">
-                  <img v-if="flow.mobile.length > 0" src="./icon-telephone_khzl@2x.png" alt="" class="right-img-phone" @click="phoneCall()">
+                  <img v-if="flow.mobile.length > 0" src="./icon-telephone_khzl@2x.png" alt="" class="right-img-phone" @click="phoneCall">
                 </div>
               </div>
               <div class="data-list">
