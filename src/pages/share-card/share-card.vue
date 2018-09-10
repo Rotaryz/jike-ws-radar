@@ -8,7 +8,7 @@
           <img src="./pic-myshop@2x.png" alt="" class="title-img">
           <img :src="card.avatar" alt="" class="avatar-img">
           <img :src="card.qrcode" alt="" class="avatar-card">
-          <div class="qrcode-text">点击识别二维码</div>
+          <div class="qrcode-text">长按识别二维码</div>
         </div>
       </div>
     </div>
@@ -17,10 +17,8 @@
 
 <script>
   import Scroll from 'components/scroll/scroll'
-  import { Business, Global } from 'api'
+  import { Business } from 'api'
   import { mapGetters } from 'vuex'
-  import { ERR_OK } from 'common/js/config'
-  import wx from 'weixin-js-sdk'
 
   export default {
     name: 'share-card',
@@ -41,25 +39,6 @@
           this.showMobile = false
         }
       })
-      let url = location.href
-      Global.jssdkConfig({weixin: 'ai_radar', url, current_type: 'weishang'}).then((res) => {
-        if (res.error === ERR_OK) {
-          res = res.data
-          wx.config({
-            debug: false, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
-            appId: res.appid, // 必填，企业号的唯一标识，此处填写企业号corpid
-            timestamp: res.timestamp, // 必填，生成签名的时间戳
-            nonceStr: res.noncestr, // 必填，生成签名的随机串
-            signature: res.signature, // 必填，签名，见附录1
-            jsApiList: ['previewImage'] // 必填，需要使用的JS接口列表，所有JS接口列表见附录2
-          })
-        }
-      })
-    },
-    methods: {
-      showPic(item) {
-        wx.previewImage({urls: [item]})
-      }
     },
     computed: {
       ...mapGetters(['ios']),
