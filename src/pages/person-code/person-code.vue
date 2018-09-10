@@ -141,10 +141,14 @@
     },
     methods: {
       showPlaSuc() {
-        this.$refs.scroll.scrollTo(0, -230)
+        if (this.slide === 'slide') {
+          this.$refs.scroll.scrollTo(0, -230)
+        }
       },
       showPlaFai() {
-        this.$refs.scroll.scrollTo(0, 0)
+        if (this.slide === 'slide') {
+          this.$refs.scroll.scrollTo(0, 0)
+        }
       },
       cropImage() {
         if (this.loading) return
