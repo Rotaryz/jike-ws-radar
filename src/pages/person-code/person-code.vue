@@ -541,6 +541,7 @@
       font-size: $font-size-small
       font-family: $font-family-regular
       color: #202020
+      overflow: scroll
       span
         color: #ddd
     .data-area-box
