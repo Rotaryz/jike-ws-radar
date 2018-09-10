@@ -266,14 +266,14 @@
             font-size: $font-size-16
             color: $color-20202E
             letter-spacing: 0.6px
-            max-width :30vw
+            max-width :18vw
             no-wrap()
           .status
             font-family: $font-family-regular
             font-size: $font-size-12
             color: $color-56BA15
         .ai
-          width: 105px
+          width: 142px
           height: 100%
           padding-right: 15px
           padding-top: 5px
