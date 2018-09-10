@@ -275,7 +275,7 @@
             background: $color-white
             position: absolute
             right: 20px
-            bottom: 25px
+            bottom: 20px
             font-size: $font-size-12
             font-family: $font-family-regular
             .black-txt
