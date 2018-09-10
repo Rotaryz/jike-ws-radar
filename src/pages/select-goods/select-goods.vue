@@ -509,11 +509,11 @@
             justify-content: space-between
             .activity-type
               font-family: $font-family-medium
-              font-size: $font-size-14
+              font-size: 3.7vw
               color: #374B63
             .activity-time
               font-family: $font-family-regular
-              font-size: $font-size-14
+              font-size: 3.7vw
               color: #374B63
               margin-right: 10px
           .left-down
