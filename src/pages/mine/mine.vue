@@ -7,7 +7,7 @@
             <img class="mine-header" :src="mine.avatar">
             <p class="peo-name">{{mine.name}}</p>
           </div>
-          <router-link class="top-box-right" to="mine/shareCard">
+          <router-link class="top-box-right" to="/shareCard">
             <span class="code"></span>
             <span class="icon"></span>
           </router-link>

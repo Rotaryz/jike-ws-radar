@@ -7,7 +7,7 @@
           <div class="title">{{card.name}}</div>
           <img src="./pic-myshop@2x.png" alt="" class="title-img">
           <img :src="card.avatar" alt="" class="avatar-img">
-          <img :src="card.qrcode" alt="" class="avatar-card" @click="showPic(card.qrcode)">
+          <img :src="card.qrcode" alt="" class="avatar-card">
           <div class="qrcode-text">点击识别二维码</div>
         </div>
       </div>
