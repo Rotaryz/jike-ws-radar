@@ -104,13 +104,6 @@ const route = new Router({
           }]
         },
         {
-          path: 'shareCard',
-          component: ShareCard,
-          meta: {
-            title: '分享名片'
-          }
-        },
-        {
           path: 'goodList',
           component: GoodsList,
           meta: {
