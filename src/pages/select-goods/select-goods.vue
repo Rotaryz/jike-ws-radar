@@ -30,7 +30,7 @@
             <div class="activity-left">
               <div class="left-top border-bottom-1px">
                 <p class="activity-type">{{item.goods_type * 1 === 3 ? '砍价活动' : '拼团优惠'}}</p>
-                <p class="activity-time">距离本场结束：{{item.endTime}}</p>
+                <p class="activity-time">距离本场结束：{{item.end_time}}</p>
               </div>
               <div class="left-down">
                 <div class="left-img" :style="{backgroundImage: 'url(' + item.goods_image_url + ')',backgroundPosition: 'center',backgroundRepeat: 'no-repeat',backgroundSize: 'cover'}"></div>
@@ -94,7 +94,7 @@
         Im.getActivityList(data).then((res) => {
           if (res.error === ERR_OK) {
             this.goodsList = res.data
-            this._timeRun()
+            // this._timeRun()
             setTimeout(() => {
               this.$refs.scroll.forceUpdate()
               this.$refs.scroll.scrollTo(0, 0, 300, ease[this.scrollToEasing])
