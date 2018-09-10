@@ -114,6 +114,7 @@
       ediConfirm() {
         if (!this.editorMsg) {
           this.$refs.toast.show('请先输入内容')
+          return
         }
         let data
         if (this.editorItem.id) {
