@@ -84,7 +84,6 @@
 
   .card-main
     width: 317px
-    position: relative
     padding: 20px 20px 25px
     margin: auto
     background: url("./bg-shopcode@2x.png") no-repeat center center
@@ -96,8 +95,6 @@
       margin: 0 auto
       layout()
       align-items: center
-      position: relative
-      z-index: 1
       .title
         font-family: $font-family-medium
         font-size: $font-size-18
@@ -114,9 +111,9 @@
         margin-top: 21px
       .avatar-card
         display: block
-        width: 100px
-        height: 100px
-        margin-bottom: 20px
+        width: 125px
+        height: 125px
+        padding: 25px
         -webkit-box-sizing: border-box
         box-sizing: border-box
       .qrcode-text
