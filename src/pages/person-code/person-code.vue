@@ -141,7 +141,7 @@
     },
     methods: {
       showPlaSuc() {
-        this.$refs.scroll.scrollTo(0, -200)
+        this.$refs.scroll.scrollTo(0, -260)
       },
       showPlaFai() {
         this.$refs.scroll.scrollTo(0, 0)
