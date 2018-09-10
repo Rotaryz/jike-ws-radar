@@ -74,7 +74,7 @@
         </div>
       </transition>
       <toast ref="toast"></toast>
-      <router-view @refushBox="refushBox" @getQrCode="getQrCodeStatus"/>
+      <router-view @getQrCode="getQrCodeStatus"/>
     </div>
   </transition>
 </template>
@@ -113,10 +113,13 @@
         emojiList: emotionsFaceArr,
         emojiShow: false,
         mortListShow: false,
-        allowSelectPic: true
+        codeStatus: {},
+        coverFullShow: false,
+        coverShowType: ''
       }
     },
     created() {
+      this.getQrCodeStatus()
     },
     mounted() {
       this.textareaDom = this.$refs.inputTxt
@@ -129,6 +132,26 @@
         'setNewsGetType',
         'setGroupMsgIng'
       ]),
+      toMineCode() {
+        let url
+        switch (this.coverShowType) {
+          case 'person':
+            url = this.$route.fullPath + '/person-code'
+            break
+          case 'group':
+            url = this.$route.fullPath + '/group-code'
+            break
+        }
+        this.coverFullShow = false
+        this.$router.push({path: url})
+      },
+      getQrCodeStatus() {
+        Im.getCodeStatus().then(res => {
+          if (res.error === ERR_OK) {
+            this.codeStatus = res.data
+          }
+        })
+      },
       exceptionHandle(flag) {
         if (flag) {
           this.$refs.toast.show('网络异常, 请稍后重试')
@@ -191,6 +214,44 @@
                   unreadMsgCount: 0,
                   avatar: item1.avatar,
                   nickName: item1.nickname
+                }
+                this.addListMsg({msg: addMsg, type: 'mineAdd'})
+                resolve()
+              }, () => {
+                resolve()
+                // this.$refs.toast.show('网络异常, 请稍后重试')
+              })
+            } else if (type === 'person-qr-code') {
+              webimHandler.onSendCustomMsg(content, item1.account).then(res => {
+                let timeStamp = parseInt(Date.now() / 1000)
+                let addMsg = {
+                  text: '[其他消息]',
+                  time: timeStamp,
+                  msgTimeStamp: timeStamp,
+                  fromAccount: item1.account,
+                  sessionId: item1.account,
+                  unreadMsgCount: 0,
+                  avatar: item1.avatar,
+                  nickName: item1.nickName
+                }
+                this.addListMsg({msg: addMsg, type: 'mineAdd'})
+                resolve()
+              }, () => {
+                resolve()
+                // this.$refs.toast.show('网络异常, 请稍后重试')
+              })
+            } else if (type === 'group-qr-code') {
+              webimHandler.onSendCustomMsg(content, item1.account).then(res => {
+                let timeStamp = parseInt(Date.now() / 1000)
+                let addMsg = {
+                  text: '[其他消息]',
+                  time: timeStamp,
+                  msgTimeStamp: timeStamp,
+                  fromAccount: item1.account,
+                  sessionId: item1.account,
+                  unreadMsgCount: 0,
+                  avatar: item1.avatar,
+                  nickName: item1.nickName
                 }
                 this.addListMsg({msg: addMsg, type: 'mineAdd'})
                 resolve()
@@ -304,12 +365,89 @@
           case 2:
             url = this.$route.fullPath + '/select-goods?type=1'
             this.mortListShow = false
-            this.$router.push({path: url})
+            this.$router.push({path: url, query: {chatType: 'group'}})
             break
           case 3:
             url = this.$route.fullPath + '/select-goods?type=2'
             this.mortListShow = false
-            this.$router.push({path: url})
+            this.$router.push({path: url, query: {chatType: 'group'}})
+            break
+          case 4:
+            if (!this.codeStatus.have_personal_qrcode) {
+              this.coverFullShow = true
+              this.coverShowType = 'person'
+            } else {
+              let data = {}
+              let desc = {log_type: 6}
+              let ext = '20005'
+              data = JSON.stringify(data)
+              desc = JSON.stringify(desc)
+              let opt = {
+                data,
+                desc,
+                ext
+              }
+              let msg = {
+                time: parseInt(Date.now() / 1000),
+                lastMsg: '[其他信息]'
+              }
+              this.setGroupItem(msg)
+              this.setNewsGetType(true)
+              let groupIds = this.currentGroupMsg.map((item) => {
+                return item.id
+              })
+              let reqData = {
+                type: 6,
+                group_ids: groupIds
+              }
+              this.$router.go(-2)
+              Im.setGroupList(reqData).then((res) => {
+              })
+              this.mortListShow = false
+              let reqArr = this._splitArr(this.currentGroupMsg)
+              this._splitSendGroupMsg(reqArr, 'person-qr-code', opt)
+            }
+            break
+          case 5:
+            if (!this.codeStatus.have_wxgroup_qrcode) {
+              this.coverFullShow = true
+              this.coverShowType = 'group'
+            } else {
+              let data = {}
+              let desc = {log_type: 7}
+              let ext = '20005'
+              data = JSON.stringify(data)
+              desc = JSON.stringify(desc)
+              let opt = {
+                data,
+                desc,
+                ext
+              }
+              let msg = {
+                time: parseInt(Date.now() / 1000),
+                lastMsg: '[其他信息]'
+              }
+              this.setGroupItem(msg)
+              this.setNewsGetType(true)
+              let groupIds = this.currentGroupMsg.map((item) => {
+                return item.id
+              })
+              let reqData = {
+                type: 7,
+                group_ids: groupIds
+              }
+              this.$router.go(-2)
+              Im.setGroupList(reqData).then((res) => {
+              })
+              this.mortListShow = false
+              let reqArr = this._splitArr(this.currentGroupMsg)
+              this._splitSendGroupMsg(reqArr, 'group-qr-code', opt)
+            }
+            break
+          case 6:
+            url = this.$route.fullPath + '/useful-word'
+            this.mortListShow = false
+            this.$router.push({path: url, query: {chatType: 'group'}})
             break
         }
       },

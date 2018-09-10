@@ -30,7 +30,7 @@
             <div class="activity-left">
               <div class="left-top border-bottom-1px">
                 <p class="activity-type">{{item.goods_type * 1 === 3 ? '砍价活动' : '拼团优惠'}}</p>
-                <p class="activity-time">距离本场结束：{{item.end_time}}</p>
+                <p class="activity-time">距离本场结束：{{item.end_at}}</p>
               </div>
               <div class="left-down">
                 <div class="left-img" :style="{backgroundImage: 'url(' + item.goods_image_url + ')',backgroundPosition: 'center',backgroundRepeat: 'no-repeat',backgroundSize: 'cover'}"></div>
@@ -70,6 +70,7 @@
   import {ease} from 'common/js/ease'
   import webimHandler from 'common/js/webim_handler'
   import Toast from 'components/toast/toast'
+  import utils from 'common/js/utils'
   export default {
     name: 'SelectGoods',
     created() {
@@ -131,7 +132,10 @@
     methods: {
       ...mapActions([
         'setNowChat',
-        'addListMsg'
+        'addListMsg',
+        'setGroupItem',
+        'setNewsGetType',
+        'setGroupMsgIng'
       ]),
       selectItem(item) {
         this.selectGoods = item
@@ -175,49 +179,77 @@
           desc,
           ext
         }
-        let timeStamp = parseInt(Date.parse(new Date()) / 1000)
-        let msg = {
-          from_account_id: this.imInfo.im_account,
-          avatar: this.userInfo.avatar,
-          content: '',
-          url: msgUrl,
-          title: msgTitle,
-          goods_price: this.selectGoods.goods_price,
-          original_price: this.selectGoods.original_price,
-          shop_name: this.selectGoods.shop_name,
-          time: timeStamp,
-          msgTimeStamp: timeStamp,
-          nickName: this.userInfo.nickName,
-          sessionId: this.userInfo.account,
-          unreadMsgCount: 0,
-          type: logType
-        }
-        if (this.nowChat.length) {
-          let lastItem = this.nowChat[this.nowChat.length - 1]
-          let lastTime = lastItem.created_at ? lastItem.created_at : lastItem.msgTimeStamp
-          msg.is_showtime = timeStamp - lastTime > TIMELAG
+        if (this.$route.query.chatType === 'group') {
+          // 群发
+          if (this.groupMsgIng) {
+            this.$refs.toast.show('群发消息发送中，请稍后再发')
+            return
+          }
+          let msg = {
+            time: parseInt(Date.now() / 1000),
+            lastMsg: '[商品信息]'
+          }
+          this.setGroupItem(msg)
+          this.setNewsGetType(true)
+          this.$router.go(-3)
+          let groupIds = this.currentGroupMsg.map((item) => {
+            return item.id
+          })
+          let reqData = {
+            type: logType,
+            goods_id: data.goods_id,
+            group_ids: groupIds
+          }
+          Im.setGroupList(reqData).then((res) => {
+          })
+          let reqArr = this._splitArr(this.currentGroupMsg)
+          this._splitSendGroupMsg(reqArr, 'shop', option)
         } else {
-          msg.is_showtime = true
+          // 单发
+          let timeStamp = parseInt(Date.parse(new Date()) / 1000)
+          let msg = {
+            from_account_id: this.imInfo.im_account,
+            avatar: this.userInfo.avatar,
+            content: '',
+            url: msgUrl,
+            title: msgTitle,
+            goods_price: this.selectGoods.goods_price,
+            original_price: this.selectGoods.original_price,
+            shop_name: this.selectGoods.shop_name,
+            time: timeStamp,
+            msgTimeStamp: timeStamp,
+            nickName: this.userInfo.nickName,
+            sessionId: this.userInfo.account,
+            unreadMsgCount: 0,
+            type: logType
+          }
+          if (this.nowChat.length) {
+            let lastItem = this.nowChat[this.nowChat.length - 1]
+            let lastTime = lastItem.created_at ? lastItem.created_at : lastItem.msgTimeStamp
+            msg.is_showtime = timeStamp - lastTime > TIMELAG
+          } else {
+            msg.is_showtime = true
+          }
+          let list = [...this.nowChat, msg]
+          this.setNowChat(list)
+          let addMsg = {
+            text: '[商品信息]',
+            time: timeStamp,
+            msgTimeStamp: timeStamp,
+            fromAccount: this.currentMsg.account,
+            sessionId: this.currentMsg.account,
+            unreadMsgCount: 0,
+            avatar: this.currentMsg.avatar,
+            nickName: this.currentMsg.nickName
+          }
+          this.addListMsg({msg: addMsg, type: 'mineAdd'})
+          this.$router.back()
+          this.$emit('refushBox')
+          webimHandler.onSendCustomMsg(option, this.currentMsg.account).then(res => {
+          }, () => {
+            this.$refs.toast.show('网络异常, 请稍后重试')
+          })
         }
-        let list = [...this.nowChat, msg]
-        this.setNowChat(list)
-        let addMsg = {
-          text: '[商品信息]',
-          time: timeStamp,
-          msgTimeStamp: timeStamp,
-          fromAccount: this.currentMsg.account,
-          sessionId: this.currentMsg.account,
-          unreadMsgCount: 0,
-          avatar: this.currentMsg.avatar,
-          nickName: this.currentMsg.nickName
-        }
-        this.addListMsg({msg: addMsg, type: 'mineAdd'})
-        this.$router.back()
-        this.$emit('refushBox')
-        webimHandler.onSendCustomMsg(option, this.currentMsg.account).then(res => {
-        }, () => {
-          this.$refs.toast.show('网络异常, 请稍后重试')
-        })
       },
       onPullingUp() {
         if (this.showNoMore) return
@@ -246,6 +278,73 @@
           this.$refs.scroll.destroy()
           this.$refs.scroll.initScroll()
         })
+      },
+      _splitArr(arr) {
+        let res = arr.map((item) => {
+          return item.customers || []
+        })
+        let res1 = [].concat.apply([], res)
+        let res2 = utils.breakArr(res1, 2)
+        return res2
+      },
+      _splitSendGroupMsg(arr, type, content) {
+        this.setGroupMsgIng(true)
+        Promise.all(arr.map((item, index) => {
+          return new Promise((resolve, reject) => {
+            setTimeout(async () => {
+              await this._sendGroupMsg(item, type, content)
+              resolve()
+            }, index * 1000)
+          })
+        })).then(res => {
+          this.setGroupMsgIng(false)
+        })
+      },
+      async _sendGroupMsg(arr, type, content) {
+        await Promise.all(arr.map((item1) => {
+          return new Promise((resolve, reject) => {
+            if (type === 'shop') {
+              webimHandler.onSendCustomMsg(content, item1.account).then(res => {
+                let timeStamp = parseInt(Date.now() / 1000)
+                let addMsg = {
+                  text: '[商品信息]',
+                  time: timeStamp,
+                  msgTimeStamp: timeStamp,
+                  fromAccount: item1.account,
+                  sessionId: item1.account,
+                  unreadMsgCount: 0,
+                  avatar: item1.avatar,
+                  nickName: item1.nickname
+                }
+                this.addListMsg({msg: addMsg, type: 'mineAdd'})
+                resolve()
+              }, () => {
+                resolve()
+                // this.$refs.toast.show('网络异常, 请稍后重试')
+              })
+            } else if (type === 'chat') {
+              webimHandler.onSendMsg(content, item1.account).then(res => {
+                let timeStamp = parseInt(Date.now() / 1000)
+                let addMsg = {
+                  text: content,
+                  time: timeStamp,
+                  msgTimeStamp: timeStamp,
+                  fromAccount: item1.account,
+                  sessionId: item1.account,
+                  unreadMsgCount: 0,
+                  avatar: item1.avatar,
+                  nickName: item1.nickname
+                }
+                this.addListMsg({msg: addMsg, type: 'mineAdd'})
+                resolve()
+              }, () => {
+                resolve()
+                // this.$refs.toast.show('网络异常, 请稍后重试')
+              })
+            }
+          })
+        }))
+        return true
       },
       _timeRun() {
         clearInterval(this.timer)
@@ -296,7 +395,9 @@
       ...mapGetters([
         'currentMsg',
         'nowChat',
-        'imInfo'
+        'imInfo',
+        'groupMsgIng',
+        'currentGroupMsg'
       ]),
       pullUpLoadObj: function () {
         return this.pullUpLoad ? {

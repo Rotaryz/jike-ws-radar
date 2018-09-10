@@ -31,6 +31,8 @@
   import webimHandler from 'common/js/webim_handler'
   import Toast from 'components/toast/toast'
   import storage from 'storage-controller'
+  import utils from 'common/js/utils'
+
   export default {
     name: 'News',
     created() {
@@ -39,6 +41,7 @@
         return
       }
       this.getMsg(true)
+      console.log(this.$route.query.type)
     },
     data() {
       return {
@@ -50,7 +53,10 @@
     methods: {
       ...mapActions([
         'addListMsg',
-        'setNowChat'
+        'setNowChat',
+        'setGroupItem',
+        'setNewsGetType',
+        'setGroupMsgIng'
       ]),
       getMsg(loading = false) {
         Im.getMyWordList(loading).then(res => {
@@ -70,49 +76,143 @@
           this.$refs.toast.show('请先选择您要发送的内容')
           return
         }
-        this.userInfo = storage.get('info')
-        let timeStamp = parseInt(Date.parse(new Date()) / 1000)
-        let msg = {
-          from_account_id: this.imInfo.im_account,
-          avatar: this.userInfo.avatar,
-          content: this.itemChecked.message,
-          time: timeStamp,
-          msgTimeStamp: timeStamp,
-          nickName: this.userInfo.nickName,
-          sessionId: this.userInfo.account,
-          unreadMsgCount: 0,
-          type: 1
-        }
-        if (this.nowChat.length) {
-          let lastItem = this.nowChat[this.nowChat.length - 1]
-          let lastTime = lastItem.created_at ? lastItem.created_at : lastItem.msgTimeStamp
-          msg.is_showtime = timeStamp - lastTime > TIMELAG
+        if (this.$route.query.chatType === 'group') {
+          if (this.groupMsgIng) {
+            this.$refs.toast.show('群发消息发送中，请稍后再发')
+            return
+          }
+          let value = this.itemChecked.message
+          let msg = {
+            time: parseInt(Date.now() / 1000),
+            lastMsg: value
+          }
+          this.setGroupItem(msg)
+          this.setNewsGetType(true)
+          this.$router.go(-3)
+          let groupIds = this.currentGroupMsg.map((item) => {
+            return item.id
+          })
+          let reqData = {
+            type: 1,
+            content: value,
+            group_ids: groupIds
+          }
+          Im.setGroupList(reqData).then((res) => {
+          })
+          let reqArr = this._splitArr(this.currentGroupMsg)
+          this._splitSendGroupMsg(reqArr, 'chat', value)
         } else {
-          msg.is_showtime = true
+          this.userInfo = storage.get('info')
+          let timeStamp = parseInt(Date.parse(new Date()) / 1000)
+          let msg = {
+            from_account_id: this.imInfo.im_account,
+            avatar: this.userInfo.avatar,
+            content: this.itemChecked.message,
+            time: timeStamp,
+            msgTimeStamp: timeStamp,
+            nickName: this.userInfo.nickName,
+            sessionId: this.userInfo.account,
+            unreadMsgCount: 0,
+            type: 1
+          }
+          if (this.nowChat.length) {
+            let lastItem = this.nowChat[this.nowChat.length - 1]
+            let lastTime = lastItem.created_at ? lastItem.created_at : lastItem.msgTimeStamp
+            msg.is_showtime = timeStamp - lastTime > TIMELAG
+          } else {
+            msg.is_showtime = true
+          }
+          let list = [...this.nowChat, msg]
+          this.setNowChat(list)
+          let addMsg = {
+            text: this.itemChecked.message,
+            time: timeStamp,
+            msgTimeStamp: timeStamp,
+            fromAccount: this.currentMsg.account,
+            sessionId: this.currentMsg.account,
+            unreadMsgCount: 0,
+            avatar: this.currentMsg.avatar,
+            nickName: this.currentMsg.nickName
+          }
+          this.addListMsg({msg: addMsg, type: 'mineAdd'})
+          this.$emit('refushBox')
+          this.$router.back()
+          webimHandler.onSendMsg(this.itemChecked.message, this.currentMsg.account).then(res => {
+          }, () => {
+            // this.$refs.toast.show('网络异常, 请稍后重试')
+          })
         }
-        let list = [...this.nowChat, msg]
-        this.setNowChat(list)
-        let addMsg = {
-          text: this.itemChecked.message,
-          time: timeStamp,
-          msgTimeStamp: timeStamp,
-          fromAccount: this.currentMsg.account,
-          sessionId: this.currentMsg.account,
-          unreadMsgCount: 0,
-          avatar: this.currentMsg.avatar,
-          nickName: this.currentMsg.nickName
-        }
-        this.addListMsg({msg: addMsg, type: 'mineAdd'})
-        this.$emit('refushBox')
-        this.$router.back()
-        webimHandler.onSendMsg(this.itemChecked.message, this.currentMsg.account).then(res => {
-        }, () => {
-          // this.$refs.toast.show('网络异常, 请稍后重试')
-        })
       },
       addWord() {
         let url = this.$route.fullPath + '/add-word'
         this.$router.push({path: url})
+      },
+      _splitArr(arr) {
+        let res = arr.map((item) => {
+          return item.customers || []
+        })
+        let res1 = [].concat.apply([], res)
+        let res2 = utils.breakArr(res1, 2)
+        return res2
+      },
+      _splitSendGroupMsg(arr, type, content) {
+        this.setGroupMsgIng(true)
+        Promise.all(arr.map((item, index) => {
+          return new Promise((resolve, reject) => {
+            setTimeout(async () => {
+              await this._sendGroupMsg(item, type, content)
+              resolve()
+            }, index * 1000)
+          })
+        })).then(res => {
+          this.setGroupMsgIng(false)
+        })
+      },
+      async _sendGroupMsg(arr, type, content) {
+        await Promise.all(arr.map((item1) => {
+          return new Promise((resolve, reject) => {
+            if (type === 'custom') {
+              webimHandler.onSendCustomMsg(content, item1.account).then(res => {
+                let timeStamp = parseInt(Date.now() / 1000)
+                let addMsg = {
+                  text: '[图片信息]',
+                  time: timeStamp,
+                  msgTimeStamp: timeStamp,
+                  fromAccount: item1.account,
+                  sessionId: item1.account,
+                  unreadMsgCount: 0,
+                  avatar: item1.avatar,
+                  nickName: item1.nickname
+                }
+                this.addListMsg({msg: addMsg, type: 'mineAdd'})
+                resolve()
+              }, () => {
+                resolve()
+                // this.$refs.toast.show('网络异常, 请稍后重试')
+              })
+            } else if (type === 'chat') {
+              webimHandler.onSendMsg(content, item1.account).then(res => {
+                let timeStamp = parseInt(Date.now() / 1000)
+                let addMsg = {
+                  text: content,
+                  time: timeStamp,
+                  msgTimeStamp: timeStamp,
+                  fromAccount: item1.account,
+                  sessionId: item1.account,
+                  unreadMsgCount: 0,
+                  avatar: item1.avatar,
+                  nickName: item1.nickname
+                }
+                this.addListMsg({msg: addMsg, type: 'mineAdd'})
+                resolve()
+              }, () => {
+                resolve()
+                // this.$refs.toast.show('网络异常, 请稍后重试')
+              })
+            }
+          })
+        }))
+        return true
       }
     },
     computed: {
@@ -120,7 +220,9 @@
         'currentMsg',
         'imInfo',
         'nowChat',
-        'ios'
+        'ios',
+        'groupMsgIng',
+        'currentGroupMsg'
       ])
     },
     components: {

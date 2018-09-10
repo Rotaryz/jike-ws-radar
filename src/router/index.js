@@ -265,21 +265,60 @@ const route = new Router({
         component: NewsChatGroup,
         meta: {
           title: '群发'
-        }
+        },
+        children: [ // todo
+          {
+            path: 'select-goods',
+            component: SelectGoods,
+            meta: {
+              title: '选择商品'
+            }
+          },
+          {
+            path: 'group-code',
+            component: GroupCode,
+            meta: {
+              title: '微信群码'
+            }
+          },
+          {
+            path: 'person-code',
+            component: PersonCode,
+            meta: {
+              title: '个人微信'
+            },
+            children: [{
+              path: 'robot-code',
+              component: RobotCode,
+              meta: {
+                title: '机器人微信'
+              }
+            }]
+          },
+          {
+            path: 'useful-word',
+            component: UsefulWord,
+            meta: {
+              title: '常用语'
+            },
+            children: [
+              {
+                path: 'add-word',
+                component: AddWord,
+                meta: {
+                  title: '常用语'
+                }
+              }
+            ]
+          }
+        ]
       },
       {
         path: '/new-group-msg',
         component: NewGroupMsg,
         meta: {
           title: '新建群发'
-        },
-        children: [{
-          path: 'select-goods',
-          component: SelectGoods,
-          meta: {
-            title: '选择商品'
-          }
-        }]
+        }
       },
       {
         path: '/client',
