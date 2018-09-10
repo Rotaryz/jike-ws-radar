@@ -94,7 +94,7 @@
         Im.getActivityList(data).then((res) => {
           if (res.error === ERR_OK) {
             this.goodsList = res.data
-            this._timeRun()
+            // this._timeRun()
             setTimeout(() => {
               this.$refs.scroll.forceUpdate()
               this.$refs.scroll.scrollTo(0, 0, 300, ease[this.scrollToEasing])
