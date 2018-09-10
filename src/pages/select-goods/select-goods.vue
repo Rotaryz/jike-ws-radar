@@ -171,6 +171,7 @@
         let msgTitle = data.title
         let logType = this.selectGoods.goods_type * 1 === 0 ? 3 : this.selectGoods.goods_type * 1 === 1 ? 4 : 5
         let descMsg = {log_type: logType}
+        let groupData = data
         data = JSON.stringify(data)
         let desc = JSON.stringify(descMsg)
         let ext = '20005'
@@ -197,7 +198,8 @@
           })
           let reqData = {
             type: logType,
-            goods_id: data.goods_id,
+            goods_id: groupData.goods_id,
+            title: groupData.title,
             group_ids: groupIds
           }
           Im.setGroupList(reqData).then((res) => {

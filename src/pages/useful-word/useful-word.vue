@@ -144,7 +144,7 @@
         }
       },
       addWord() {
-        let url = this.$route.fullPath + '/add-word'
+        let url = this.$route.path + '/add-word'
         this.$router.push({path: url})
       },
       _splitArr(arr) {
