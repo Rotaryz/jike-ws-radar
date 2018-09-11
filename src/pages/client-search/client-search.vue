@@ -223,7 +223,11 @@
         justify-content: center
         align-items: center
     .content
-      flex: 1
+      top: 55px
+      position: absolute
+      left: 0
+      right: 0
+      bottom: 0
       overflow: hidden
 
       .user-list
