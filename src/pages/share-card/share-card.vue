@@ -15,8 +15,11 @@
 
 <script>
   import { Business } from 'api'
-  location.reload()
-  location.reload()
+  let count = 0
+  if (count < 2) {
+    location && location.reload()
+    count++
+  }
   export default {
     name: 'share-card',
     data() {
