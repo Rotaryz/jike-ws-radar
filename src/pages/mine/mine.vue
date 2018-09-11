@@ -7,10 +7,10 @@
             <img class="mine-header" :src="mine.avatar">
             <p class="peo-name">{{mine.name}}</p>
           </div>
-          <router-link class="top-box-right" to="/shareCard">
+          <div class="top-box-right" @click="toShareCard">
             <span class="code"></span>
             <span class="icon"></span>
-          </router-link>
+          </div>
         </div>
         <div class="mine-shadow">
           <router-link class="mian-box" to="mine/my-data">
@@ -39,7 +39,7 @@
         </li>
       </ul>
     </Scroll>
-    <router-view @refresh="refresh"></router-view>
+    <router-view @refresh="refresh" v-if="show"></router-view>
   </div>
 </template>
 
@@ -57,7 +57,9 @@
       return {
         contentList: CONTENTLIST,
         mine: {},
-        allDatas: {}
+        allDatas: {},
+        show: true,
+        count: 0
       }
     },
     created () {
@@ -66,6 +68,20 @@
       this.getAllDataObj('all')
     },
     methods: {
+      toShareCard() {
+        this.$router.push('/shareCard')
+        this.reload()
+      },
+      reload() {
+        this.show = false
+        this.count++
+        this.$nextTick(() => {
+          this.show = true
+          if (this.count < 6) {
+            this.reload()
+          }
+        })
+      },
       _goPage (src) {
         if (!src) {
           return
