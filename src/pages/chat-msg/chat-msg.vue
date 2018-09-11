@@ -37,7 +37,7 @@
                     <div class="goods-title">
                       <img src="../../../static/img/pic-spell@2x.png" class="title-icon" v-if="item.type * 1 == 4">
                       <img src="../../../static/img/icon-bargain@2x.png" class="title-icon" v-if="item.type * 1 == 5">
-                      <span>原价{{item.original_price}}元的{{item.title}}，{{item.type * 1 == 4 ? '团购价' : '底价'}}只要{{item.goods_price}}元！</span>
+                      <span>原价{{item.original_price}}元的{{item.title}}，{{item.type * 1 == 4 ? '团购价' : '现价'}}只要{{item.goods_price}}元！</span>
                     </div>
                     <div :style="{backgroundImage: 'url(' + item.url + ')',backgroundPosition: 'center',backgroundRepeat: 'no-repeat',backgroundSize: 'cover'}" class="goods-img"></div>
                   </div>
@@ -68,7 +68,7 @@
                     <div class="goods-title">
                       <img src="../../../static/img/pic-spell@2x.png" class="title-icon" v-if="item.type * 1 == 4">
                       <img src="../../../static/img/icon-bargain@2x.png" class="title-icon" v-if="item.type * 1 == 5">
-                      <span>原价{{item.original_price}}元的{{item.title}}，{{item.type * 1 == 4 ? '团购价' : '底价'}}只要{{item.goods_price}}元！</span>
+                      <span>原价{{item.original_price}}元的{{item.title}}，{{item.type * 1 == 4 ? '团购价' : '现价'}}只要{{item.goods_price}}元！</span>
                     </div>
                     <div :style="{backgroundImage: 'url(' + item.url + ')',backgroundPosition: 'center',backgroundRepeat: 'no-repeat',backgroundSize: 'cover'}" class="goods-img"></div>
                   </div>
