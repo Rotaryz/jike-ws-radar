@@ -247,8 +247,8 @@
       textHeight() {
         let timer = setTimeout(() => {
           this.textareaDom.style.height = 'auto'
-          this.textareaDom.style.height = this.textareaDom.scrollHeight + 20 + 'px'
-          this.textBoxDom.scrollTop = this.textareaDom.scrollHeight
+          this.textareaDom.style.height = this.textareaDom.scrollHeight + 'px'
+          this.textBoxDom.scrollTop = this.textareaDom.scrollHeight + 40
           clearTimeout(timer)
         }, 20)
       },
