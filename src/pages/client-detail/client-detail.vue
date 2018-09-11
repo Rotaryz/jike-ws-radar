@@ -44,7 +44,7 @@
                   <div class="bottom-number">
                     <div class="number-top">
                       <div class="number">{{clientData.conversion_rate}}</div>
-                      <div class="icon">%</div>
+                      <div class="icon" :class="slide === 'slide'? '' : 'iosicon'">%</div>
                     </div>
                     <div class="number-bottom">
                       <div class="text">预计成交率</div>
@@ -53,7 +53,7 @@
                   <div class="bottom-number">
                     <div class="number-top" v-if="clientData.progress < 110">
                       <div class="number">{{clientData.progress}}</div>
-                      <div class="icon">%</div>
+                      <div class="icon" :class="slide === 'slide'? '' : 'iosicon'">%</div>
                     </div>
                     <div class="number-top" v-if="clientData.progress === '无法签单' || clientData.progress === '成交'">
                       <div class="text">{{clientData.progress}}</div>
@@ -993,6 +993,8 @@
                 color: $color-text
                 font-family: $font-family-light
                 padding-bottom: 5px
+              .iosicon
+                padding-bottom: 10px
             .number-bottom
               justify-content: center
               layout(row)
