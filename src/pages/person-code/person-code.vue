@@ -47,8 +47,8 @@
           </div>
           <div class="robot-area">
             <div class="robot-title">添加欢迎语</div>
-            <div class="data-area-box" @touchstart="disableScroll" @touchend="enableScroll">
-              <textarea class="data-area" v-model="note" maxlength="200" name="" id="" cols="30" rows="10" @blur="showPlaFai"
+            <div class="data-area-box" @touchstart="disableScroll" @touchend="enableScroll" >
+              <textarea @touchmove.stop class="data-area" v-model="note" maxlength="200" name="" id="" cols="30" rows="10" @blur="showPlaFai"
                         @focus="showPlaSuc" ></textarea>
               <div class="data-area-pla" v-if="!note && showPla">
                 <div class="text">请添加欢迎语</div>
@@ -121,7 +121,7 @@
     data() {
       return {
         tabList: ICONTAB,
-        tabIndex: 0,
+        tabIndex: 1,
         imageBig: '',
         visible: false,
         status: false,
