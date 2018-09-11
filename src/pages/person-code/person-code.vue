@@ -47,7 +47,7 @@
           </div>
           <div class="robot-area">
             <div class="robot-title">添加欢迎语</div>
-            <div class="data-area-box">
+            <div class="data-area-box" @touchstart="disableScroll" @touchend="enableScroll">
               <textarea class="data-area" v-model="note" maxlength="200" name="" id="" cols="30" rows="10" @blur="showPlaFai"
                         @focus="showPlaSuc" ></textarea>
               <div class="data-area-pla" v-if="!note && showPla">
@@ -146,17 +146,21 @@
       this.getLoginStatus()
     },
     methods: {
+      disableScroll() {
+        this.$refs.scroll.disable()
+      },
+      enableScroll() {
+        this.$refs.scroll.enable()
+      },
       showPlaSuc() {
         if (this.slide === 'slide') {
           this.$refs.scroll.scrollTo(0, -230)
         }
-        this.$refs.scroll.disable()
       },
       showPlaFai() {
         if (this.slide === 'slide') {
           this.$refs.scroll.scrollTo(0, 0)
         }
-        this.$refs.scroll.enable()
       },
       refReshStatus() {
         this.getLoginStatus()
