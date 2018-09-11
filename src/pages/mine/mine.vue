@@ -70,17 +70,6 @@
     methods: {
       toShareCard() {
         this.$router.push('/shareCard')
-        this.reload()
-      },
-      reload() {
-        this.show = false
-        this.count++
-        this.$nextTick(() => {
-          this.show = true
-          if (this.count < 6) {
-            this.reload()
-          }
-        })
       },
       _goPage (src) {
         if (!src) {
@@ -93,7 +82,6 @@
       },
       getMine () {
         Business.myBusinessCard().then((res) => {
-          console.log(res)
           if (res.error === ERR_OK) {
             this.mine = res.data
           }
