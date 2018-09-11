@@ -6,7 +6,7 @@
         <div class="title">{{card.name}}</div>
         <div class="title-img"></div>
         <img :src="card.avatar" alt="" class="avatar-img">
-        <img v-if="card.qrcode" :src="card.qrcode" alt="" class="avatar-card">
+        <img v-if="show" :src="card.qrcode" alt="" class="avatar-card">
         <div class="qrcode-text">长按识别二维码</div>
       </div>
     </div>
@@ -20,7 +20,8 @@
     name: 'share-card',
     data() {
       return {
-        card: null
+        card: null,
+        show: false
       }
     },
     created() {
@@ -29,6 +30,9 @@
           this.card = res.data
         }
       })
+      setTimeout(() => {
+        this.show = true
+      }, 2000)
     }
   }
 </script>
@@ -62,10 +66,10 @@
         width: 175px
         height: 16px
         margin-top: 13.5px
-        background-image :url("./pic-myshop@2x.png")
-        background-repeat :no-repeat
-        background-position :center center
-        background-size :cover
+        background-image: url("./pic-myshop@2x.png")
+        background-repeat: no-repeat
+        background-position: center center
+        background-size: cover
       .avatar-img
         display: block
         width: 235px
