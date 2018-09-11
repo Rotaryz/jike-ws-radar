@@ -4,7 +4,7 @@
     <div class="card-main">
       <div class="main-con" v-if="card">
         <div class="title">{{card.name}}</div>
-        <img src="./pic-myshop@2x.png" alt="" class="title-img">
+        <div class="title-img"></div>
         <img :src="card.avatar" alt="" class="avatar-img">
         <img v-if="card.qrcode" :src="card.qrcode" alt="" class="avatar-card">
         <div class="qrcode-text">长按识别二维码</div>
@@ -31,7 +31,7 @@
           this.card = res.data
         }
       })
-      this.reload()
+      // this.reload()
     },
     reload() {
       this.show = false
@@ -75,6 +75,10 @@
         width: 175px
         height: 16px
         margin-top: 13.5px
+        background-image :url("./pic-myshop@2x.png")
+        background-repeat :no-repeat
+        background-position :center center
+        background-size :cover
       .avatar-img
         display: block
         width: 235px
