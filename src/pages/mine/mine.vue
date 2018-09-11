@@ -48,6 +48,7 @@
   import { Business, Echart } from 'api'
   import { ERR_OK } from '../../common/js/config'
   import storage from 'storage-controller'
+  import {mapGetters} from 'vuex'
 
   const CONTENTLIST = [{title: '微信群码', src: 'mine/group-code', icon: 'code'}, {title: '个人微信', src: 'mine/person-code', icon: 'wechat'}, {title: '我的报表', src: 'mine/my-data', icon: 'data'}]
 
@@ -70,6 +71,7 @@
     methods: {
       toShareCard() {
         this.$router.push('/shareCard')
+        console.log(this.ios)
         if (this.ios) {
           setTimeout(() => {
             location.reload()
@@ -104,11 +106,14 @@
       }
     },
     computed: {
+      ...mapGetters([
+        'ios'
+      ]),
       userInfo() {
         return storage.get('info')
       },
       slide() {
-        return this.ios ? '' : 'slide'
+        return 'slide'
       }
     },
     components: {

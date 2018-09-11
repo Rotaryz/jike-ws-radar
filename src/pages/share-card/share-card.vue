@@ -1,5 +1,5 @@
 <template>
-  <div class="share-card">
+  <div class="share-card" v-if="show">
     <div class="card-con"></div>
     <div class="card-main">
       <div class="main-con" v-if="card">
@@ -20,7 +20,8 @@
     name: 'share-card',
     data() {
       return {
-        card: null
+        card: null,
+        show: false
       }
     },
     created() {
@@ -29,6 +30,9 @@
           this.card = res.data
         }
       })
+      setTimeout(() => {
+        this.show = true
+      }, 300)
     }
   }
 </script>
