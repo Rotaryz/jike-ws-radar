@@ -715,14 +715,14 @@
             .text
               font-size: $font-size-14
               color: $color-20202E
-              font-family: $font-family-medium
+              font-family: $font-family-regular
             .right-box
               layout(row)
               align-items: center
               .number
                 font-size: $font-size-14
                 color: $color-56BA15
-                font-family: $font-family-medium
+                font-family: $font-family-regular
               .msgs-rt
                 width: 7.5px
                 height: 11.5px
