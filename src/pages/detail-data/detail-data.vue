@@ -219,7 +219,7 @@
       focusText() {
         console.log('scroll', this.$refs.scroll, this.slide)
         if (this.slide === 'slide') {
-          this.$refs.scroll && this.$refs.scroll.scrollTo(0, -240)
+          this.$refs.scroll && this.$refs.scroll.scrollTo(0, -480)
         }
       },
       blurText() {
