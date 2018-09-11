@@ -1,5 +1,5 @@
 <template>
-  <div class="share-card">
+  <div class="share-card" v-if="show">
     <div class="card-con"></div>
     <div class="card-main">
       <div class="main-con" v-if="card">
@@ -15,17 +15,31 @@
 
 <script>
   import { Business } from 'api'
+
   export default {
     name: 'share-card',
     data() {
       return {
-        card: null
+        card: null,
+        show: false,
+        count: 0
       }
     },
     created() {
       Business.Myshop({is_hyaline: 1}).then((res) => {
         if (res.data) {
           this.card = res.data
+        }
+      })
+      this.reload()
+    },
+    reload() {
+      this.show = true
+      this.count++
+      this.$nextTick(() => {
+        this.show = false
+        if (this.count < 2) {
+          this.reload()
         }
       })
     }
