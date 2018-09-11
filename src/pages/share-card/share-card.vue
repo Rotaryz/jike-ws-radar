@@ -20,26 +20,13 @@
     name: 'share-card',
     data() {
       return {
-        card: null,
-        show: true,
-        count: 0
+        card: null
       }
     },
     created() {
       Business.Myshop({is_hyaline: 1}).then((res) => {
         if (res.data) {
           this.card = res.data
-        }
-      })
-      // this.reload()
-    },
-    reload() {
-      this.show = false
-      this.count++
-      this.$nextTick(() => {
-        this.show = true
-        if (this.count < 2) {
-          this.reload()
         }
       })
     }
@@ -90,12 +77,12 @@
         height: 80px
         padding: 100px
         margin-top: -80px
+        z-index: 50
       .qrcode-text
         font-family: $font-family-regular
         font-size: $font-size-12
         color: #7C7C8F
         margin-top: -90px
-        z-index: 50
 
   .share-card
     height: 100vh
