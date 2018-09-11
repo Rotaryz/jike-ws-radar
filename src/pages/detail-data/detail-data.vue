@@ -1,7 +1,7 @@
 <template>
   <transition :name="slide">
     <article class="data-all">
-      <scroll>
+      <scroll ref="scroll">
         <div class="data-box">
           <div class="client-top">
             <div class="cliten-bg"></div>
@@ -98,7 +98,7 @@
             <div class="data-bottom">
               <div class="title">备注</div>
               <div class="textarea-number">{{flow.note.length}}<span>/500</span></div>
-              <textarea class="data-area" v-model="flow.note" maxlength="500" name="" id="" cols="30" rows="10"
+              <textarea class="data-area" v-model="flow.note" maxlength="500" @focus="focusText" @blur="blurText" @touchmove.stop name="" id="" cols="30" rows="10"
                         placeholder="请输入备注"></textarea>
             </div>
           </div>
@@ -215,6 +215,15 @@
       },
       onError(e) {
         console.log('无法复制文本！')
+      },
+      focusText() {
+        console.log('scroll', this.$refs.scroll, this.slide)
+        if (this.slide === 'slide') {
+          this.$refs.scroll && this.$refs.scroll.scrollTo(0, -240)
+        }
+      },
+      blurText() {
+        this.$refs.scroll && this.$refs.scroll.scrollTo(0, 0)
       }
     },
     computed: {

@@ -23,7 +23,7 @@
           <div class="editor-content">
             <div class="editor-title">添加常用语</div>
             <div class="editor-input-box">
-              <textarea class="textarea" placeholder="请输入常用语" placeholder-class="holder-class" v-model="editorMsg" maxlength="100"></textarea>
+              <textarea class="textarea" placeholder="请输入常用语" placeholder-class="holder-class" @touchmove.stop v-model="editorMsg" maxlength="100"></textarea>
               <div class="count-box"><span class="black-txt">{{editorMsg.length}}</span><span class="gray-txt">/100</span></div>
             </div>
             <div class="editor-down">
