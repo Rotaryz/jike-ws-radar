@@ -29,6 +29,8 @@
           this.card = res.data
         }
       })
+      location.reload()
+      location.reload()
     }
   }
 </script>
