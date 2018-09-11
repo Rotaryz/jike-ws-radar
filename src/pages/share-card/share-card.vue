@@ -15,6 +15,7 @@
 
 <script>
   import { Business } from 'api'
+  import { mapGetters } from 'vuex'
 
   export default {
     name: 'share-card',
@@ -30,9 +31,18 @@
           this.card = res.data
         }
       })
-      setTimeout(() => {
+      if (this.ios) {
+        setTimeout(() => {
+          this.show = true
+        }, 300)
+      } else {
         this.show = true
-      }, 300)
+      }
+    },
+    computed: {
+      ...mapGetters([
+        'ios'
+      ])
     }
   }
 </script>

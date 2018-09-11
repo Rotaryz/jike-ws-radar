@@ -71,7 +71,6 @@
     methods: {
       toShareCard() {
         this.$router.push('/shareCard')
-        console.log(this.ios)
         if (this.ios) {
           setTimeout(() => {
             location.reload()
