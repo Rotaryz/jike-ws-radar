@@ -121,7 +121,7 @@
     data() {
       return {
         tabList: ICONTAB,
-        tabIndex: 1,
+        tabIndex: 0,
         imageBig: '',
         visible: false,
         status: false,
