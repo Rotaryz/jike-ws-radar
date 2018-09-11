@@ -1,53 +1,34 @@
 <template>
-  <transition :name="slide">
-    <div class="share-card">
-      <div class="card-con"></div>
-      <div class="card-main">
-        <div class="main-con">
-          <div class="title">{{card.name}}</div>
-          <img src="./pic-myshop@2x.png" alt="" class="title-img">
-          <img :src="card.avatar" alt="" class="avatar-img">
-          <img v-if="card.qrcode" :src="card.qrcode" alt="" class="avatar-card">
-          <div class="qrcode-text">长按识别二维码</div>
-        </div>
+  <div class="share-card">
+    <div class="card-con"></div>
+    <div class="card-main">
+      <div class="main-con" v-if="card">
+        <div class="title">{{card.name}}</div>
+        <img src="./pic-myshop@2x.png" alt="" class="title-img">
+        <img :src="card.avatar" alt="" class="avatar-img">
+        <img v-if="card.qrcode" :src="card.qrcode" alt="" class="avatar-card">
+        <div class="qrcode-text">长按识别二维码</div>
       </div>
     </div>
-  </transition>
+  </div>
 </template>
 
 <script>
-  import Scroll from 'components/scroll/scroll'
-  import {Business} from 'api'
-  import {mapGetters} from 'vuex'
+  import { Business } from 'api'
 
   export default {
     name: 'share-card',
     data() {
       return {
-        card: {},
-        showPosition: true,
-        showMobile: true
+        card: null
       }
     },
     created() {
       Business.Myshop({is_hyaline: 1}).then((res) => {
-        this.card = res.data || {}
-        if (this.card.position.length === 0) {
-          this.showPosition = false
-        }
-        if (this.card.business_card_mobile.length === 0) {
-          this.showMobile = false
+        if (res.data) {
+          this.card = res.data
         }
       })
-    },
-    computed: {
-      ...mapGetters(['ios']),
-      slide() {
-        return this.ios ? '' : 'slide'
-      }
-    },
-    components: {
-      Scroll
     }
   }
 </script>
@@ -97,7 +78,7 @@
         font-size: $font-size-12
         color: #7C7C8F
         margin-top: -90px
-        z-index : 50
+        z-index: 50
 
   .share-card
     height: 100vh
