@@ -169,10 +169,9 @@
       },
       onPullingUp() {
         // 更新数据
-        console.log('pulling up and load data')
         if (!this.pullUpLoad) return // 防止下拉报错
         if (this.isAll) return this.$refs.scroll.forceUpdate()
-        console.log(this.isAll)
+        console.info('pulling up and load data')
         let page = ++this.page
         let limit = LIMIT
         const data = {
