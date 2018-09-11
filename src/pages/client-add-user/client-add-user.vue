@@ -36,7 +36,7 @@
               </div>
             </li>
           </ul>
-          <div style="height: 45px;"></div>
+          <!--<div style="height: 45px;"></div>-->
         </scroll>
       </div>
       <footer class="btn" @click="submit">确定</footer>
