@@ -15,7 +15,8 @@
 
 <script>
   import { Business } from 'api'
-
+  location.reload()
+  location.reload()
   export default {
     name: 'share-card',
     data() {
@@ -29,8 +30,6 @@
           this.card = res.data
         }
       })
-      location.reload()
-      location.reload()
     }
   }
 </script>
