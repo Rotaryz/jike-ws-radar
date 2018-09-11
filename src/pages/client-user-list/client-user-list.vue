@@ -169,9 +169,9 @@
       },
       onPullingUp() {
         // 更新数据
-        console.log('pulling up and load data')
         if (!this.pullUpLoad) return // 防止下拉报错
         if (this.isAll) return this.$refs.scroll.forceUpdate()
+        console.info('pulling up and load data')
         let page = ++this.page
         let limit = LIMIT
         const data = {
@@ -184,10 +184,12 @@
         Client.getCustomerList(data).then(res => {
           if (res.error === ERR_OK) {
             if (res.data && res.data.length) {
-              this.dataArray.concat(res.data)
+              let arr = this.dataArray.concat(res.data)
+              this.dataArray = arr
             } else {
               this.$refs.scroll.forceUpdate()
               this.isAll = true
+              this.pullUpLoad = false
             }
           } else {
             this.$refs.toast.show(res.message)
@@ -203,6 +205,8 @@
       tabSelect(index) {
         this.$refs.scroll.scrollTo(0, 0)
         this.tabListIndex = index
+        this.isAll = false
+        this.pullUpLoad = true
         switch (index * 1) {
           case 0:
             this.selectText = 'join'
