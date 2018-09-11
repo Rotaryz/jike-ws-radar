@@ -621,7 +621,7 @@
       .tab-item
         flex: 1
         text-align: center
-        font-family: $font-family-medium
+        font-family: $font-family-regular
       .active
         color: $color-202020
     .line
