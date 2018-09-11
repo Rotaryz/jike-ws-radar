@@ -21,7 +21,7 @@
     data() {
       return {
         card: null,
-        show: false,
+        show: true,
         count: 0
       }
     },
@@ -34,10 +34,10 @@
       this.reload()
     },
     reload() {
-      this.show = true
+      this.show = false
       this.count++
       this.$nextTick(() => {
-        this.show = false
+        this.show = true
         if (this.count < 2) {
           this.reload()
         }
