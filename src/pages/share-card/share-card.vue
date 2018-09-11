@@ -7,7 +7,7 @@
           <div class="title">{{card.name}}</div>
           <img src="./pic-myshop@2x.png" alt="" class="title-img">
           <img :src="card.avatar" alt="" class="avatar-img">
-          <img :src="card.qrcode" alt="" class="avatar-card">
+          <img v-if="card.qrcode" :src="card.qrcode" alt="" class="avatar-card">
           <div class="qrcode-text">长按识别二维码</div>
         </div>
       </div>
@@ -97,6 +97,7 @@
         font-size: $font-size-12
         color: #7C7C8F
         margin-top: -90px
+        z-index : 50
 
   .share-card
     height: 100vh
