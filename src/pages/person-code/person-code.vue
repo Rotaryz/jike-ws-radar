@@ -150,11 +150,13 @@
         if (this.slide === 'slide') {
           this.$refs.scroll.scrollTo(0, -230)
         }
+        this.$refs.scroll.disable()
       },
       showPlaFai() {
         if (this.slide === 'slide') {
           this.$refs.scroll.scrollTo(0, 0)
         }
+        this.$refs.scroll.enable()
       },
       refReshStatus() {
         this.getLoginStatus()
