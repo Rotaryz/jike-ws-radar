@@ -1,5 +1,5 @@
 <template>
-  <div class="share-card" v-if="show">
+  <div class="share-card">
     <div class="card-con"></div>
     <div class="card-main">
       <div class="main-con" v-if="card">
