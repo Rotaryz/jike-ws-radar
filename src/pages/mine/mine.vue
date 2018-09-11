@@ -128,7 +128,7 @@
     padding: 20px 15px
     height: 150px
     position: relative
-    margin-bottom: 53px
+    margin-bottom: 56px
     .top-box
       layout(row)
       align-items: center
@@ -292,7 +292,7 @@
     border-1px($color-row-line)
     .content-item
       font-family: $font-family-regular
-      font-size: $font-size-16
+      font-size: $font-size-14
       color: $color-text
       height: 55px
       align-items: center
@@ -309,7 +309,7 @@
           height: 18px
           margin-right: 10px
           &.code
-            icon-image('icon-groupcode')
+            icon-image('icon-groupcodetwo')
           &.wechat
             icon-image('icon-personalwechat')
           &.data

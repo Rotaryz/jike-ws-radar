@@ -616,10 +616,12 @@
       line-height: 45px
       font-size: $font-size-16
       color: $color-202020
+      font-family: $font-family-medium
       letter-spacing: 0.6px
       .tab-item
         flex: 1
         text-align: center
+        font-family: $font-family-medium
       .active
         color: $color-202020
     .line
@@ -713,12 +715,14 @@
             .text
               font-size: $font-size-14
               color: $color-20202E
+              font-family: $font-family-medium
             .right-box
               layout(row)
               align-items: center
               .number
                 font-size: $font-size-14
                 color: $color-56BA15
+                font-family: $font-family-medium
               .msgs-rt
                 width: 7.5px
                 height: 11.5px
@@ -747,6 +751,7 @@
         color: $color-20202E
         font-size: $font-size-14
         border-1px(#e5e5e5)
+        font-family: $font-family-medium
       .active
         background: $color-20202E
         color: $color-white-fff
@@ -790,6 +795,7 @@
           font-size: $font-size-18
           color: #20202E
           padding: 10px 0 15px
+          font-family: $font-family-medium
         .msg-item-content
           width: 100%
           height: 70px
@@ -823,6 +829,7 @@
             .msgs-p
               line-height: 18px
               font-size: $font-size-medium
+              font-family: $font-family-medium
               .green
                 color: $color-text-56
           .msgs-rt

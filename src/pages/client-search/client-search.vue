@@ -1,7 +1,7 @@
 <template>
   <transition :name="slide">
     <article class="client-search">
-      <section class="search-box">
+      <section class="search-box border-bottom-1px">
         <div class="input-box">
           <img class="icon" src="./icon-search@3x.png" alt="">
           <input class="input" type="text" placeholder="请输客户姓名" v-model="userName">
@@ -16,7 +16,7 @@
                 @pullingUp="onPullingUp"
         >
           <ul class="user-list">
-            <li class="user-box" v-for="(item,index) in dataArray" :key="index" @click="check(item)">
+            <li class="user-box border-bottom-1px" v-for="(item,index) in dataArray" :key="index" @click="check(item)">
               <user-card :userInfo="item"></user-card>
             </li>
           </ul>
@@ -175,13 +175,13 @@
     z-index: 10
     layout(column, block, nowrap)
     .search-box
-      height: 45px
-      background-color: $color-F0F2F5
+      height: 55px
+      background-color: $color-white
       layout(row, block, no-wrap)
       align-items: center
       .input-box
         flex: 1
-        background-color: $color-white-fff
+        background-color: $color-F0F2F5
         layout(row, block, no-warp)
         height: 36px
         margin-left: 15px
@@ -196,6 +196,7 @@
           font-family: $font-family-meddle
           font-size: $font-size-14
           color: $color-20202E
+          background: $color-F0F2F5
           &::-webkit-input-placeholder
             font-family: $font-family-regular
             font-size: $font-size-14

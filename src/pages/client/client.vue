@@ -358,7 +358,7 @@
         align-items: center
         padding: 0 20px
         justify-content: space-between
-        font-family: $font-family-regular
+        font-family: $font-family-medium
         font-size: $font-size-14
         color: $color-20202E
         letter-spacing: 0.52px
