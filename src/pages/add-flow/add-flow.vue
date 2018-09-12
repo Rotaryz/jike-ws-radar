@@ -4,7 +4,7 @@
       <div class="bottom-bg"></div>
       <div class="data-bottom">
         <div class="textarea-number">{{note.length}}<span>/500</span></div>
-        <textarea class="data-area" v-model="note" maxlength="500" name="" id="" cols="30" rows="10"
+        <textarea class="data-area" v-model="note" @touchmove.stop maxlength="500" name="" id="" cols="30" rows="10"
                   placeholder="请输入备注"></textarea>
       </div>
       <div class="bottom-box">
