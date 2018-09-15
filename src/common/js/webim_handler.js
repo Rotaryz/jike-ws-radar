@@ -467,9 +467,9 @@ export default class webimHandler {
         case 20005:
           let desc = JSON.parse(msg.desc)
           if (desc.log_type * 1 === 20) {
-            resTxt = `收到一条图片信息`
+            resTxt = `${nickName}给你发送了一条图片信息`
           } else {
-            resTxt = `收到一条商品信息`
+            resTxt = `${nickName}给你发送了一条商品信息`
           }
           break
         case 20006:
