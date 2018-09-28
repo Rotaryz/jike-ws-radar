@@ -370,7 +370,7 @@
           case 3:
             url = this.$route.fullPath + '/select-goods?type=2'
             this.mortListShow = false
-            this.$router.push({path: url, query: {chatType: 'group'}})
+            // this.$router.push({path: url, query: {chatType: 'group'}})
             break
           case 4:
             if (!this.codeStatus.have_personal_qrcode) {
@@ -398,7 +398,8 @@
               })
               let reqData = {
                 type: 6,
-                group_ids: groupIds
+                group_ids: groupIds,
+                url: this.codeStatus.person_qrcode
               }
               this.$router.go(-2)
               Im.setGroupList(reqData).then((res) => {
@@ -434,7 +435,8 @@
               })
               let reqData = {
                 type: 7,
-                group_ids: groupIds
+                group_ids: groupIds,
+                url: this.codeStatus.person_qrcode
               }
               this.$router.go(-2)
               Im.setGroupList(reqData).then((res) => {

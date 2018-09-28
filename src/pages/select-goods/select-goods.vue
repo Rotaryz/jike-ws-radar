@@ -62,12 +62,12 @@
 </template>
 
 <script>
-  import { mapActions, mapGetters } from 'vuex'
-  import { Im } from 'api'
+  import {mapActions, mapGetters} from 'vuex'
+  import {Im} from 'api'
   import Scroll from 'components/scroll/scroll'
-  import { ERR_OK, TIMELAG } from 'common/js/config'
+  import {ERR_OK, TIMELAG} from 'common/js/config'
   import storage from 'storage-controller'
-  import { ease } from 'common/js/ease'
+  import {ease} from 'common/js/ease'
   import webimHandler from 'common/js/webim_handler'
   import Toast from 'components/toast/toast'
   import utils from 'common/js/utils'
@@ -148,7 +148,8 @@
           return
         }
         let data
-        if (this.selectGoods.goods_type * 1 === 0) {
+        this.selectGoods.goods_type = this.selectGoods.goods_type ? +this.selectGoods.goods_type : 0
+        if (this.selectGoods.goods_type === 0) {
           data = {
             url: this.selectGoods.image_url,
             goods_id: this.selectGoods.id,
@@ -156,7 +157,8 @@
             goods_price: this.selectGoods.goods_price,
             original_price: this.selectGoods.original_price,
             avatar: this.userInfo.avatar,
-            shop_name: this.selectGoods.shop_name
+            shop_name: this.selectGoods.shop_name,
+            type: 3
           }
         } else {
           data = {
@@ -166,7 +168,10 @@
             goods_price: this.selectGoods.goods_price,
             original_price: this.selectGoods.original_price,
             avatar: this.userInfo.avatar,
-            shop_name: this.selectGoods.shop_name
+            shop_name: this.selectGoods.shop_name,
+            stock: this.selectGoods.activity_stock,
+            group_number: this.selectGoods.group_number,
+            type: this.selectGoods.goods_type === 3 ? 5 : 4
           }
         }
         let msgUrl = data.url
@@ -198,13 +203,8 @@
           this.$router.go(-3)
           let groupIds = this.currentGroupMsg.map((item) => {
             return item.id
-          })
-          let reqData = {
-            type: logType,
-            goods_id: groupData.goods_id,
-            title: groupData.title,
-            group_ids: groupIds
-          }
+          })// 群聊组id
+          let reqData = Object.assign({}, groupData, {group_ids: groupIds})
           Im.setGroupList(reqData).then((res) => {
           })
           let reqArr = this._splitArr(this.currentGroupMsg)
