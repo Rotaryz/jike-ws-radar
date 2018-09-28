@@ -370,7 +370,7 @@
           case 3:
             url = this.$route.fullPath + '/select-goods?type=2'
             this.mortListShow = false
-            // this.$router.push({path: url, query: {chatType: 'group'}})
+            this.$router.push({path: url, query: {chatType: 'group'}})
             break
           case 4:
             if (!this.codeStatus.have_personal_qrcode) {
