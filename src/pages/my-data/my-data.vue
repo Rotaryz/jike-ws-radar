@@ -80,13 +80,13 @@
               <div class="sub-title">(每小时更新)</div>
             </div>
           </div>
-          <div class="pie-box">
-            <div id="myBar"></div>
-            <div class="title-box">
-              <div class="title">客户与我的互动</div>
-              <div class="sub-title">(每天0点更新)</div>
-            </div>
-          </div>
+          <!--<div class="pie-box">-->
+            <!--<div id="myBar"></div>-->
+            <!--<div class="title-box">-->
+              <!--<div class="title">客户与我的互动</div>-->
+              <!--<div class="sub-title">(每天0点更新)</div>-->
+            <!--</div>-->
+          <!--</div>-->
         </div>
       </scroll>
       <toast ref="toast"></toast>
@@ -580,7 +580,7 @@
         Echart.getBar(this.userInfo.merchant_id, this.userInfo.id).then(res => {
           if (res.error === ERR_OK) {
             this.barData = res.data
-            this.drawBar()
+            // this.drawBar()
           } else {
             this.$refs.toast.show(res.message)
           }
