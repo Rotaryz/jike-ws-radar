@@ -157,7 +157,6 @@
   import {ease} from 'common/js/ease'
   import {mapActions, mapGetters} from 'vuex'
   import webimHandler from 'common/js/webim_handler'
-  import storage from 'storage-controller'
   import {Im, UpLoad, Global, Business} from 'api'
   import {ERR_OK, TIMELAG} from 'common/js/config'
   import utils from 'common/js/utils'
@@ -182,7 +181,6 @@
         customer_im_account: this.id,
         employee_im_account: this.imInfo.im_account
       }
-      await this._getCurrent()
       Im.getMsgList(data).then((res) => {
         if (res.error === ERR_OK) {
           let list = res.data.reverse()
@@ -199,6 +197,7 @@
           }, 20)
         }
       })
+      await this._getCurrent()
       let url = location.href
       Global.jssdkConfig({weixin: 'ai_radar', url, current_type: 'weishang'}).then((res) => {
         if (res.error === ERR_OK) {
@@ -213,9 +212,6 @@
           })
         }
       })
-      document.title = this.currentMsg.name
-      webimHandler.getC2CMsgList(this.currentMsg.account) // 消息已读处理
-      this.setUnreadCount(this.currentMsg.account) // vuex
       this.getQrCodeStatus()
     },
     mounted() {
@@ -223,6 +219,9 @@
       this.textBoxDom = this.$refs.textBox
       this.chatDom = this.$refs.chat
       this.listDom = this.$refs.list
+      document.title = this.currentMsg.nickName
+      webimHandler.getC2CMsgList(this.currentMsg.account) // 消息已读处理
+      this.setUnreadCount(this.currentMsg.account) // vuex
     },
     beforeDestroy() {
       this.setCurrent({})
@@ -240,7 +239,8 @@
         if (res.error !== ERR_OK) {
           return
         }
-        this.currentMsg = res.data
+        this.userInfo = res.data
+        console.log(this.userInfo)
       },
       showPic(item) {
         wx.previewImage({urls: [item.url]})
@@ -342,7 +342,7 @@
           sessionId: this.id,
           unreadMsgCount: 0,
           avatar: this.currentMsg.avatar,
-          nickName: this.currentMsg.name
+          nickName: this.currentMsg.nickName
         }
         this.addListMsg({msg: addMsg, type: 'mineAdd'})
         this.inputMsg = ''
@@ -420,7 +420,7 @@
                 sessionId: this.id,
                 unreadMsgCount: 0,
                 avatar: this.currentMsg.avatar,
-                nickName: this.currentMsg.name
+                nickName: this.currentMsg.nickName
               }
               this.addListMsg({msg: addMsg, type: 'mineAdd'})
               this.mortListShow = false
@@ -482,7 +482,7 @@
                 sessionId: this.id,
                 unreadMsgCount: 0,
                 avatar: this.currentMsg.avatar,
-                nickName: this.currentMsg.name
+                nickName: this.currentMsg.nickName
               }
               this.addListMsg({msg: addMsg, type: 'mineAdd'})
               this.mortListShow = false
@@ -580,7 +580,7 @@
               sessionId: this.id,
               unreadMsgCount: 0,
               avatar: this.currentMsg.avatar,
-              nickName: this.currentMsg.name
+              nickName: this.currentMsg.nickName
             }
             this.addListMsg({msg: addMsg, type: 'mineAdd'})
             this.mortListShow = false
@@ -616,7 +616,8 @@
         mortListShow: false,
         codeStatus: {},
         coverFullShow: false,
-        coverShowType: ''
+        coverShowType: '',
+        userInfo: {}
       }
     },
     components: {
@@ -645,6 +646,7 @@
     },
     computed: {
       ...mapGetters([
+        'currentMsg', // 聊天对象
         'imInfo',
         'nowChat',
         'ios'
@@ -655,9 +657,6 @@
           stop: parseInt(this.pullDownRefreshStop),
           txt: ' '
         } : false
-      },
-      userInfo() {
-        return storage.get('info')
       },
       slide() {
         return this.ios ? '' : 'slide'
