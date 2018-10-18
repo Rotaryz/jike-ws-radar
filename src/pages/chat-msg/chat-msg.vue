@@ -158,7 +158,7 @@
   import {mapActions, mapGetters} from 'vuex'
   import webimHandler from 'common/js/webim_handler'
   import storage from 'storage-controller'
-  import {Im, UpLoad, Global} from 'api'
+  import {Im, UpLoad, Global, Business} from 'api'
   import {ERR_OK, TIMELAG} from 'common/js/config'
   import utils from 'common/js/utils'
   import {emotionsFaceArr} from 'common/js/constants'
@@ -174,7 +174,7 @@
   ]
   export default {
     name: 'Chat',
-    created() {
+    async created() {
       this.id = this.$route.params.id
       let data = {
         'end_date': this.endDate,
@@ -182,6 +182,7 @@
         customer_im_account: this.id,
         employee_im_account: this.imInfo.im_account
       }
+      await this._getCurrent()
       Im.getMsgList(data).then((res) => {
         if (res.error === ERR_OK) {
           let list = res.data.reverse()
@@ -212,6 +213,9 @@
           })
         }
       })
+      document.title = this.currentMsg.name
+      webimHandler.getC2CMsgList(this.currentMsg.account) // 消息已读处理
+      this.setUnreadCount(this.currentMsg.account) // vuex
       this.getQrCodeStatus()
     },
     mounted() {
@@ -219,9 +223,6 @@
       this.textBoxDom = this.$refs.textBox
       this.chatDom = this.$refs.chat
       this.listDom = this.$refs.list
-      document.title = this.currentMsg.nickName
-      webimHandler.getC2CMsgList(this.currentMsg.account) // 消息已读处理
-      this.setUnreadCount(this.currentMsg.account) // vuex
     },
     beforeDestroy() {
       this.setCurrent({})
@@ -234,6 +235,13 @@
         'addListMsg',
         'setNowChat'
       ]),
+      async _getCurrent() {
+        let res = await Business.myBusinessCard()
+        if (res.error !== ERR_OK) {
+          return
+        }
+        this.currentMsg = res.data
+      },
       showPic(item) {
         wx.previewImage({urls: [item.url]})
       },
@@ -334,7 +342,7 @@
           sessionId: this.id,
           unreadMsgCount: 0,
           avatar: this.currentMsg.avatar,
-          nickName: this.currentMsg.nickName
+          nickName: this.currentMsg.name
         }
         this.addListMsg({msg: addMsg, type: 'mineAdd'})
         this.inputMsg = ''
@@ -412,7 +420,7 @@
                 sessionId: this.id,
                 unreadMsgCount: 0,
                 avatar: this.currentMsg.avatar,
-                nickName: this.currentMsg.nickName
+                nickName: this.currentMsg.name
               }
               this.addListMsg({msg: addMsg, type: 'mineAdd'})
               this.mortListShow = false
@@ -474,7 +482,7 @@
                 sessionId: this.id,
                 unreadMsgCount: 0,
                 avatar: this.currentMsg.avatar,
-                nickName: this.currentMsg.nickName
+                nickName: this.currentMsg.name
               }
               this.addListMsg({msg: addMsg, type: 'mineAdd'})
               this.mortListShow = false
@@ -572,7 +580,7 @@
               sessionId: this.id,
               unreadMsgCount: 0,
               avatar: this.currentMsg.avatar,
-              nickName: this.currentMsg.nickName
+              nickName: this.currentMsg.name
             }
             this.addListMsg({msg: addMsg, type: 'mineAdd'})
             this.mortListShow = false
@@ -637,7 +645,6 @@
     },
     computed: {
       ...mapGetters([
-        'currentMsg',
         'imInfo',
         'nowChat',
         'ios'
@@ -752,20 +759,20 @@
               height: 45px
               position: relative
               .gray-arrow
-                width:0
-                height:0
+                width: 0
+                height: 0
                 border-width: 5px 6px 5px 0
                 border-style: solid
-                border-color: transparent #D6DCE0 transparent transparent/*透明 灰 透明 透明 */
+                border-color: transparent #D6DCE0 transparent transparent /*透明 灰 透明 透明 */
                 position: absolute
                 right: 0
                 top: 17.5px
                 .white-arrow
-                  width:0
-                  height:0
+                  width: 0
+                  height: 0
                   border-width: 5px 6px 5px 0
                   border-style: solid
-                  border-color: transparent #FFF transparent transparent/*透明 灰 透明 透明 */
+                  border-color: transparent #FFF transparent transparent /*透明 灰 透明 透明 */
                   position: absolute
                   left: 1px
                   top: -5px
@@ -778,11 +785,11 @@
               height: 45px
               position: relative
               .green-arrow
-                width:0
-                height:0
+                width: 0
+                height: 0
                 border-width: 5px 0 5px 6px
                 border-style: solid
-                border-color: transparent transparent transparent $color-green/*透明 灰 透明 透明 */
+                border-color: transparent transparent transparent $color-green /*透明 灰 透明 透明 */
                 position: absolute
                 left: 0
                 top: 17.5px
@@ -796,7 +803,7 @@
             margin-right: 10px
           .chat-msg-new-goods
             width: 226px
-            border: 0.5px solid rgba(0,0,0,0.10)
+            border: 0.5px solid rgba(0, 0, 0, 0.10)
             border-radius: 4px
             background: $color-white
             overflow: hidden
@@ -815,7 +822,7 @@
                 .shop-icon
                   width: 18px
                   height: 18px
-                  border: 0.5px solid rgba(0,0,0,0.10)
+                  border: 0.5px solid rgba(0, 0, 0, 0.10)
                   border-radius: 50%
                   margin-right: 6px
                 .shop-name
@@ -862,7 +869,7 @@
             margin-right: 10px
           .chat-msg-goods
             width: 200px
-            border: 0.5px solid rgba(0,0,0,0.10)
+            border: 0.5px solid rgba(0, 0, 0, 0.10)
             border-radius: 4px
             background: $color-white
             margin-left: 10px
@@ -883,7 +890,7 @@
             .qrCode-content
               width: 230px
               padding: 10px 12px
-              border: 0.5px solid rgba(0,0,0,0.10)
+              border: 0.5px solid rgba(0, 0, 0, 0.10)
               border-radius: 4px
               background: $color-white
               overflow: hidden
@@ -947,7 +954,7 @@
           width: 43px
           height: 36px
           margin: 0 5px
-          border: 1px solid rgba(0,0,0,0.10)
+          border: 1px solid rgba(0, 0, 0, 0.10)
           border-radius: 2px
           background: $color-white
           text-align: center
@@ -959,7 +966,7 @@
           flex: 1
           overflow-x: hidden
           min-height: 28px
-          border: 1px solid rgba(0,0,0,0.10)
+          border: 1px solid rgba(0, 0, 0, 0.10)
           background: $color-white
           max-height: 100px
           overflow-y: auto
@@ -1045,12 +1052,12 @@
       z-index: 100
       layout()
       align-items: center
-      background: rgba(32,32,46,0.8)
+      background: rgba(32, 32, 46, 0.8)
       .cover-container
         width: 300px
         height: 160px
         background: $color-white
-        border: 1px solid rgba(32,32,46,0.10)
+        border: 1px solid rgba(32, 32, 46, 0.10)
         border-radius: 2px
         all-center()
         .cover-top
