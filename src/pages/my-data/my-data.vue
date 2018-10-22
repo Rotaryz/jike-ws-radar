@@ -57,7 +57,7 @@
             <div id="myLine"></div>
             <div class="title-box">
               <div class="title">近7日客户活跃度</div>
-              <div class="sub-title">(每小时更新)</div>
+              <!--<div class="sub-title">(每小时更新)</div>-->
             </div>
           </div>
           <div class="pie-box">
@@ -77,7 +77,7 @@
             <div id="myAddLine"></div>
             <div class="title-box">
               <div class="title">近7日新增客户数</div>
-              <div class="sub-title">(每小时更新)</div>
+              <!--<div class="sub-title">(每小时更新)</div>-->
             </div>
           </div>
           <div class="pie-box">
