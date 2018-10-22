@@ -398,7 +398,8 @@
               })
               let reqData = {
                 type: 6,
-                group_ids: groupIds
+                group_ids: groupIds,
+                url: this.codeStatus.person_qrcode
               }
               this.$router.go(-2)
               Im.setGroupList(reqData).then((res) => {
@@ -434,7 +435,8 @@
               })
               let reqData = {
                 type: 7,
-                group_ids: groupIds
+                group_ids: groupIds,
+                url: this.codeStatus.wxgroup_qrcode
               }
               this.$router.go(-2)
               Im.setGroupList(reqData).then((res) => {

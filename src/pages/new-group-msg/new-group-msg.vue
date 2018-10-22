@@ -14,13 +14,45 @@
           <div class="item-content">
             <div class="item-top border-bottom-1px">
               <div class="item-title">群发组：<span v-for="(item1, index1) in item.groups" :key="index1">{{index1 == (item.groups.length - 1) ? item1.name + '(' + item1.customers.length + ')' : item1.name + '(' + item1.customers.length + ')，'}}</span></div>
-              +
               <div class="item-text" v-html="item.html" v-if="item.type == 1"></div>
-              <div class="item-text"  v-if="item.type == 3">[商品信息]</div>
-              <div class="item-text"  v-if="item.type == 4">[活动信息]</div>
-              <div class="item-text"  v-if="item.type == 5">[活动信息]</div>
-              <div class="item-text"  v-if="item.type == 6">[个人微信二维码]</div>
-              <div class="item-text"  v-if="item.type == 7">[群微信二维码]</div>
+              <div class="item-text item-text3" v-if="item.type == 3">
+                <!--[商品信息]-->
+                <div class="goods_img-box">
+                  <img :src="item.url" class="goods_img">
+                </div>
+                <p class="goods_title">{{item.title}}</p>
+              </div>
+              <div class="item-text item-text3" v-if="item.type == 4">
+                <!--[团购活动信息]-->
+                <div class="goods_img-box">
+                  <img :src="item.url" class="goods_img">
+                </div>
+                <p class="goods_title"><span class="tip">{{item.group_number}}人团</span>{{item.title}}</p>
+              </div>
+              <div class="item-text item-text3" v-if="item.type == 5">
+                <!--[砍价活动信息]-->
+                <div class="goods_img-box">
+                  <img :src="item.url" class="goods_img">
+                </div>
+                <p class="goods_title"><span class="tip">仅剩{{item.stock}}件</span>{{item.title}}</p>
+              </div>
+              <div class="item-text item-text6" v-if="item.type == 6">
+                <!--[个人微信二维码]-->
+                <img :src="item.url" alt="" class="item-code-img">
+                <div class="content">
+                  <div class="content-title">欢迎光临我的小店</div>
+                  <div class="content-text">点击本条消息加微信，随时找我聊天</div>
+                </div>
+              </div>
+              <div class="item-text item-text6" v-if="item.type == 7">
+                <!--[微信福利群]-->
+                <img :src="item.url" alt="" class="item-code-img">
+                <div class="content">
+                  <div class="content-title">欢迎加入我的微信福利群</div>
+                  <div class="content-text">点击本条消息加微信群，不定时抢购 福利</div>
+                </div>
+              </div>
+              <!--图片-->
               <img class="item-img" @load="refushBox" v-if="item.type == 20" :src="item.url"/>
             </div>
             <div class="item-down" @click="toChat(item)">再发一条</div>
@@ -37,9 +69,10 @@
   import Toast from 'components/toast/toast'
   import {mapActions, mapGetters} from 'vuex'
   import Scroll from 'components/scroll/scroll'
-  import { Im } from 'api'
+  import {Im} from 'api'
   import {ERR_OK} from '../../common/js/config'
   import utils from 'common/js/utils'
+
   export default {
     name: 'NewGroupMsg',
     created() {
@@ -51,6 +84,7 @@
             }
             return item
           })
+          console.log(this.list)
           setTimeout(() => {
             this.$refs.scroll.forceUpdate()
           }, 20)
@@ -192,6 +226,7 @@
   @import '~common/stylus/mixin'
 
   .new-group-msg
+    word-break: break-all
     position: fixed
     left: 0
     top: 0
@@ -217,15 +252,15 @@
             line-height: 14px
         .item-content
           background: $color-white
-          border: 1px solid rgba(32,32,46,0.10)
-          box-shadow: 0 4px 12px 0 rgba(43,43,145,0.07)
+          border: 1px solid rgba(32, 32, 46, 0.10)
+          box-shadow: 0 4px 12px 0 rgba(43, 43, 145, 0.07)
           border-radius: 2px
           .item-top
             padding: 12px 15px 15px
             font-size: 0
             .item-title
-              white-space:normal
-              word-break:break-all
+              white-space: normal
+              word-break: break-all
               font-family: $font-family-regular
               font-size: $font-size-16
               color: $color-text
@@ -236,6 +271,52 @@
               font-family: $font-family-light
               font-size: $font-size-14
               color: $color-888888
+            .item-text6
+              display: flex
+              .item-code-img
+                width: 65px
+                height: 65px
+              .content
+                margin-left: 10px
+                flex: 1
+                .content-title
+                  font-size: $font-size-16
+                  color: $color-20202E
+                  font-family: $font-family-regular
+                  line-height: 1
+                  margin-bottom: 11px
+                .content-text
+                  font-size: $font-size-14
+                  color: $color-888888
+                  font-family: $font-family-regular
+                  line-height: 19px
+            .item-text3
+              .goods_img-box
+                width: 315px
+                height: 220px
+                overflow: hidden
+                .goods_img
+                  width: 100%
+              .goods_title
+                overflow: hidden
+                display: -webkit-box
+                -webkit-line-clamp: 2
+                -webkit-box-orient: vertical
+                word-break: break-all
+                margin-top: 11px
+                font-size: $font-size-16
+                line-height: 24px
+                font-family: $font-family-regular
+                color: $color-20202E
+                .tip
+                  transform: translate3d(0, -3px, 0)
+                  line-height: 1
+                  font-size: 11px
+                  margin-right: 9.5px
+                  display: inline-block
+                  color: #F94C5F
+                  padding: 2.5px 5.5px
+                  border-1px(#F94C5F)
             .item-img
               padding-top: 12px
               width: 100%
@@ -247,7 +328,6 @@
             font-family: $font-family-regular
             font-size: $font-size-14
             color: #56BA15
-
 
   .new-btn
     position: fixed
